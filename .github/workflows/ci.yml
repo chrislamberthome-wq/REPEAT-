@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master, copilot/** ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: "Guardrail: Fail if repeat_hd/ or tests/ are ignored"
+      run: |
+        echo "Checking if repeat_hd or tests are ignored..."
+        if git check-ignore -v repeat_hd tests; then
+          echo "ERROR: repeat_hd or tests are being ignored by .gitignore!"
+          exit 1
+        else
+          echo "✓ No critical directories are ignored"
+        fi
+    
+    - name: "Guardrail: Fail if expected directories are missing"
+      run: |
+        echo "Checking for required directories..."
+        test -d repeat_hd || { echo "ERROR: repeat_hd/ directory is missing!"; exit 1; }
+        test -d tests || { echo "ERROR: tests/ directory is missing!"; exit 1; }
+        test -d .github/workflows || { echo "WARNING: .github/workflows/ directory is missing"; }
+        echo "✓ All required directories exist"
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .[test]
+    
+    - name: Run test suite
+      run: |
+        pytest -q
+    
+    - name: "CLI Smoke Test: encode and verify"
+      run: |
+        echo "Running CLI smoke test..."
+        python -m repeat_hd.cli encode "hello" | python -m repeat_hd.cli verify
+        echo "✓ CLI smoke test passed"
+    
+    - name: "Optional: Print tracked files for debugging"
+      if: always()
+      run: |
+        echo "Tracked files in key paths:"
+        git ls-files | grep -E '^(repeat_hd|tests|\.github)/' | head -n 200 || echo "No matching files found"
