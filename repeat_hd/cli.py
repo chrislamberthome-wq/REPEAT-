@@ -6,7 +6,7 @@ import hashlib
 
 def encode(text):
     """Encode text and output with checksum."""
-    checksum = hashlib.md5(text.encode()).hexdigest()
+    checksum = hashlib.sha256(text.encode()).hexdigest()
     return f"{text}:{checksum}"
 
 
@@ -15,7 +15,7 @@ def verify(encoded_text):
     if ':' not in encoded_text:
         return False
     text, expected_checksum = encoded_text.rsplit(':', 1)
-    actual_checksum = hashlib.md5(text.encode()).hexdigest()
+    actual_checksum = hashlib.sha256(text.encode()).hexdigest()
     return actual_checksum == expected_checksum
 
 
