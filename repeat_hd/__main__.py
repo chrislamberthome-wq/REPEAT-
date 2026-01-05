@@ -1,4 +1,4 @@
-"""Entry point for python -m repeat_hd.cli"""
+"""Entry point for python -m repeat_hd"""
 import sys
 from repeat_hd.cli import main
 

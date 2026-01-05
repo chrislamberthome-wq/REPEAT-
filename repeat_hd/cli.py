@@ -193,9 +193,8 @@ def main():
     verify_parser.add_argument(
         '--strict',
         action='store_true',
-        help='Enable strict mode with additional runtime invariant checks. '
-             'These checks ensure internal consistency beyond basic CRC/parse '
-             'verification, making the runtime self-auditing.'
+        help='Enable additional runtime invariant checks for enhanced data '
+             'integrity verification beyond basic CRC/parse checks.'
     )
     verify_parser.set_defaults(func=cmd_verify)
     
