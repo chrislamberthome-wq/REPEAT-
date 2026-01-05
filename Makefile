@@ -20,5 +20,5 @@ smoke:
 
 # Check tree structure compliance
 verify-tree:
-	@echo "Verifying tree structure..."
-	@echo "Tree structure check completed."
+	@echo "Verifying tree structure..." && \
+	echo "Tree structure check completed."
