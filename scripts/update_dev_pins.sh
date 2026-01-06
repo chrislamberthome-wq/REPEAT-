@@ -7,6 +7,11 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
+# Ensure Python is available before proceeding
+if ! command -v python >/dev/null 2>&1; then
+    echo "Error: Python is required but was not found in PATH." >&2
+    exit 1
+fi
 # Define the list of dev packages to pin
 DEV_PACKAGES="pytest ruff build twine"
 
