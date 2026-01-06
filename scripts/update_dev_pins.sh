@@ -16,7 +16,14 @@ fi
 DEV_PACKAGES="pytest ruff build twine"
 
 echo "Installing latest versions of dev dependencies..."
-pip install --upgrade pip $DEV_PACKAGES
+for pkg in pip $DEV_PACKAGES; do
+    echo "Installing/upgrading ${pkg}..."
+    if ! pip install --upgrade "${pkg}"; then
+        echo "Error: Failed to install or upgrade '${pkg}'." >&2
+        echo "Aborting update_dev_pins.sh. Please fix the issue with '${pkg}' and retry." >&2
+        exit 1
+    fi
+done
 
 echo "Generating requirements-dev.txt with pinned versions..."
 # Build grep pattern from package list
