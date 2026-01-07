@@ -1,6 +1,5 @@
 """Tests for REPEAT-HD CLI."""
 
-import pytest
 from repeat_hd.cli import encode, verify
 
 
