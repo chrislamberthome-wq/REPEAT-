@@ -4,9 +4,11 @@ test:
 	pytest -q
 
 smoke:
-	python -m repeat_hd.cli encode "hello" > ./repeat_hd_frame.bin
-	python -m repeat_hd.cli verify --infile ./repeat_hd_frame.bin
-	rm -f ./repeat_hd_frame.bin
+	@set -e; \
+	tmp_file="./repeat_hd_frame.bin"; \
+	trap 'rm -f "$$tmp_file"' EXIT; \
+	python -m repeat_hd.cli encode "hello" > "$$tmp_file"; \
+	python -m repeat_hd.cli verify --infile "$$tmp_file"
 
 verify-tree:
 	@if git check-ignore -v repeat_hd tests; then \
