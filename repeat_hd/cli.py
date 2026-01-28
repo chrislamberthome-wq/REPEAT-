@@ -5,6 +5,8 @@ import argparse
 import sys
 import struct
 import zlib
+import json
+import re
 
 
 def encode_data(data: str) -> bytes:
@@ -161,6 +163,117 @@ def cmd_verify(args):
     return 0
 
 
+def normalize_hex(hex_input: str) -> tuple[str, list[str]]:
+    """
+    Normalize hex string by removing whitespace and converting to lowercase.
+    
+    Args:
+        hex_input: Input hex string (may contain whitespace)
+        
+    Returns:
+        tuple: (normalized_hex, errors)
+            - normalized_hex: Lowercase hex without whitespace
+            - errors: List of validation error messages
+    """
+    errors = []
+    
+    # Remove all whitespace
+    normalized = re.sub(r'\s+', '', hex_input)
+    
+    # Convert to lowercase
+    normalized = normalized.lower()
+    
+    # Validate hex characters
+    if not re.match(r'^[0-9a-f]*$', normalized):
+        invalid_chars = set(c for c in normalized if c not in '0123456789abcdef')
+        errors.append(f"Invalid hex characters found: {', '.join(sorted(invalid_chars))}")
+        return "", errors
+    
+    return normalized, errors
+
+
+def verify_publichex_frame(hex_string: str) -> tuple[bool, list[str]]:
+    """
+    Verify a PublicHex frame.
+    
+    Args:
+        hex_string: Normalized hex string (lowercase, no whitespace)
+        
+    Returns:
+        tuple: (is_valid, errors)
+            - is_valid: True if frame is valid
+            - errors: List of validation error messages
+    """
+    errors = []
+    
+    # Check minimum length (8 bytes = 16 hex chars for header)
+    if len(hex_string) < 16:
+        errors.append(f"Frame too short: minimum 16 hex characters required, got {len(hex_string)}")
+        return False, errors
+    
+    # Check even number of hex characters
+    if len(hex_string) % 2 != 0:
+        errors.append("Invalid hex string: odd number of characters")
+        return False, errors
+    
+    # Convert hex to bytes
+    try:
+        frame_bytes = bytes.fromhex(hex_string)
+    except ValueError as e:
+        errors.append(f"Failed to decode hex: {e}")
+        return False, errors
+    
+    # Use existing decode_data function to verify the frame
+    decoded, is_valid, decode_errors = decode_data(frame_bytes)
+    
+    if not is_valid:
+        errors.extend(decode_errors)
+        return False, errors
+    
+    return True, errors
+
+
+def cmd_publichex_verify(args):
+    """Handle the publichex-verify command."""
+    # Get input
+    if args.hex:
+        hex_input = args.hex
+    else:
+        # Read from stdin
+        hex_input = sys.stdin.read()
+    
+    # Normalize the hex input
+    normalized_hex, norm_errors = normalize_hex(hex_input)
+    
+    if norm_errors:
+        # Parse/usage error
+        print(json.dumps({
+            "encoding": "publichex-v1",
+            "normalized_frame_hex": "",
+            "errors": norm_errors
+        }), file=sys.stderr)
+        return 1
+    
+    # Verify the frame
+    is_valid, verify_errors = verify_publichex_frame(normalized_hex)
+    
+    # Always output the normalized hex in JSON
+    output = {
+        "encoding": "publichex-v1",
+        "normalized_frame_hex": normalized_hex
+    }
+    
+    print(json.dumps(output))
+    
+    if not is_valid:
+        # FAIL - frame parsed but validation failed
+        print(json.dumps({"errors": verify_errors}), file=sys.stderr)
+        return 2
+    
+    # PASS
+    return 0
+
+
 def main():
     """Main CLI entry point."""
     parser = argparse.ArgumentParser(
@@ -197,6 +310,17 @@ def main():
              'integrity verification beyond basic CRC/parse checks.'
     )
     verify_parser.set_defaults(func=cmd_verify)
+    
+    # PublicHex verify command
+    publichex_parser = subparsers.add_parser(
+        'publichex-verify',
+        help='Verify PublicHex v1 encoded frames'
+    )
+    publichex_parser.add_argument(
+        '--hex',
+        help='Hex string to verify (reads from stdin if not specified)'
+    )
+    publichex_parser.set_defaults(func=cmd_publichex_verify)
     
     # Parse arguments
     args = parser.parse_args()
