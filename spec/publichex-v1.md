@@ -65,6 +65,28 @@ The canonical JSON output format for a PublicHex frame verification is:
 - **encoding** (string): MUST be `"publichex-v1"` to indicate this specification version
 - **normalized_frame_hex** (string): The canonical form of the frame (lowercase, no whitespace)
 
+### Error Reporting
+
+In addition to the canonical JSON output on stdout, error details are written to stderr as JSON when validation fails:
+
+**For parse errors (exit code 1):**
+```json
+{
+  "encoding": "publichex-v1",
+  "normalized_frame_hex": "",
+  "errors": ["error message"]
+}
+```
+Written to stderr.
+
+**For validation failures (exit code 2):**
+Canonical JSON is written to stdout, and error details are written to stderr:
+```json
+{
+  "errors": ["error message"]
+}
+```
+
 ### Exit Codes
 
 The verification process uses the following exit codes:
@@ -79,7 +101,7 @@ The verification process uses the following exit codes:
 
 Input (with whitespace):
 ```
-A1B2 C3D4
+8289 D1F7
 0500 0000
 4865 6C6C 6F
 ```
@@ -88,7 +110,7 @@ Canonical output:
 ```json
 {
   "encoding": "publichex-v1",
-  "normalized_frame_hex": "a1b2c3d405000000416c6c6f48"
+  "normalized_frame_hex": "8289d1f70500000048656c6c6f"
 }
 ```
 
@@ -96,10 +118,17 @@ Canonical output:
 
 Input (CRC mismatch):
 ```
-FFFFFFFF05000000Hello
+FFFFFFFF0500000048656c6c6f
 ```
 
-Output would still normalize, but exit code would be 2 (FAIL)
+Canonical output (normalized, but fails validation):
+```json
+{
+  "encoding": "publichex-v1",
+  "normalized_frame_hex": "ffffffff0500000048656c6c6f"
+}
+```
+Exit code: 2 (FAIL)
 
 ### Parse Error (ERROR)
 

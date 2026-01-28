@@ -128,7 +128,7 @@ class TestVerifyPublicHexFrame:
 class TestPublicHexVerifyCommand:
     """Tests for cmd_publichex_verify function."""
     
-    def test_verify_pass_with_valid_hex(self, monkeypatch, capsys):
+    def test_verify_pass_with_valid_hex(self, capsys):
         """Test PASS case with valid hex."""
         # Create valid hex
         original = "test data"
@@ -304,7 +304,7 @@ class TestPublicHexIntegration:
             "ffffffff" + valid_hex[8:],
             # Wrong length field
             "8289d1f7ff00000048656c6c6f",
-            # Length mismatch (header says 10 bytes but only 5 provided)
+            # Length mismatch (header says 10 bytes but only 5 bytes provided)
             valid_hex[:8] + "0a000000" + valid_hex[16:16 + 10],
         ]
         

@@ -1,4 +1,4 @@
-# TRTL Makefile - Test, Run, Test, Lint
+# TRTL Makefile - Test, Run Tests, and Lint
 #
 # This Makefile provides standard targets for testing, linting, and verification.
 
