@@ -24,6 +24,31 @@ make smoke
 
 ## Usage
 
+### PublicHex Verification
+
+Verify and normalize hexadecimal strings according to PublicHex v1 specification:
+
+Using the `--hex` argument:
+```bash
+python -m repeat_hd.cli publichex-verify --hex "DEADBEEF"
+# Output: {"encoding": "publichex-v1", "normalized_frame_hex": "deadbeef"}
+# Exit code: 0 (PASS)
+```
+
+Using stdin:
+```bash
+echo "48 65 6C 6C 6F" | python -m repeat_hd.cli publichex-verify
+# Output: {"encoding": "publichex-v1", "normalized_frame_hex": "48656c6c6f"}
+# Exit code: 0 (PASS)
+```
+
+The `publichex-verify` command:
+- Accepts hexadecimal input via `--hex <string>` or stdin
+- Is whitespace-tolerant (removes spaces, tabs, newlines)
+- Normalizes to lowercase and removes all whitespace
+- Outputs JSON with `encoding` and `normalized_frame_hex` fields
+- Exit codes: 0 (PASS), 2 (FAIL), 1 (parse/usage error)
+
 ### Encoding Data
 
 ```bash
