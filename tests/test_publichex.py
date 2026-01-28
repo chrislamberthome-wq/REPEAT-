@@ -1,6 +1,5 @@
 """Tests for PublicHex v1 functionality."""
 
-import pytest
 import json
 import subprocess
 import sys
@@ -87,16 +86,24 @@ class TestPublicHexVerifyCLI:
     
     def run_publichex_verify(self, hex_input=None, use_stdin=False):
         """Helper to run publichex-verify command."""
-        cmd = [sys.executable, "-m", "repeat_hd.cli", "publichex-verify"]
-        
+        cmd = [
+            sys.executable, "-m", "repeat_hd.cli", "publichex-verify"
+        ]
+
         if hex_input and not use_stdin:
             cmd.extend(["--hex", hex_input])
-            result = subprocess.run(cmd, capture_output=True, text=True)
+            result = subprocess.run(
+                cmd, capture_output=True, text=True
+            )
         elif hex_input and use_stdin:
-            result = subprocess.run(cmd, input=hex_input, capture_output=True, text=True)
+            result = subprocess.run(
+                cmd, input=hex_input, capture_output=True, text=True
+            )
         else:
-            result = subprocess.run(cmd, capture_output=True, text=True)
-        
+            result = subprocess.run(
+                cmd, capture_output=True, text=True
+            )
+
         return result.returncode, result.stdout, result.stderr
     
     def test_pass_simple_hex(self):
@@ -119,7 +126,9 @@ class TestPublicHexVerifyCLI:
     
     def test_pass_with_various_whitespace(self):
         """Test PASS with tabs, newlines, and spaces."""
-        exit_code, stdout, stderr = self.run_publichex_verify("48\t65\n6C\r6C\n6F")
+        exit_code, stdout, stderr = self.run_publichex_verify(
+            "48\t65\n6C\r6C\n6F"
+        )
         
         assert exit_code == 0
         output = json.loads(stdout)
@@ -137,8 +146,10 @@ class TestPublicHexVerifyCLI:
     
     def test_pass_via_stdin(self):
         """Test PASS using stdin input."""
-        exit_code, stdout, stderr = self.run_publichex_verify("48656C6C6F", use_stdin=True)
-        
+        exit_code, stdout, stderr = self.run_publichex_verify(
+            "48656C6C6F", use_stdin=True
+        )
+
         assert exit_code == 0
         output = json.loads(stdout)
         assert output["encoding"] == "publichex-v1"
@@ -146,8 +157,10 @@ class TestPublicHexVerifyCLI:
     
     def test_pass_stdin_with_whitespace(self):
         """Test PASS via stdin with whitespace injection."""
-        exit_code, stdout, stderr = self.run_publichex_verify("48 65 6C 6C 6F", use_stdin=True)
-        
+        exit_code, stdout, stderr = self.run_publichex_verify(
+            "48 65 6C 6C 6F", use_stdin=True
+        )
+
         assert exit_code == 0
         output = json.loads(stdout)
         assert output["encoding"] == "publichex-v1"
@@ -219,7 +232,9 @@ class TestPublicHexNormalization:
         for inp in inputs:
             normalized, is_valid, error = normalize_hex(inp)
             assert is_valid, f"Input '{inp}' should be valid"
-            assert normalized == expected, f"Input '{inp}' should normalize to '{expected}', got '{normalized}'"
+            assert (
+                normalized == expected
+            ), f"Input '{inp}' should normalize to '{expected}'"
 
 
 class TestPublicHexPassVectors:
@@ -227,7 +242,10 @@ class TestPublicHexPassVectors:
     
     def run_publichex_verify(self, hex_input):
         """Helper to run publichex-verify command."""
-        cmd = [sys.executable, "-m", "repeat_hd.cli", "publichex-verify", "--hex", hex_input]
+        cmd = [
+            sys.executable, "-m", "repeat_hd.cli",
+            "publichex-verify", "--hex", hex_input
+        ]
         result = subprocess.run(cmd, capture_output=True, text=True)
         return result.returncode, result.stdout
     
@@ -279,7 +297,10 @@ class TestPublicHexFailVectors:
     
     def run_publichex_verify(self, hex_input):
         """Helper to run publichex-verify command."""
-        cmd = [sys.executable, "-m", "repeat_hd.cli", "publichex-verify", "--hex", hex_input]
+        cmd = [
+            sys.executable, "-m", "repeat_hd.cli",
+            "publichex-verify", "--hex", hex_input
+        ]
         result = subprocess.run(cmd, capture_output=True, text=True)
         return result.returncode, result.stdout
     
