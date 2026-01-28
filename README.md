@@ -7,6 +7,7 @@ REPEAT-HD: A data encoding and verification library with CRC checksums and runti
 - **Encode**: Encode data with CRC32 checksum for integrity verification
 - **Verify**: Verify encoded data with CRC/parse checks
 - **Strict Mode**: Additional runtime invariant checks for self-auditing
+- **PublicHex**: Verify PublicHex v1 encoded frames with normalization and validation
 
 ## Installation
 
@@ -59,6 +60,41 @@ When `--strict` is enabled:
 Without `--strict`:
 - Exit code 0: CRC and parse checks passed
 - Exit code 1: CRC or parse check failed
+
+### PublicHex Verification
+
+The `publichex-verify` command validates PublicHex v1 encoded frames. It accepts hexadecimal input, normalizes it (removing whitespace and converting to lowercase), and verifies the frame structure.
+
+**Using argument-based input:**
+```bash
+# Verify a valid hex frame
+python -m repeat_hd.cli publichex-verify --hex "8289d1f70500000048656c6c6f"
+# Output: {"encoding": "publichex-v1", "normalized_frame_hex": "8289d1f70500000048656c6c6f"}
+# Exit code: 0 (PASS)
+
+# Verify with whitespace (automatically normalized)
+python -m repeat_hd.cli publichex-verify --hex "8289 d1f7 0500 0000 4865 6c6c 6f"
+# Output: {"encoding": "publichex-v1", "normalized_frame_hex": "8289d1f70500000048656c6c6f"}
+# Exit code: 0 (PASS)
+```
+
+**Using stdin:**
+```bash
+# From stdin
+echo "8289D1F70500000048656C6C6F" | python -m repeat_hd.cli publichex-verify
+# Output: {"encoding": "publichex-v1", "normalized_frame_hex": "8289d1f70500000048656c6c6f"}
+# Exit code: 0 (PASS)
+
+# From encoded data
+python -m repeat_hd.cli encode "Hello" | xxd -p | python -m repeat_hd.cli publichex-verify
+# Output: {"encoding": "publichex-v1", "normalized_frame_hex": "8289d1f70500000048656c6c6f"}
+# Exit code: 0 (PASS)
+```
+
+**Exit codes:**
+- **0 (PASS)**: Frame is valid
+- **2 (FAIL)**: Frame parsed but validation failed (CRC/length mismatch)
+- **1 (ERROR)**: Parse error or usage error (invalid hex characters)
 
 ## Data Format
 
