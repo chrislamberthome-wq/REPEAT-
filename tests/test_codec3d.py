@@ -252,7 +252,8 @@ class TestVerifyRepeatability:
             dodecahedron=ContactPoint(10.0, 11.0, 12.0),
             icosahedron=ContactPoint(13.0, 14.0, 15.0),
         )
-        # Small perturbation within epsilon = 0.08
+        # Small perturbation of 0.01 per coordinate
+        # L2 distance = sqrt(0.01^2 + 0.01^2 + 0.01^2) ≈ 0.0173 < ε=0.08
         frame2 = FrameData(
             tetrahedron=ContactPoint(1.01, 2.01, 3.01),
             cube=ContactPoint(4.01, 5.01, 6.01),
@@ -297,6 +298,8 @@ class TestVerifyRepeatability:
             dodecahedron=ContactPoint(10.0, 11.0, 12.0),
             icosahedron=ContactPoint(13.0, 14.0, 15.0),
         )
+        # Perturbation of 0.15 per coordinate
+        # L2 distance = sqrt(0.15^2 + 0.15^2 + 0.15^2) ≈ 0.26 > ε=0.08
         frame2 = FrameData(
             tetrahedron=ContactPoint(1.15, 2.15, 3.15),
             cube=ContactPoint(4.0, 5.0, 6.0),
@@ -304,11 +307,11 @@ class TestVerifyRepeatability:
             dodecahedron=ContactPoint(10.0, 11.0, 12.0),
             icosahedron=ContactPoint(13.0, 14.0, 15.0),
         )
-        # Should fail with default epsilon
+        # Should fail with default epsilon (distance ≈ 0.26 > 0.08)
         is_repeatable1, _ = verify_repeatability(frame1, frame2)
         assert not is_repeatable1
         
-        # Should pass with larger epsilon
+        # Should pass with larger epsilon (distance ≈ 0.26 < 0.3)
         is_repeatable2, _ = verify_repeatability(frame1, frame2, epsilon=0.3)
         assert is_repeatable2
 
@@ -423,3 +426,32 @@ class TestProcessFrame:
         if len(errors) > 0:
             assert not is_valid
             assert any("disagree" in e.lower() for e in errors)
+    
+    def test_rule_disagreement_with_repeatability_failure(self):
+        """Test that frame is invalid when both rules disagree AND repeatability fails."""
+        # Frame that causes rule disagreement
+        frame1 = FrameData(
+            tetrahedron=ContactPoint(0.0, 1.0, 0.0),
+            cube=ContactPoint(0.0, 1.0, 0.0),
+            octahedron=ContactPoint(0.0, 1.0, 0.0),
+            dodecahedron=ContactPoint(-1.0, 0.0, 0.0),
+            icosahedron=ContactPoint(-1.0, 0.0, 0.0),
+        )
+        # Second frame with large deviation (fails repeatability)
+        frame2 = FrameData(
+            tetrahedron=ContactPoint(0.5, 1.0, 0.0),  # Large x deviation
+            cube=ContactPoint(0.0, 1.0, 0.0),
+            octahedron=ContactPoint(0.0, 1.0, 0.0),
+            dodecahedron=ContactPoint(-1.0, 0.0, 0.0),
+            icosahedron=ContactPoint(-1.0, 0.0, 0.0),
+        )
+        
+        bit, is_valid, errors = process_frame(
+            frame2, 
+            previous_frame=frame1,
+            allow_rule_disagreement=True
+        )
+        
+        # Should be invalid because repeatability fails, even though rule disagreement is allowed
+        assert not is_valid
+        assert len(errors) > 1  # Both rule disagreement and repeatability errors

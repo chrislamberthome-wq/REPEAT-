@@ -240,7 +240,13 @@ def process_frame(
             errors.extend(repeat_errors)
     
     # Determine output bit and validity
-    is_valid = len(errors) == 0 or (allow_rule_disagreement and len(errors) == 1)
+    # Valid if no errors, or only error is rule disagreement and that's allowed
+    has_only_rule_error = (
+        len(errors) == 1 and 
+        agreement_error is not None and 
+        errors[0] == agreement_error
+    )
+    is_valid = len(errors) == 0 or (allow_rule_disagreement and has_only_rule_error)
     output_bit = bit_a if rules_agree else -1
     
     return output_bit, is_valid, errors
