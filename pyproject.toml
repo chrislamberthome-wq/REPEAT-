@@ -1,7 +1,23 @@
+[project]
+name = "repeat-hd"
+version = "0.1.0"
+description = "REPEAT-HD: A data encoding and verification library with CRC checksums and runtime invariant checks"
+requires-python = ">=3.10"
+dependencies = []
+
 [project.optional-dependencies]
 dev = [
   "pytest>=7.0,<9",
   "ruff>=0.6,<1",
   "mypy>=1.8,<2",
   "build>=1.2,<2",
+  "numpy>=1.24,<2",
 ]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["repeat_hd*"]
+exclude = ["tests*", "profiles*", "tools*", "scripts*"]
