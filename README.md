@@ -1,6 +1,6 @@
 # REPEAT-
 
-REPEAT-HD: A data encoding and verification library with CRC checksums, runtime invariant checks, and 3D geometric codec system.
+REPEAT-HD: A data encoding and verification library with CRC checksums, runtime invariant checks, and 3D geometric codec system, including the **Holo-ID v0** REPEAT-verifiable pipeline for icosidodecahedron boundary encoding.
 
 ## Features
 
@@ -8,6 +8,7 @@ REPEAT-HD: A data encoding and verification library with CRC checksums, runtime 
 - **Verify**: Verify encoded data with CRC/parse checks
 - **Strict Mode**: Additional runtime invariant checks for self-auditing
 - **3D Codec**: Encode binary messages using geometric representations in 2D and 3D space
+- **Holo-ID v0**: Geometric encoding system using icosidodecahedron boundary for audit log verification
 
 ## Installation
 
@@ -16,11 +17,17 @@ REPEAT-HD: A data encoding and verification library with CRC checksums, runtime 
 git clone https://github.com/chrislamberthome-wq/REPEAT-.git
 cd REPEAT-
 
-# Run tests
+# Run all tests
 make test
 
-# Run smoke test
+# Run Holo-ID v0 smoke tests
 make smoke
+
+# Run Holo-ID v0 golden tests
+make golden
+
+# Run full Holo-ID v0 verification
+make verify
 ```
 
 ## Usage
@@ -130,4 +137,52 @@ Run the demonstration script to see the codec system in action:
 ```bash
 python scripts/demo_codec.py
 ```
+
+## Holo-ID v0: REPEAT-Verifiable Audit Log Pipeline
+
+Holo-ID v0 is a geometric encoding system for audit logs that uses the icosidodecahedron boundary to encode and verify data. See [SPEC.md](SPEC.md) for comprehensive documentation.
+
+### Quick Start
+
+```bash
+# Encode data to Holo-ID v0 packet
+echo "System event: User login" | python src/verify_holo_id.py encode > event.json
+
+# Verify packet (basic)
+python src/verify_holo_id.py verify --input event.json
+
+# Verify packet (strict with runtime invariants)
+python src/verify_holo_id.py verify --strict --input event.json
+
+# Simulate corruption
+python src/verify_holo_id.py corrupt --input event.json --type bitflip --output corrupted.json
+
+# Verify corrupted packet (should fail)
+python src/verify_holo_id.py verify --input corrupted.json
+```
+
+### Holo-ID v0 Components
+
+- **SPEC.md**: Comprehensive specification of Holo-ID v0
+- **boundary/icosidodecahedron_canonical.json**: Canonical geometry codebook
+- **schema/holo-id-v0.schema.json**: JSON schema for packet validation
+- **src/verify_holo_id.py**: CLI tool for encoding, decoding, verification, and corruption simulation
+- **golden/**: Golden test vectors for validation
+
+### Testing Holo-ID v0
+
+```bash
+# Quick smoke tests
+make smoke
+
+# Verify golden test packets
+make golden
+
+# Full verification suite (includes corruption detection)
+make verify
+
+# Run all Holo-ID v0 tests
+make holo-all
+```
+
 ```
