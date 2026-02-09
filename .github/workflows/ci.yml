@@ -36,5 +36,14 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements-dev.txt
     
-    - name: Run tests
+    - name: Run Python tests
       run: make test
+    
+    - name: Run Holo-ID v0 smoke tests
+      run: make smoke
+    
+    - name: Run Holo-ID v0 golden tests
+      run: make golden
+    
+    - name: Run Holo-ID v0 verification suite
+      run: make verify

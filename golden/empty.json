@@ -1,0 +1,13 @@
+{
+  "version": "v0",
+  "timestamp": "2026-02-09T23:52:10.848912Z",
+  "data": "",
+  "geometry": {
+    "boundary": "icosidodecahedron",
+    "coordinates": []
+  },
+  "checksum": {
+    "algorithm": "CRC32",
+    "value": "00000000"
+  }
+}

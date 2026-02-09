@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/chrislamberthome-wq/REPEAT-/schema/holo-id-v0.schema.json",
+  "title": "Holo-ID v0 Packet Schema",
+  "description": "JSON schema for Holo-ID v0 audit log packets with geometric encoding",
+  "type": "object",
+  "required": ["version", "timestamp", "data", "geometry", "checksum"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "v0",
+      "description": "Protocol version identifier"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp in ISO 8601 format"
+    },
+    "data": {
+      "type": "string",
+      "contentEncoding": "base64",
+      "description": "Base64-encoded original binary data"
+    },
+    "geometry": {
+      "type": "object",
+      "required": ["boundary", "coordinates"],
+      "properties": {
+        "boundary": {
+          "type": "string",
+          "const": "icosidodecahedron",
+          "description": "Geometric boundary type"
+        },
+        "coordinates": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "3D coordinate [x, y, z]"
+          },
+          "description": "List of 3D coordinates corresponding to encoded data"
+        }
+      },
+      "additionalProperties": false
+    },
+    "checksum": {
+      "type": "object",
+      "required": ["algorithm", "value"],
+      "properties": {
+        "algorithm": {
+          "type": "string",
+          "enum": ["CRC32"],
+          "description": "Checksum algorithm used"
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}$",
+          "description": "Hexadecimal checksum value (8 hex digits for CRC32)"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
