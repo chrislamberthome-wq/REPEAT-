@@ -1,0 +1,19 @@
+{
+  "version": "v0",
+  "timestamp": "2026-02-09T23:52:10.893813Z",
+  "data": "QQ==",
+  "geometry": {
+    "boundary": "icosidodecahedron",
+    "coordinates": [
+      [
+        -1.3090169943749475,
+        0.8090169943749475,
+        -0.8090169943749475
+      ]
+    ]
+  },
+  "checksum": {
+    "algorithm": "CRC32",
+    "value": "d3d99e8b"
+  }
+}
