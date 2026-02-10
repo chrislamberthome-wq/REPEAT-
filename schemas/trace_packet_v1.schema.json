@@ -1,0 +1,109 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://repeat-hd.example.com/schemas/trace_packet_v1.schema.json",
+  "title": "Trace Packet Schema v1",
+  "description": "Complete trace packet for REPEAT protocol with verification",
+  "type": "object",
+  "required": ["experiment", "reading", "verifications", "trace_hash", "receipt"],
+  "properties": {
+    "experiment": {
+      "$ref": "spin_experiment.schema.json"
+    },
+    "reading": {
+      "$ref": "spin_window_symbol_v1.schema.json#/properties/reading"
+    },
+    "verifications": {
+      "type": "array",
+      "description": "Results from all verification layers",
+      "items": {
+        "type": "object",
+        "required": ["layer", "layer_name", "passed", "message", "details"],
+        "properties": {
+          "layer": {
+            "type": "integer",
+            "description": "Verification layer number (1-3)",
+            "minimum": 1,
+            "maximum": 3
+          },
+          "layer_name": {
+            "type": "string",
+            "description": "Human-readable layer name"
+          },
+          "passed": {
+            "type": "boolean",
+            "description": "Whether this layer verification passed"
+          },
+          "message": {
+            "type": "string",
+            "description": "Verification result message"
+          },
+          "details": {
+            "type": "object",
+            "description": "Layer-specific verification details"
+          }
+        }
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "decoded_binary": {
+      "type": ["integer", "null"],
+      "description": "Final decoded binary value",
+      "enum": [0, 1, null]
+    },
+    "trace_hash": {
+      "type": "string",
+      "description": "SHA-256 hash of experiment trace for repeatability",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "receipt": {
+      "type": "object",
+      "description": "Auditable receipt for the experiment",
+      "required": ["timestamp", "trace_hash", "device_type", "all_verifications_passed", "verification_summary", "protocol_version"],
+      "properties": {
+        "timestamp": {
+          "type": "string",
+          "description": "Receipt generation timestamp",
+          "format": "date-time"
+        },
+        "trace_hash": {
+          "type": "string",
+          "description": "SHA-256 hash matching trace_hash field",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "device_type": {
+          "type": "string",
+          "description": "Device type from experiment"
+        },
+        "all_verifications_passed": {
+          "type": "boolean",
+          "description": "Whether all verification layers passed"
+        },
+        "verification_summary": {
+          "type": "object",
+          "description": "Summary of verification results by layer",
+          "required": ["layer_1", "layer_2", "layer_3"],
+          "properties": {
+            "layer_1": {
+              "type": "boolean",
+              "description": "Layer 1 (Bloch sphere survival) result"
+            },
+            "layer_2": {
+              "type": "boolean",
+              "description": "Layer 2 (pulse integrity) result"
+            },
+            "layer_3": {
+              "type": "boolean",
+              "description": "Layer 3 (task outcome) result"
+            }
+          }
+        },
+        "protocol_version": {
+          "type": "string",
+          "description": "REPEAT protocol version",
+          "pattern": "^REPEAT-v[0-9]+\\.[0-9]+$"
+        }
+      }
+    }
+  }
+}

@@ -22,7 +22,28 @@ from repeat_hd.codec_3d import (
     DEFAULT_RADIUS,
 )
 
+# Export spintronics functions
+from repeat_hd.spintronics import (
+    # Data structures
+    SpinSymbol,
+    SpinExperiment,
+    SpinReading,
+    VerificationResult,
+    TracePacket,
+    # REPEAT protocol functions
+    encode_spin_symbol,
+    encode_experiment,
+    decode_spin_reading,
+    verify_bloch_sphere_survival,
+    verify_pulse_integrity,
+    verify_task_outcome,
+    compute_trace_hash,
+    create_receipt,
+    run_repeat_protocol,
+)
+
 __all__ = [
+    # 3D codec
     "wrap_angle",
     "verify_tolerance",
     "encode_2d",
@@ -34,5 +55,20 @@ __all__ = [
     "decode_3d_solids_rule_b",
     "EPSILON",
     "DEFAULT_RADIUS",
+    # Spintronics
+    "SpinSymbol",
+    "SpinExperiment",
+    "SpinReading",
+    "VerificationResult",
+    "TracePacket",
+    "encode_spin_symbol",
+    "encode_experiment",
+    "decode_spin_reading",
+    "verify_bloch_sphere_survival",
+    "verify_pulse_integrity",
+    "verify_task_outcome",
+    "compute_trace_hash",
+    "create_receipt",
+    "run_repeat_protocol",
 ]
 

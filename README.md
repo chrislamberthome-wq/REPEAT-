@@ -1,6 +1,6 @@
 # REPEAT-
 
-REPEAT-HD: A data encoding and verification library with CRC checksums, runtime invariant checks, and 3D geometric codec system.
+REPEAT-HD: A data encoding and verification library with CRC checksums, runtime invariant checks, 3D geometric codec system, and **REPEAT + Platoputer spintronics applications**.
 
 ## Features
 
@@ -8,6 +8,7 @@ REPEAT-HD: A data encoding and verification library with CRC checksums, runtime 
 - **Verify**: Verify encoded data with CRC/parse checks
 - **Strict Mode**: Additional runtime invariant checks for self-auditing
 - **3D Codec**: Encode binary messages using geometric representations in 2D and 3D space
+- **Spintronics**: REPEAT protocol for spintronic devices with Platonic solids codebook and multi-layer verification
 
 ## Installation
 
@@ -130,4 +131,51 @@ Run the demonstration script to see the codec system in action:
 ```bash
 python scripts/demo_codec.py
 ```
+
+### REPEAT + Platoputer Spintronics Applications
+
+The spintronics module implements the complete REPEAT protocol (Encode, Decode, Verify, Repeat) for spintronic devices with support for:
+
+- **Platonic Solids Codebook**: Discrete spin texture encoding using tetrahedron, cube, octahedron, dodecahedron, and icosahedron
+- **Multi-Layer Verification**: 
+  - Layer 1: Symbol survival on Bloch sphere (angular θ checks)
+  - Layer 2: Pulse and trace integrity
+  - Layer 3: Task outcome verification (device-specific)
+- **Adoption Scenarios**:
+  - MRAM switching with resistance readout
+  - Domain-wall racetrack memory with positional verification
+  - Skyrmion stability with topological charge
+  - Magnonic phase-coherent computation
+
+```python
+from repeat_hd import SpinReading, run_repeat_protocol
+
+# MRAM switching scenario
+reading = SpinReading(resistance=1000.0, measured_theta=0.01)
+packet = run_repeat_protocol(
+    binary=0,
+    reading=reading,
+    device_type="MRAM",
+    pulse_amplitude=0.5,
+    pulse_duration=10.0,
+    temperature=300.0
+)
+
+print(f"Decoded: {packet.decoded_binary}")
+print(f"All verifications passed: {packet.receipt['all_verifications_passed']}")
+print(f"Trace hash: {packet.trace_hash}")
+```
+
+Run the spintronics demonstration:
+
+```bash
+python scripts/demo_spintronics.py
+```
+
+#### JSON Schemas
+
+The spintronics module includes JSON schemas for data validation:
+- `schemas/spin_experiment.schema.json` - Experiment encoding schema
+- `schemas/spin_window_symbol_v1.schema.json` - Reading decoding schema  
+- `schemas/trace_packet_v1.schema.json` - Complete trace packet schema
 ```
