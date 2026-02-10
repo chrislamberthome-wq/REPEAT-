@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/chrislamberthome-wq/REPEAT-/spintronics/schemas/mram_write_read_v1.schema.json",
+  "title": "MRAM Write/Read v1",
+  "description": "Schema for threshold-based MRAM state flipping receipts with write/read verification",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "timestamp",
+    "write_operation",
+    "read_operation",
+    "threshold_verification"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "mram_write_read_v1",
+      "description": "Schema version identifier"
+    },
+    "receipt_id": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "Unique receipt identifier (SHA-256 hex)"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of operation"
+    },
+    "write_operation": {
+      "type": "object",
+      "required": ["address", "data_bit", "pulse_program", "write_voltage"],
+      "properties": {
+        "address": {
+          "type": "string",
+          "pattern": "^0x[0-9a-fA-F]+$",
+          "description": "MRAM cell address in hexadecimal"
+        },
+        "data_bit": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Bit value to write (0 or 1)"
+        },
+        "pulse_program": {
+          "type": "object",
+          "required": ["amplitude", "duration", "pulse_shape"],
+          "properties": {
+            "amplitude": {
+              "type": "number",
+              "description": "Write pulse amplitude in volts"
+            },
+            "duration": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Write pulse duration in nanoseconds"
+            },
+            "pulse_shape": {
+              "type": "string",
+              "enum": ["rectangular", "trapezoidal", "gaussian"],
+              "description": "Write pulse waveform shape"
+            }
+          }
+        },
+        "write_voltage": {
+          "type": "number",
+          "description": "Applied write voltage in volts"
+        },
+        "write_current": {
+          "type": "number",
+          "description": "Measured write current in microamperes"
+        }
+      },
+      "description": "MRAM write operation details"
+    },
+    "read_operation": {
+      "type": "object",
+      "required": ["resistance_state", "read_voltage", "read_current"],
+      "properties": {
+        "resistance_state": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Measured resistance in ohms"
+        },
+        "read_voltage": {
+          "type": "number",
+          "description": "Applied read voltage in volts"
+        },
+        "read_current": {
+          "type": "number",
+          "description": "Measured read current in microamperes"
+        },
+        "decoded_bit": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Bit value decoded from resistance"
+        }
+      },
+      "description": "MRAM read operation and resistance measurement"
+    },
+    "threshold_verification": {
+      "type": "object",
+      "required": ["low_resistance_threshold", "high_resistance_threshold", "switching_margin"],
+      "properties": {
+        "low_resistance_threshold": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Threshold for low resistance state (parallel) in ohms"
+        },
+        "high_resistance_threshold": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Threshold for high resistance state (antiparallel) in ohms"
+        },
+        "switching_margin": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Resistance margin between states in ohms"
+        },
+        "verification_passed": {
+          "type": "boolean",
+          "description": "Whether threshold verification passed"
+        },
+        "tmr_ratio": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Tunnel Magnetoresistance ratio (ΔR/R_low)"
+        }
+      },
+      "description": "Threshold-based verification parameters"
+    }
+  }
+}

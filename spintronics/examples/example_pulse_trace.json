@@ -1,0 +1,41 @@
+{
+  "schema_version": "trace_integrity_v1",
+  "trace_id": "f1e2d3c4b5a6978869504132a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2",
+  "timestamp": "2024-01-15T10:35:00.000Z",
+  "pulse_sequence": [
+    {
+      "index": 0,
+      "amplitude": 1.5,
+      "duration": 10.0,
+      "pulse_type": "write",
+      "rise_time": 1.0,
+      "fall_time": 1.0
+    },
+    {
+      "index": 1,
+      "amplitude": 0.5,
+      "duration": 5.0,
+      "pulse_type": "read"
+    },
+    {
+      "index": 2,
+      "amplitude": 1.5,
+      "duration": 10.0,
+      "pulse_type": "write",
+      "rise_time": 1.0,
+      "fall_time": 1.0
+    },
+    {
+      "index": 3,
+      "amplitude": 0.5,
+      "duration": 5.0,
+      "pulse_type": "read"
+    }
+  ],
+  "integrity_check": {
+    "checksum": "d11efbbc0132e632486155682075fae891902468298b5257e275f18dd64f538c",
+    "checksum_algorithm": "sha256",
+    "total_duration": 30.0,
+    "pulse_count": 4
+  }
+}

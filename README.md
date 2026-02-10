@@ -8,6 +8,7 @@ REPEAT-HD: A data encoding and verification library with CRC checksums, runtime 
 - **Verify**: Verify encoded data with CRC/parse checks
 - **Strict Mode**: Additional runtime invariant checks for self-auditing
 - **3D Codec**: Encode binary messages using geometric representations in 2D and 3D space
+- **Spintronics Protocol**: MRAM-ready experimental packet handling with verification (see [spintronics/README.md](spintronics/README.md))
 
 ## Installation
 
@@ -130,4 +131,21 @@ Run the demonstration script to see the codec system in action:
 ```bash
 python scripts/demo_codec.py
 ```
+
+### Spintronics Protocol
+
+The spintronics module provides experimental packet handling for MRAM and spintronics research. See [spintronics/README.md](spintronics/README.md) for detailed documentation.
+
+Run the spintronics demonstration:
+
+```bash
+python scripts/demo_spintronics.py
+```
+
+Key features:
+- JSON schemas for spin configurations, pulse traces, and MRAM receipts
+- Cryptographic hashing and verification
+- Threshold-based MRAM state decoding
+- Nearest neighbor energy computation
+- Pulse sequence integrity validation
 ```
