@@ -165,16 +165,20 @@ def verify_packet_receipt(
         packet_hash = _compute_sha256_str(packet_checksum)
         
         # Build proof chain: each step verifies the decode process
-        # 1. Hash of packet checksum
-        # 2. Hash of decoded data
-        # 3. Hash of (packet_hash + data_hash) - combines both
-        # 4. Hash of original data hash from metadata (if available)
-        proof_chain = [packet_hash, data_hash]
+        # 1. Hash of packet checksum (establishes packet integrity)
+        # 2. Hash of decoded data (establishes data content)
+        # 3. Hash of (packet_hash + data_hash) - cryptographically binds packet to decoded data
+        # 4. Hash of original data hash from metadata - verifies against original (if available)
+        proof_chain = [
+            packet_hash,  # Step 1: Packet integrity
+            data_hash,    # Step 2: Data content
+        ]
         
+        # Step 3: Bind packet and data together
         combined_hash = _compute_sha256_str(packet_hash + data_hash)
         proof_chain.append(combined_hash)
         
-        # Add original hash verification if available
+        # Step 4: Add original hash verification if available
         original_hash = packet.get("data", {}).get("metadata", {}).get("original_hash", "")
         if original_hash:
             original_hash_verify = _compute_sha256_str(original_hash)
@@ -201,7 +205,7 @@ def verify_packet_receipt(
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "status": status,
         "verifier_proof": {
-            "packet_hash": proof_chain[0] if len(proof_chain) > 0 else "",
+            "packet_hash": packet_hash if status == "success" else "",
             "data_hash": data_hash,
             "proof_chain": proof_chain,
             "verification_status": verification_status

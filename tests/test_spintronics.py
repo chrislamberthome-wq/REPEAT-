@@ -255,10 +255,10 @@ class TestVerifierProofs:
         assert len(proof["proof_chain"]) >= 1
         
         # All hashes should be 64 chars (SHA-256 hex)
-        assert len(proof["packet_hash"]) == 64
-        assert len(proof["data_hash"]) == 64
+        assert len(proof["packet_hash"]) == 64, "Expected SHA-256 hex string (64 chars) for packet_hash"
+        assert len(proof["data_hash"]) == 64, "Expected SHA-256 hex string (64 chars) for data_hash"
         for hash_val in proof["proof_chain"]:
-            assert len(hash_val) == 64
+            assert len(hash_val) == 64, f"Expected SHA-256 hex string (64 chars) in proof chain, got {len(hash_val)}"
     
     def test_verify_receipt_with_predecoded_data(self):
         """Test creating receipt with pre-decoded data."""
