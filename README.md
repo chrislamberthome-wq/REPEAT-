@@ -131,4 +131,21 @@ Run the demonstration script to see the codec system in action:
 ```bash
 python scripts/demo_codec.py
 ```
+
+### Spintronics Protocol
+
+The spintronics module provides experimental packet handling for MRAM and spintronics research. See [spintronics/README.md](spintronics/README.md) for detailed documentation.
+
+Run the spintronics demonstration:
+
+```bash
+python scripts/demo_spintronics.py
+```
+
+Key features:
+- JSON schemas for spin configurations, pulse traces, and MRAM receipts
+- Cryptographic hashing and verification
+- Threshold-based MRAM state decoding
+- Nearest neighbor energy computation
+- Pulse sequence integrity validation
 ```

@@ -2,6 +2,26 @@
 
 This module implements a spintronics-ready REPEAT + Platoputer protocol with MRAM MVP (Minimum Viable Product) for fast scientific adoption.
 
+## Quick Start
+
+```bash
+# Run the demonstration script
+python scripts/demo_spintronics.py
+
+# Verify example packets
+python -m spintronics.verifiers.verify_mram_write_read \
+  spintronics/examples/example_mram_receipt.json
+
+python -m spintronics.verifiers.verify_state_survival_macrospin \
+  spintronics/examples/example_spin_configuration.json
+
+python -m spintronics.verifiers.verify_trace_integrity \
+  spintronics/examples/example_pulse_trace.json
+
+# Run tests
+pytest tests/test_spintronics*.py -v
+```
+
 ## Overview
 
 The spintronics protocol provides a standardized framework for experimental packet handling, verification, and data integrity in spintronics research, with a focus on MRAM (Magnetoresistive Random Access Memory) applications.
