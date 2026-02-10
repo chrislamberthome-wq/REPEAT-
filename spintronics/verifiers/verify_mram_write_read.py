@@ -7,7 +7,7 @@ threshold-based resistance decoding, and switching margin verification.
 
 import json
 import sys
-from typing import Dict, Any, Tuple
+from typing import Dict, Any, Tuple, List
 
 
 def decode_resistance_to_bit(resistance: float, 

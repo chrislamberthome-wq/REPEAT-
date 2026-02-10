@@ -76,8 +76,10 @@ class TestComputeNearestNeighborEnergy:
         energy = compute_nearest_neighbor_energy(
             spins, (2, 2), -1.0, "periodic"
         )
-        # All aligned with J=-1.0 should give negative energy
-        assert energy < 0
+        # All aligned with J=-1.0: E = -J * S*S = -(-1)*1*1 = +1 per bond
+        # 2x2 periodic has 8 bonds (4 horizontal + 4 vertical)
+        # So energy should be positive (8.0)
+        assert energy > 0
     
     def test_antiferromagnetic_checkerboard(self):
         """Test checkerboard pattern."""
@@ -85,8 +87,9 @@ class TestComputeNearestNeighborEnergy:
         energy = compute_nearest_neighbor_energy(
             spins, (2, 2), -1.0, "periodic"
         )
-        # Checkerboard with ferromagnetic J=-1.0 gives positive energy
-        assert energy > 0
+        # Checkerboard with ferromagnetic J=-1.0: E = -J * S1*S2 = -(-1)*(-1) = -1 per bond
+        # All nearest neighbors are antiparallel, so energy is negative
+        assert energy < 0
 
 
 class TestVerifyPulseSequence:
