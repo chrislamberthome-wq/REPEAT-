@@ -8,6 +8,7 @@ REPEAT-HD: A data encoding and verification library with CRC checksums, runtime 
 - **Verify**: Verify encoded data with CRC/parse checks
 - **Strict Mode**: Additional runtime invariant checks for self-auditing
 - **3D Codec**: Encode binary messages using geometric representations in 2D and 3D space
+- **Spintronics Protocol**: MRAM-ready experimental packet handling with verification (see [spintronics/README.md](spintronics/README.md))
 
 ## Installation
 

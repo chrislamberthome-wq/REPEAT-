@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/chrislamberthome-wq/REPEAT-/spintronics/schemas/state_survival_macrospin_v1.schema.json",
+  "title": "State Survival Macrospin v1",
+  "description": "Schema for spintronics spin configuration packets with nearest neighbor decoding for macrospin state survival verification",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "packet_id",
+    "timestamp",
+    "spin_configuration",
+    "nearest_neighbors",
+    "metadata"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "state_survival_macrospin_v1",
+      "description": "Schema version identifier"
+    },
+    "packet_id": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "Unique packet identifier (SHA-256 hex)"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of packet creation"
+    },
+    "spin_configuration": {
+      "type": "object",
+      "required": ["lattice_size", "spins"],
+      "properties": {
+        "lattice_size": {
+          "type": "object",
+          "required": ["x", "y"],
+          "properties": {
+            "x": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Lattice size in x dimension"
+            },
+            "y": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Lattice size in y dimension"
+            }
+          }
+        },
+        "spins": {
+          "type": "array",
+          "description": "Spin states (0=down, 1=up) in row-major order",
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1
+          }
+        }
+      },
+      "description": "2D spin lattice configuration"
+    },
+    "nearest_neighbors": {
+      "type": "object",
+      "required": ["interaction_strength", "boundary_conditions"],
+      "properties": {
+        "interaction_strength": {
+          "type": "number",
+          "description": "Nearest neighbor interaction coupling strength (J)"
+        },
+        "boundary_conditions": {
+          "type": "string",
+          "enum": ["periodic", "open"],
+          "description": "Lattice boundary conditions"
+        }
+      },
+      "description": "Nearest neighbor interaction parameters"
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["temperature", "external_field"],
+      "properties": {
+        "temperature": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Temperature in Kelvin"
+        },
+        "external_field": {
+          "type": "number",
+          "description": "External magnetic field in Tesla"
+        },
+        "evolution_time": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Time evolution duration in nanoseconds"
+        }
+      },
+      "description": "Experimental metadata"
+    }
+  }
+}
