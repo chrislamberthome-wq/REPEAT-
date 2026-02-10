@@ -130,4 +130,3 @@ Run the demonstration script to see the codec system in action:
 ```bash
 python scripts/demo_codec.py
 ```
-```
