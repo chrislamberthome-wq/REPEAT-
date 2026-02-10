@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://repeat-hd.example.com/schemas/spin_experiment.schema.json",
+  "title": "Spin Experiment Schema",
+  "description": "Schema for spintronics experiment encoding with REPEAT protocol",
+  "type": "object",
+  "required": ["symbol", "pulse_amplitude", "pulse_duration", "pulse_geometry", "temperature", "device_type", "timestamp"],
+  "properties": {
+    "symbol": {
+      "type": "object",
+      "description": "Spin texture symbol on Bloch sphere",
+      "required": ["binary", "theta", "phi", "platonic_angles"],
+      "properties": {
+        "binary": {
+          "type": "integer",
+          "description": "Binary value (0 or 1)",
+          "enum": [0, 1]
+        },
+        "theta": {
+          "type": "number",
+          "description": "Polar angle on Bloch sphere in radians [0, π]",
+          "minimum": 0,
+          "maximum": 3.141592653589793
+        },
+        "phi": {
+          "type": "number",
+          "description": "Azimuthal angle on Bloch sphere in radians [0, 2π]",
+          "minimum": 0,
+          "maximum": 6.283185307179586
+        },
+        "platonic_angles": {
+          "type": "array",
+          "description": "5 Platonic solid stopping angles in radians",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 5,
+          "maxItems": 5
+        }
+      }
+    },
+    "pulse_amplitude": {
+      "type": "number",
+      "description": "Magnetic field pulse amplitude in Tesla",
+      "minimum": 0,
+      "maximum": 2.0
+    },
+    "pulse_duration": {
+      "type": "number",
+      "description": "Pulse duration in nanoseconds",
+      "minimum": 0.1,
+      "maximum": 1000.0
+    },
+    "pulse_geometry": {
+      "type": "string",
+      "description": "Magnetic field pulse geometry",
+      "enum": ["in-plane", "perpendicular", "tilted", "rotating"]
+    },
+    "temperature": {
+      "type": "number",
+      "description": "Operating temperature in Kelvin",
+      "minimum": 1.0,
+      "maximum": 400.0
+    },
+    "device_type": {
+      "type": "string",
+      "description": "Type of spintronic device",
+      "enum": ["MRAM", "racetrack", "skyrmion", "magnonic"]
+    },
+    "timestamp": {
+      "type": "string",
+      "description": "ISO 8601 timestamp of experiment",
+      "format": "date-time"
+    }
+  }
+}

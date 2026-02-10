@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://repeat-hd.example.com/schemas/spin_window_symbol_v1.schema.json",
+  "title": "Spin Window Symbol Schema v1",
+  "description": "Schema for decoded spin readings and symbol recovery",
+  "type": "object",
+  "required": ["reading"],
+  "properties": {
+    "reading": {
+      "type": "object",
+      "description": "Device measurement readings",
+      "properties": {
+        "resistance": {
+          "type": ["number", "null"],
+          "description": "Resistance measurement for MRAM in Ohms",
+          "minimum": 0
+        },
+        "position": {
+          "type": ["number", "null"],
+          "description": "Domain wall position for racetrack in micrometers",
+          "minimum": 0
+        },
+        "topological_charge": {
+          "type": ["integer", "null"],
+          "description": "Topological charge for skyrmions (±1)",
+          "enum": [-1, 0, 1, null]
+        },
+        "phase": {
+          "type": ["number", "null"],
+          "description": "Phase measurement for magnonics in radians",
+          "minimum": 0,
+          "maximum": 6.283185307179586
+        },
+        "measured_theta": {
+          "type": ["number", "null"],
+          "description": "Measured polar angle on Bloch sphere in radians",
+          "minimum": 0,
+          "maximum": 3.141592653589793
+        },
+        "measured_phi": {
+          "type": ["number", "null"],
+          "description": "Measured azimuthal angle on Bloch sphere in radians",
+          "minimum": 0,
+          "maximum": 6.283185307179586
+        }
+      }
+    },
+    "decoded_binary": {
+      "type": ["integer", "null"],
+      "description": "Decoded binary value from reading",
+      "enum": [0, 1, null]
+    },
+    "confidence": {
+      "type": "number",
+      "description": "Confidence score for decoding [0, 1]",
+      "minimum": 0,
+      "maximum": 1
+    }
+  }
+}
