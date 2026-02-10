@@ -126,6 +126,21 @@ PYTHONPATH=. python -m pytest tests/test_spintronics.py -v
 PYTHONPATH=. python -m pytest tests/ -v
 ```
 
+## Demonstration
+
+Run the demonstration script to see the full system in action:
+
+```bash
+PYTHONPATH=. python scripts/demo_spintronics.py
+```
+
+This will demonstrate:
+1. Magnetization texture encoding/decoding
+2. MRAM packet creation and reading
+3. SHA-based verifier proofs
+4. Complete workflow
+5. Deterministic encoding
+
 ## Initialization and Verification
 
 Run the initialization script to verify the system:
