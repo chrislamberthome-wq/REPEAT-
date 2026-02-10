@@ -5,6 +5,8 @@ import argparse
 import sys
 import struct
 import zlib
+import json
+import re
 
 
 def encode_data(data: str) -> bytes:
@@ -161,6 +163,73 @@ def cmd_verify(args):
     return 0
 
 
+def normalize_hex(hex_input: str) -> tuple[str, bool, str]:
+    """
+    Normalize a hexadecimal string according to PublicHex v1 rules.
+    
+    Args:
+        hex_input: Input string potentially containing hex and whitespace
+        
+    Returns:
+        tuple: (normalized_hex, is_valid, error_message)
+            - normalized_hex: Normalized lowercase hex string (empty if invalid)
+            - is_valid: True if input is valid PublicHex
+            - error_message: Error description if invalid
+    """
+    # Remove all whitespace
+    cleaned = re.sub(r'\s+', '', hex_input)
+    
+    # Check if empty after whitespace removal
+    if not cleaned:
+        return "", False, "Input is empty or contains only whitespace"
+    
+    # Convert to lowercase
+    normalized = cleaned.lower()
+    
+    # Check if all characters are valid hexadecimal
+    if not re.match(r'^[0-9a-f]+$', normalized):
+        return "", False, "Input contains non-hexadecimal characters"
+    
+    # Check if even number of characters (complete bytes)
+    if len(normalized) % 2 != 0:
+        return "", False, "Input has odd number of characters (incomplete bytes)"
+    
+    return normalized, True, ""
+
+
+def cmd_publichex_verify(args):
+    """Handle the publichex-verify command."""
+    # Get input from --hex argument or stdin
+    if args.hex:
+        hex_input = args.hex
+    else:
+        try:
+            hex_input = sys.stdin.read()
+        except Exception as e:
+            print(json.dumps({"error": f"Failed to read from stdin: {e}"}))
+            return 1
+    
+    # Normalize the input
+    normalized_hex, is_valid, error_msg = normalize_hex(hex_input)
+    
+    if is_valid:
+        # Output JSON for PASS
+        result = {
+            "encoding": "publichex-v1",
+            "normalized_frame_hex": normalized_hex
+        }
+        print(json.dumps(result))
+        return 0
+    else:
+        # Output JSON with error for FAIL
+        result = {
+            "error": error_msg,
+            "encoding": "publichex-v1"
+        }
+        print(json.dumps(result))
+        return 2
+
+
 def main():
     """Main CLI entry point."""
     parser = argparse.ArgumentParser(
@@ -197,6 +266,17 @@ def main():
              'integrity verification beyond basic CRC/parse checks.'
     )
     verify_parser.set_defaults(func=cmd_verify)
+    
+    # PublicHex verify command
+    publichex_parser = subparsers.add_parser(
+        'publichex-verify',
+        help='Verify and normalize hexadecimal input according to PublicHex v1'
+    )
+    publichex_parser.add_argument(
+        '--hex',
+        help='Hexadecimal string to verify (reads from stdin if not specified)'
+    )
+    publichex_parser.set_defaults(func=cmd_publichex_verify)
     
     # Parse arguments
     args = parser.parse_args()
