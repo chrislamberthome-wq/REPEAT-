@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://repeat.spintronics/receipt.schema.json",
+  "title": "MRAM Operation Receipt Schema",
+  "description": "Schema for MRAM operation receipt with verifier proofs using SHA receipts",
+  "type": "object",
+  "required": ["version", "receipt_id", "packet_id", "operation", "timestamp", "status", "verifier_proof"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Schema version",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "default": "1.0.0"
+    },
+    "receipt_id": {
+      "type": "string",
+      "description": "Unique receipt identifier (UUID v4)",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "packet_id": {
+      "type": "string",
+      "description": "Reference to packet ID",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "operation": {
+      "type": "string",
+      "description": "MRAM operation type",
+      "enum": ["write", "read"]
+    },
+    "timestamp": {
+      "type": "string",
+      "description": "ISO 8601 timestamp of receipt creation",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "description": "Operation status",
+      "enum": ["success", "failure", "pending"]
+    },
+    "verifier_proof": {
+      "type": "object",
+      "description": "SHA-based verifier proof for probable decode",
+      "required": ["packet_hash", "data_hash", "proof_chain"],
+      "properties": {
+        "packet_hash": {
+          "type": "string",
+          "description": "SHA-256 hash of the packet checksum",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "data_hash": {
+          "type": "string",
+          "description": "SHA-256 hash of decoded data",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "proof_chain": {
+          "type": "array",
+          "description": "Chain of SHA-256 hashes proving decode validity",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "minItems": 1
+        },
+        "verification_status": {
+          "type": "string",
+          "description": "Verification result",
+          "enum": ["verified", "failed", "pending"]
+        }
+      }
+    },
+    "result": {
+      "type": "object",
+      "description": "Optional operation result data",
+      "properties": {
+        "decoded_bytes": {
+          "type": "integer",
+          "description": "Number of bytes decoded",
+          "minimum": 0
+        },
+        "error_message": {
+          "type": "string",
+          "description": "Error message if operation failed"
+        }
+      }
+    }
+  }
+}

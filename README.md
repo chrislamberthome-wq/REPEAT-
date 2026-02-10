@@ -8,6 +8,7 @@ REPEAT-HD: A data encoding and verification library with CRC checksums, runtime 
 - **Verify**: Verify encoded data with CRC/parse checks
 - **Strict Mode**: Additional runtime invariant checks for self-auditing
 - **3D Codec**: Encode binary messages using geometric representations in 2D and 3D space
+- **Spintronics MRAM MVP**: Integration with Platoputer using magnetization textures and cryptographic verification
 
 ## Installation
 
@@ -129,5 +130,35 @@ Run the demonstration script to see the codec system in action:
 
 ```bash
 python scripts/demo_codec.py
+```
+
+## Spintronics MRAM MVP
+
+The spintronics module implements REPEAT + Platoputer integration with magnetization texture encoding. See [repeat_spintronics/README.md](repeat_spintronics/README.md) for detailed documentation.
+
+### Quick Start
+
+```python
+from repeat_spintronics import (
+    create_mram_packet,
+    read_mram_packet,
+    verify_packet_receipt,
+)
+
+# Create MRAM packet with encoded data
+packet = create_mram_packet(b"Hello, MRAM!")
+
+# Read and verify
+decoded = read_mram_packet(packet)
+receipt = verify_packet_receipt(packet)
+
+print(f"Status: {receipt['status']}")
+print(f"Verified: {receipt['verifier_proof']['verification_status']}")
+```
+
+Run initialization verification:
+
+```bash
+PYTHONPATH=. python scripts/init_spintronics.py
 ```
 ```
