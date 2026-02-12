@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "schema": "repeat/receipt/v1",
+  "title": "REPEAT Receipt Schema v1",
+  "description": "Core contract for REPEAT receipt verification",
+  "type": "object",
+  "properties": {
+    "receipt_version": {
+      "type": "string",
+      "description": "Version identifier for the receipt schema",
+      "pattern": "^v[0-9]+$",
+      "examples": ["v1"]
+    },
+    "receipt_type": {
+      "type": "string",
+      "description": "Type or category of the receipt",
+      "enum": ["verification", "attestation", "audit", "validation"]
+    },
+    "subject": {
+      "type": "string",
+      "description": "Subject or identifier of what is being receipted"
+    },
+    "verifier": {
+      "type": "object",
+      "description": "Information about the verifier entity",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the verifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name of the verifier"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of verifier",
+          "enum": ["automated", "manual", "hybrid"]
+        }
+      },
+      "required": ["id", "type"]
+    },
+    "result": {
+      "type": "object",
+      "description": "Result of the verification or process",
+      "properties": {
+        "status": {
+          "type": "string",
+          "description": "Status of the verification result",
+          "enum": ["pass", "fail", "warning", "inconclusive"]
+        },
+        "verified": {
+          "type": "boolean",
+          "description": "Boolean flag indicating if verification was successful"
+        },
+        "message": {
+          "type": ["string", "null"],
+          "description": "Optional message describing the result"
+        }
+      },
+      "required": ["status", "verified"]
+    },
+    "evidence": {
+      "type": "array",
+      "description": "Array of evidence objects supporting the receipt",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Type of evidence"
+          },
+          "data": {
+            "description": "The evidence data, which can be of various types"
+          },
+          "hash": {
+            "type": "string",
+            "description": "Hash of the evidence for integrity verification",
+            "pattern": "^sha256:[a-f0-9]{64}$"
+          }
+        },
+        "required": ["type", "data"]
+      }
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "description": "UTC timestamp when the receipt was created",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "receipt_version",
+    "receipt_type",
+    "subject",
+    "verifier",
+    "result",
+    "evidence",
+    "timestamp_utc"
+  ],
+  "additionalProperties": false
+}
