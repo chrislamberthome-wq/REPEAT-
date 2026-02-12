@@ -8,8 +8,8 @@
     "receipt_version": {
       "type": "string",
       "description": "Version identifier for the receipt schema",
-      "pattern": "^v[0-9]+$",
-      "examples": ["v1"]
+      "pattern": "^v[0-9]+(\\.[0-9]+)*$",
+      "examples": ["v1", "v1.0", "v1.2.3"]
     },
     "receipt_type": {
       "type": "string",
@@ -76,7 +76,7 @@
           "hash": {
             "type": "string",
             "description": "Hash of the evidence for integrity verification",
-            "pattern": "^sha256:[a-f0-9]{64}$"
+            "pattern": "^(sha256|sha384|sha512):[a-f0-9]+$"
           }
         },
         "required": ["type", "data"]
