@@ -1,0 +1,1 @@
+[{"id": "golden1", "obj": {"baz": 123, "foo": "bar"}, "expected": "sha256:fdf216617c29ad5894de2528e51f783392a864c38ab4d0411a0ac59435621afd"}]
