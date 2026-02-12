@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://repeat-project.org/schemas/repeat_receipt.v1.schema.json",
+  "title": "REPEAT Receipt v1 Core Schema",
+  "description": "Core receipt contract for all REPEAT subsystems. Subsystems may extend this schema with additional fields.",
+  "type": "object",
+  "properties": {
+    "receipt_version": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Receipt schema version. Must be exactly '1.0' for this version."
+    },
+    "receipt_type": {
+      "type": "string",
+      "description": "Subsystem-defined receipt type identifier (e.g., 'genotype', 'quality_check', 'pipeline_run')."
+    },
+    "subject": {
+      "type": "object",
+      "description": "The entity being verified/processed.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the subject."
+        },
+        "hash": {
+          "type": "string",
+          "description": "Hash of the subject. Must include algorithm prefix (e.g., 'sha256:abc123...')."
+        }
+      },
+      "required": ["id", "hash"],
+      "additionalProperties": true
+    },
+    "verifier": {
+      "type": "object",
+      "description": "Information about the system/component that performed verification.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Identifier of the verifier (e.g., system name, component name)."
+        },
+        "version": {
+          "type": "string",
+          "description": "Version of the verifier software."
+        }
+      },
+      "required": ["id", "version"],
+      "additionalProperties": true
+    },
+    "result": {
+      "type": "object",
+      "description": "The verification result.",
+      "properties": {
+        "pass": {
+          "type": "boolean",
+          "description": "Whether verification passed (true) or failed (false)."
+        },
+        "reason": {
+          "type": "string",
+          "description": "Human-readable explanation of the result. May be empty string but is required."
+        }
+      },
+      "required": ["pass", "reason"],
+      "additionalProperties": true
+    },
+    "evidence": {
+      "type": "object",
+      "description": "Evidence supporting this receipt.",
+      "properties": {
+        "hash": {
+          "type": "string",
+          "description": "Hash of the evidence bundle or canonicalized payload. Must include algorithm prefix."
+        },
+        "artifacts": {
+          "type": "array",
+          "description": "List of artifact references. May be empty but is required.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["hash", "artifacts"],
+      "additionalProperties": true
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "description": "UTC timestamp when receipt was generated. ISO-8601 format recommended (e.g., '2026-02-12T12:41:29Z')."
+    }
+  },
+  "required": [
+    "receipt_version",
+    "receipt_type",
+    "subject",
+    "verifier",
+    "result",
+    "evidence",
+    "timestamp_utc"
+  ],
+  "additionalProperties": true
+}
