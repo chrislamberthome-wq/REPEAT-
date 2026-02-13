@@ -1,0 +1,1 @@
+{ "schema": "v1.0", "receipt": { "receipt_id": "AI_LOOPBACK-000001", "created_utc": "2026-02-13T00:00:00Z", "producer": "ai_loopback_visual_binary", "run_id": "run-000001" }, "verify": {}, "artifacts": {} }
