@@ -2,7 +2,7 @@
   "schema": "v1.0",
   "receipt": {
     "receipt_id": "AI-LOOPBACK-VISUAL-BINARY-000001",
-    "created_utc": "2026-02-13T19:04:54.701961Z",
+    "created_utc": "2026-02-13T19:06:18.181252Z",
     "producer": "ai_loopback_visual_binary",
     "run_id": "run-000001"
   },
