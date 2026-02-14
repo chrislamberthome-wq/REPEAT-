@@ -25,6 +25,10 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 
+[tool.setuptools.packages.find]
+include = ["repeat_hd*"]
+exclude = ["tests*", "scripts*", "profiles*", "ai_loopback_visual_binary*", "repeat_devops_gift_processing*"]
+
 [project.optional-dependencies]
 dev = [
   "pytest>=7.0,<9",
