@@ -1,0 +1,10 @@
+{
+  "protocol_id": "ai_loopback_visual_binary/v1",
+  "run_id": "demo-001",
+  "inputs_hash": "96106956532cc4a72660605600c6e9688145083c663d43320158ad9157a8d264",
+  "outputs_hash": "8556a100c810d4fec28a78fa609542ce44d30b977d3e329967d7176b1852ad4d",
+  "trace_hash": "ae61ff7c7d808723be7103c97f8d9b9fd81e9e133a020db5d87cfe0af3abf67a",
+  "timestamp": "2026-02-14T06:39:26.813226+00:00",
+  "verdict": "PASS",
+  "verifier_version": "1.0.0"
+}
