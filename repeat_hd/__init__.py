@@ -4,22 +4,22 @@ __version__ = "0.1.0"
 
 # Export 3D codec functions for easy access
 from repeat_hd.codec_3d import (
-    # Helper functions
-    wrap_angle,
-    verify_tolerance,
-    # 2D codec
-    encode_2d,
-    decode_2d,
-    # 3D seashell codec
-    encode_3d_seashell,
-    decode_3d_seashell,
-    # 3D 5-solids codec
-    encode_3d_solids,
-    decode_3d_solids_rule_a,
-    decode_3d_solids_rule_b,
+    DEFAULT_RADIUS,
     # Constants
     EPSILON,
-    DEFAULT_RADIUS,
+    decode_2d,
+    decode_3d_seashell,
+    decode_3d_solids_rule_a,
+    decode_3d_solids_rule_b,
+    # 2D codec
+    encode_2d,
+    # 3D seashell codec
+    encode_3d_seashell,
+    # 3D 5-solids codec
+    encode_3d_solids,
+    verify_tolerance,
+    # Helper functions
+    wrap_angle,
 )
 
 __all__ = [

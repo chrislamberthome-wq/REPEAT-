@@ -1,8 +1,7 @@
 """3D Codec System for encoding/decoding binary messages with geometric representations."""
 
 import math
-from typing import Tuple, Optional
-
+from typing import Optional, Tuple
 
 # Constants
 EPSILON = 0.08  # Tolerance threshold for verification
@@ -51,18 +50,18 @@ def encode_2d(binary_input: int, radius: float = DEFAULT_RADIUS) -> Tuple[float,
     """
     if binary_input not in [0, 1]:
         raise ValueError(f"Binary input must be 0 or 1, got {binary_input}")
-    
+
     # Map binary to angle
     theta = 0.0 if binary_input == 0 else math.pi
-    
+
     # Convert to cartesian coordinates
     x = radius * math.cos(theta)
     y = radius * math.sin(theta)
-    
+
     return (x, y)
 
 
-def decode_2d(point: Tuple[float, float], radius: float = DEFAULT_RADIUS, 
+def decode_2d(point: Tuple[float, float], radius: float = DEFAULT_RADIUS,
               tolerance: float = EPSILON) -> Optional[int]:
     """
     Decode binary value from 2D point with tolerance verification.
@@ -80,20 +79,20 @@ def decode_2d(point: Tuple[float, float], radius: float = DEFAULT_RADIUS,
         Decoded binary value (0 or 1), or None if verification fails
     """
     x, y = point
-    
+
     # Check if point is approximately on the expected circle
     distance = math.sqrt(x*x + y*y)
     if abs(distance - radius) > tolerance:
         return None
-    
+
     # Compute angle
     theta = math.atan2(y, x)
-    
+
     # Check which angle it's closest to
     # For b=0: θ=0, for b=1: θ=π
     dist_to_0 = abs(wrap_angle(theta - 0.0))
     dist_to_pi = abs(wrap_angle(theta - math.pi))
-    
+
     if dist_to_0 < tolerance:
         return 0
     elif dist_to_pi < tolerance:
@@ -103,7 +102,7 @@ def decode_2d(point: Tuple[float, float], radius: float = DEFAULT_RADIUS,
         return None
 
 
-def encode_3d_seashell(binary_input: int, r0: float = 1.0, phi: float = 1.2, 
+def encode_3d_seashell(binary_input: int, r0: float = 1.0, phi: float = 1.2,
                        t: float = 1.0) -> Tuple[float, float, float]:
     """
     Encode binary input to 3D point using logarithmic spiral (seashell curve).
@@ -126,18 +125,18 @@ def encode_3d_seashell(binary_input: int, r0: float = 1.0, phi: float = 1.2,
     """
     if binary_input not in [0, 1]:
         raise ValueError(f"Binary input must be 0 or 1, got {binary_input}")
-    
+
     # Compute radius based on logarithmic spiral
     r = r0 * (phi ** t)
-    
+
     # Compute x, y using polar coordinates with angle t
     x = r * math.cos(t)
     y = r * math.sin(t)
-    
+
     # Modulate z based on binary value
     # b=0 → z negative, b=1 → z positive
     z = -r if binary_input == 0 else r
-    
+
     return (x, y, z)
 
 
@@ -184,10 +183,10 @@ def encode_3d_solids(binary_input: int) -> Tuple[float, float, float, float, flo
     """
     if binary_input not in [0, 1]:
         raise ValueError(f"Binary input must be 0 or 1, got {binary_input}")
-    
+
     # Base angles for each Platonic solid (characteristic angles in radians)
     # These are related to the dihedral angles and symmetries
-    
+
     if binary_input == 0:
         # For b=0: angles that will produce cos(α) >= 0 for majority
         alpha_T = 0.0  # Tetrahedron: cos(0) = 1
@@ -202,7 +201,7 @@ def encode_3d_solids(binary_input: int) -> Tuple[float, float, float, float, flo
         alpha_O = 5.0 * math.pi / 6  # Octahedron: cos(5π/6) ≈ -0.866
         alpha_D = math.pi  # Dodecahedron: cos(π) = -1
         alpha_I = 2.5  # Icosahedron: cos(2.5) ≈ -0.801
-    
+
     return (alpha_T, alpha_C, alpha_O, alpha_D, alpha_I)
 
 
@@ -223,12 +222,12 @@ def decode_3d_solids_rule_a(angles: Tuple[float, float, float, float, float]) ->
     for alpha in angles:
         vote = 0 if math.cos(alpha) >= 0 else 1
         votes.append(vote)
-    
+
     # Return majority vote
     return 1 if sum(votes) > len(votes) / 2 else 0
 
 
-def decode_3d_solids_rule_b(angles: Tuple[float, float, float, float, float], 
+def decode_3d_solids_rule_b(angles: Tuple[float, float, float, float, float],
                             threshold: float = 0.0) -> int:
     """
     Decode binary value from 5-solids angles using Rule B (sum threshold).
