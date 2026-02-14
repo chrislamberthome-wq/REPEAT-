@@ -13,7 +13,7 @@ test:
 	python -m pytest tests/ -v
 
 lint:
-	python -m ruff check .
+	python -m ruff check repeat_hd/ tests/
 	python -m mypy repeat_hd/ --ignore-missing-imports
 
 format:

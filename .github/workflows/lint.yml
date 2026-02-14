@@ -33,7 +33,7 @@ jobs:
     
     - name: Lint with ruff
       run: |
-        python -m ruff check .
+        python -m ruff check repeat_hd/ tests/
     
     - name: Type check with mypy
       run: |

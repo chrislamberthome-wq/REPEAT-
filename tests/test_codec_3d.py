@@ -151,8 +151,8 @@ class TestEncode3DSeashell:
         x, y, z = encode_3d_seashell(0, r0=r0, phi=phi, t=t)
 
         # Verify r = r0 * phi^t
-        expected_r = r0 * (phi ** t)
-        actual_r = math.sqrt(x*x + y*y)
+        expected_r = r0 * (phi**t)
+        actual_r = math.sqrt(x * x + y * y)
         assert abs(actual_r - expected_r) < 1e-10
 
         # Verify z = -r for b=0
@@ -255,7 +255,7 @@ class TestDecode3DSolidsRuleA:
     def test_decode_solids_rule_a_custom_angles(self):
         """Test Rule A with custom angles."""
         # 3 positive cosines, 2 negative → majority vote 0
-        angles = (0.0, math.pi/4, math.pi/3, 3*math.pi/4, math.pi)
+        angles = (0.0, math.pi / 4, math.pi / 3, 3 * math.pi / 4, math.pi)
         result = decode_3d_solids_rule_a(angles)
         assert result == 0
 

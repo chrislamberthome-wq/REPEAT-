@@ -80,7 +80,7 @@ class TestDecodeData:
         """Test decoding data with corrupted CRC."""
         encoded = encode_data("hello")
         # Corrupt the CRC (first 4 bytes)
-        corrupted = b'\xff\xff\xff\xff' + encoded[4:]
+        corrupted = b"\xff\xff\xff\xff" + encoded[4:]
 
         decoded, is_valid, errors = decode_data(corrupted)
 
@@ -155,7 +155,7 @@ class TestCheckInvariants:
         data = "hello"
         encoded = encode_data(data)
         # Create a different encoding by modifying it
-        corrupted = encoded[:-1] + b'X'
+        corrupted = encoded[:-1] + b"X"
         violations = check_invariants(data, corrupted)
 
         # Should detect multiple issues including re-encoding mismatch
@@ -168,7 +168,7 @@ class TestCmdVerify:
     def test_verify_without_strict_valid_data(self):
         """Test verify command without --strict flag on valid data."""
         # Create a temporary file with encoded data
-        with tempfile.NamedTemporaryFile(mode='wb', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="wb", delete=False) as f:
             encoded = encode_data("test data")
             f.write(encoded)
             temp_file = f.name
@@ -182,7 +182,7 @@ class TestCmdVerify:
 
     def test_verify_with_strict_valid_data(self):
         """Test verify command with --strict flag on valid data."""
-        with tempfile.NamedTemporaryFile(mode='wb', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="wb", delete=False) as f:
             encoded = encode_data("test data")
             f.write(encoded)
             temp_file = f.name
@@ -196,10 +196,10 @@ class TestCmdVerify:
 
     def test_verify_without_strict_invalid_crc(self):
         """Test verify command without --strict flag on invalid CRC."""
-        with tempfile.NamedTemporaryFile(mode='wb', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="wb", delete=False) as f:
             encoded = encode_data("test data")
             # Corrupt CRC
-            corrupted = b'\xff\xff\xff\xff' + encoded[4:]
+            corrupted = b"\xff\xff\xff\xff" + encoded[4:]
             f.write(corrupted)
             temp_file = f.name
 
@@ -212,10 +212,10 @@ class TestCmdVerify:
 
     def test_verify_with_strict_invalid_crc(self):
         """Test verify command with --strict flag on invalid CRC."""
-        with tempfile.NamedTemporaryFile(mode='wb', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="wb", delete=False) as f:
             encoded = encode_data("test data")
             # Corrupt CRC
-            corrupted = b'\xff\xff\xff\xff' + encoded[4:]
+            corrupted = b"\xff\xff\xff\xff" + encoded[4:]
             f.write(corrupted)
             temp_file = f.name
 
@@ -229,7 +229,7 @@ class TestCmdVerify:
 
     def test_verify_with_strict_invariant_violation(self):
         """Test verify command with --strict flag detecting invariant violation."""
-        with tempfile.NamedTemporaryFile(mode='wb', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="wb", delete=False) as f:
             # Create data with null bytes (violates invariant)
             encoded = encode_data("hello\x00world")
             f.write(encoded)
@@ -245,7 +245,7 @@ class TestCmdVerify:
 
     def test_verify_without_strict_skips_invariants(self):
         """Test verify without --strict doesn't check invariants."""
-        with tempfile.NamedTemporaryFile(mode='wb', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="wb", delete=False) as f:
             # Create data with null bytes (violates invariant but passes CRC)
             encoded = encode_data("hello\x00world")
             f.write(encoded)

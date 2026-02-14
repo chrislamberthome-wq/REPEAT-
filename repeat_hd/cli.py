@@ -10,17 +10,17 @@ import zlib
 def encode_data(data: str) -> bytes:
     """
     Encode data with CRC checksum.
-    
+
     Format: [4 bytes: CRC32][4 bytes: length][data bytes]
     """
-    data_bytes = data.encode('utf-8')
+    data_bytes = data.encode("utf-8")
     length = len(data_bytes)
 
     # Calculate CRC32 of the data
-    crc = zlib.crc32(data_bytes) & 0xffffffff
+    crc = zlib.crc32(data_bytes) & 0xFFFFFFFF
 
     # Pack: CRC (4 bytes), length (4 bytes), then data
-    encoded = struct.pack('<II', crc, length) + data_bytes
+    encoded = struct.pack("<II", crc, length) + data_bytes
 
     return encoded
 
@@ -28,7 +28,7 @@ def encode_data(data: str) -> bytes:
 def decode_data(encoded: bytes) -> tuple[str, bool, list[str]]:
     """
     Decode data and verify CRC checksum.
-    
+
     Returns:
         tuple: (decoded_string, is_valid, errors)
             - decoded_string: The decoded data (empty if invalid)
@@ -44,7 +44,7 @@ def decode_data(encoded: bytes) -> tuple[str, bool, list[str]]:
 
     try:
         # Unpack header
-        stored_crc, length = struct.unpack('<II', encoded[:8])
+        stored_crc, length = struct.unpack("<II", encoded[:8])
         data_bytes = encoded[8:]
 
         # Check if data length matches
@@ -53,13 +53,13 @@ def decode_data(encoded: bytes) -> tuple[str, bool, list[str]]:
             return "", False, errors
 
         # Verify CRC
-        calculated_crc = zlib.crc32(data_bytes) & 0xffffffff
+        calculated_crc = zlib.crc32(data_bytes) & 0xFFFFFFFF
         if stored_crc != calculated_crc:
             errors.append(f"CRC mismatch: expected {stored_crc:08x}, got {calculated_crc:08x}")
             return "", False, errors
 
         # Decode data
-        decoded = data_bytes.decode('utf-8')
+        decoded = data_bytes.decode("utf-8")
 
         return decoded, True, errors
 
@@ -74,10 +74,10 @@ def decode_data(encoded: bytes) -> tuple[str, bool, list[str]]:
 def check_invariants(data: str, encoded: bytes) -> list[str]:
     """
     Perform runtime invariant checks on encoded data.
-    
+
     These checks ensure internal consistency and correctness beyond
     basic CRC/parse verification.
-    
+
     Returns:
         list: Error messages for any violations found
     """
@@ -90,7 +90,7 @@ def check_invariants(data: str, encoded: bytes) -> list[str]:
 
     # Invariant 2: Length field should match actual data length
     if len(encoded) >= 8:
-        _, stored_length = struct.unpack('<II', encoded[:8])
+        _, stored_length = struct.unpack("<II", encoded[:8])
         actual_data_length = len(encoded) - 8
         if stored_length != actual_data_length:
             violations.append(
@@ -99,15 +99,14 @@ def check_invariants(data: str, encoded: bytes) -> list[str]:
             )
 
     # Invariant 3: Data should not contain null bytes (common corruption indicator)
-    if '\x00' in data:
+    if "\x00" in data:
         violations.append("Invariant violation: decoded data contains null bytes")
 
     # Invariant 4: Encoded size should be reasonable (header + data)
-    expected_size = 8 + len(data.encode('utf-8'))
+    expected_size = 8 + len(data.encode("utf-8"))
     if len(encoded) != expected_size:
         violations.append(
-            f"Invariant violation: encoded size ({len(encoded)}) != "
-            f"expected size ({expected_size})"
+            f"Invariant violation: encoded size ({len(encoded)}) != expected size ({expected_size})"
         )
 
     return violations
@@ -127,7 +126,7 @@ def cmd_verify(args):
     """Handle the verify command."""
     # Read input
     if args.infile:
-        with open(args.infile, 'rb') as f:
+        with open(args.infile, "rb") as f:
             encoded = f.read()
     else:
         encoded = sys.stdin.buffer.read()
@@ -164,37 +163,26 @@ def cmd_verify(args):
 def main():
     """Main CLI entry point."""
     parser = argparse.ArgumentParser(
-        prog='repeat_hd',
-        description='REPEAT-HD: Data encoding and verification tool'
+        prog="repeat_hd", description="REPEAT-HD: Data encoding and verification tool"
     )
 
-    subparsers = parser.add_subparsers(dest='command', help='Available commands')
+    subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # Encode command
-    encode_parser = subparsers.add_parser(
-        'encode',
-        help='Encode data with CRC checksum'
-    )
-    encode_parser.add_argument(
-        'data',
-        help='Data to encode'
-    )
+    encode_parser = subparsers.add_parser("encode", help="Encode data with CRC checksum")
+    encode_parser.add_argument("data", help="Data to encode")
     encode_parser.set_defaults(func=cmd_encode)
 
     # Verify command
-    verify_parser = subparsers.add_parser(
-        'verify',
-        help='Verify encoded data integrity'
+    verify_parser = subparsers.add_parser("verify", help="Verify encoded data integrity")
+    verify_parser.add_argument(
+        "--infile", help="Input file to verify (reads from stdin if not specified)"
     )
     verify_parser.add_argument(
-        '--infile',
-        help='Input file to verify (reads from stdin if not specified)'
-    )
-    verify_parser.add_argument(
-        '--strict',
-        action='store_true',
-        help='Enable additional runtime invariant checks for enhanced data '
-             'integrity verification beyond basic CRC/parse checks.'
+        "--strict",
+        action="store_true",
+        help="Enable additional runtime invariant checks for enhanced data "
+        "integrity verification beyond basic CRC/parse checks.",
     )
     verify_parser.set_defaults(func=cmd_verify)
 
@@ -209,5 +197,5 @@ def main():
     return args.func(args)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())
