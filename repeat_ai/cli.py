@@ -94,7 +94,7 @@ def cmd_diff(args):
         evaluation = policy_engine.evaluate(changed_paths)
         
         # Generate and print report
-        grouped = not args.policy_report or args.policy_report == 'grouped'
+        grouped = args.policy_report == 'grouped'
         report = policy_engine.format_report(evaluation, grouped=grouped)
         print(report)
         
