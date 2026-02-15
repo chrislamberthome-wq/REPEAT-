@@ -1,0 +1,17 @@
+{
+  "deny": [
+    "*.critical",
+    "security/*",
+    "invariants/*"
+  ],
+  "warn": [
+    "*.config",
+    "schema/*",
+    "api/*"
+  ],
+  "allow": [
+    "*.test",
+    "*.temp",
+    "debug/*"
+  ]
+}
