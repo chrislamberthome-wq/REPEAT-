@@ -25,3 +25,6 @@ dist/
 build/
 *.egg-info/
 
+# MRAM simulation outputs
+*.jsonl
+
