@@ -74,6 +74,10 @@ def create_packet(device_id: str, num_runs: int,
     return packet
 
 
+# Drift rate constants
+DRIFT_RATE_PER_RUN = 0.003  # 0.3% drift per run in drift_fail mode
+
+
 def simulate_resistance_measurement(run_id: int, mode: str, rng: random.Random) -> float:
     """
     Simulate a resistance measurement for MRAM in parallel state.
@@ -96,7 +100,7 @@ def simulate_resistance_measurement(run_id: int, mode: str, rng: random.Random) 
     elif mode == "drift_fail":
         # Drift failure mode: gradual upward drift
         # Still passes threshold (1250 ohms) but exceeds drift tolerance
-        drift_factor = 0.003 * run_id  # 0.3% drift per run
+        drift_factor = DRIFT_RATE_PER_RUN * run_id
         noise = rng.gauss(0, 1.0)  # smaller noise to show clear drift
         return base_resistance * (1.0 + drift_factor) + noise
     

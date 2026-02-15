@@ -19,6 +19,10 @@ import pytest
 class TestMRAMDriftDetection:
     """Test suite for MRAM drift detection with REPEAT verification."""
     
+    # Golden hash constants
+    EXPECTED_PACKET_HASH = "sha256:e79de2a174f42f074d36fc450a8389fe16d804996535d2a462f4c815ba4b3353"
+    EXPECTED_RUN_23_RECEIPT_HASH = "sha256:24957fd9ea82a4197f8afac0fe11c0002453b2f6942129f1d683c08fa452c127"
+    
     def run_simulation(self, mode: str, seed: int) -> tuple[str, str]:
         """
         Run the simulation and return (output_text, receipt_file_path).
@@ -153,8 +157,7 @@ class TestMRAMDriftDetection:
             assert packet_hash_pass == packet_hash_drift
             
             # Verify against expected golden hash
-            expected_hash = "sha256:e79de2a174f42f074d36fc450a8389fe16d804996535d2a462f4c815ba4b3353"
-            assert packet_hash_pass == expected_hash
+            assert packet_hash_pass == self.EXPECTED_PACKET_HASH
         finally:
             os.unlink(file_pass)
             os.unlink(file_drift)
@@ -228,8 +231,7 @@ class TestMRAMDriftDetection:
             assert run_23_receipt['verdict']['pass'] is False
             
             # Golden hash for run 23 with seed 42
-            expected_receipt_hash = "sha256:24957fd9ea82a4197f8afac0fe11c0002453b2f6942129f1d683c08fa452c127"
-            assert run_23_receipt['receipt_hash_sha256'] == expected_receipt_hash, \
+            assert run_23_receipt['receipt_hash_sha256'] == self.EXPECTED_RUN_23_RECEIPT_HASH, \
                 "Golden hash mismatch - indicates non-deterministic behavior or schema change"
         finally:
             os.unlink(receipt_file)

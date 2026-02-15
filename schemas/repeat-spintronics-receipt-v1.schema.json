@@ -50,7 +50,9 @@
           "type": "boolean"
         },
         "fail_reason": {
-          "type": "string"
+          "type": "string",
+          "enum": ["drift_detected", "threshold_exceeded"],
+          "description": "Reason for test failure: drift_detected (drift exceeds tolerance) or threshold_exceeded (resistance exceeds threshold)"
         }
       }
     },

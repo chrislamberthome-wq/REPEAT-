@@ -132,9 +132,9 @@ Simulation complete: mode=drift_fail, seed=42
 | 22  | 1064.78       | 4.76      | ✓ PASS          | ✓ PASS         |
 | 23  | 1068.69       | **5.15**  | ✓ PASS          | ✗ **FAIL**     |
 | 50  | 1147.83       | 12.93     | ✓ PASS          | ✗ FAIL         |
-| 100 | 1291.45†      | 27.07     | ✗ FAIL          | ✗ FAIL         |
+| 100 | 1291.45[1]    | 27.07     | ✗ FAIL          | ✗ FAIL         |
 
-† At run 100, resistance finally exceeds threshold, so even naive logic fails. But by this point, REPEAT has already identified the drift at run 23—77 runs earlier!
+[1] At run 100, resistance finally exceeds threshold, so even naive logic fails. But by this point, REPEAT has already identified the drift at run 23—77 runs earlier!
 
 ---
 
