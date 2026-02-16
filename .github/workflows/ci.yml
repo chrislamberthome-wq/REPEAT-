@@ -37,10 +37,18 @@ jobs:
         pip install -r requirements-dev.txt
     
     - name: Syntax Validation
-      run: python3 -m py_compile tools/crc16_ccitt_false.py
+      run: python -m py_compile tools/crc16_ccitt_false.py
     
     - name: Run CRC-16 Vector Validation (Python)
-      run: PYTHONPATH=. python3 -m unittest -v tests.test_crc16_golden
+      run: python -m unittest -v tests.test_crc16_golden
+      env:
+        PYTHONPATH: .
     
     - name: Run tests
-      run: make test
+      shell: bash
+      run: |
+        if command -v make &> /dev/null; then
+          make test
+        else
+          python -m pytest tests/ -v
+        fi
