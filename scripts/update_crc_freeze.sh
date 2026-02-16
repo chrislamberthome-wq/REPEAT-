@@ -5,7 +5,12 @@
 set -e
 
 # Get the latest commit SHA from the current branch
-COMMIT_SHA=$(git log -1 --format="%H" 2>/dev/null || echo "unknown")
+COMMIT_SHA=$(git log -1 --format="%H" 2>/dev/null)
+
+if [ -z "$COMMIT_SHA" ]; then
+  echo "Error: Unable to get commit SHA from git" >&2
+  exit 1
+fi
 
 # Path to the freeze file
 FREEZE_FILE="tests/vectors/CRC_VECTORS_FREEZE.md"
