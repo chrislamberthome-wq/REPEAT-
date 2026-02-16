@@ -1,0 +1,66 @@
+{
+  "version": "1.0.0",
+  "algorithm": "CRC-16/CCITT-FALSE",
+  "parameters": {
+    "polynomial": "0x1021",
+    "init": "0xFFFF",
+    "xorout": "0x0000",
+    "reflection": "none"
+  },
+  "vectors": [
+    {
+      "label": "empty",
+      "description": "Empty byte sequence",
+      "input_type": "bytes",
+      "input_hex": "",
+      "input_utf8": "",
+      "crc16": "0xFFFF"
+    },
+    {
+      "label": "numeric_123456789",
+      "description": "ASCII digits 123456789",
+      "input_type": "string",
+      "input_hex": "313233343536373839",
+      "input_utf8": "123456789",
+      "crc16": "0x29B1"
+    },
+    {
+      "label": "text_abc",
+      "description": "ASCII uppercase ABC",
+      "input_type": "string",
+      "input_hex": "414243",
+      "input_utf8": "ABC",
+      "crc16": "0xF508"
+    },
+    {
+      "label": "binary_00_to_09",
+      "description": "Binary sequence 0x00 through 0x09",
+      "input_type": "bytes",
+      "input_hex": "00010203040506070809",
+      "input_utf8": null,
+      "crc16": "0xC241"
+    },
+    {
+      "label": "binary_ff_x32",
+      "description": "0xFF repeated 32 times",
+      "input_type": "bytes",
+      "input_hex": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "input_utf8": null,
+      "crc16": "0x75F8"
+    },
+    {
+      "label": "binary_00_to_ff",
+      "description": "All byte values from 0x00 to 0xFF (256 bytes)",
+      "input_type": "bytes",
+      "input_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff",
+      "input_utf8": null,
+      "crc16": "0x3FBD"
+    }
+  ],
+  "metadata": {
+    "created": "2026-02-16",
+    "purpose": "Frozen golden test vectors for CRC-16/CCITT-FALSE certification",
+    "immutable": true,
+    "notes": "These vectors MUST NOT be modified without formal review and re-certification"
+  }
+}

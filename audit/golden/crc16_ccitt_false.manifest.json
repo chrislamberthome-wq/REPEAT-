@@ -1,0 +1,27 @@
+{
+  "algorithm": "CRC-16/CCITT-FALSE",
+  "checksums": {
+    "documentation": "7d3d38fe454c704dcd58ba02256c7b5624bc0053c275b2d846430c8bb1ee9986",
+    "implementation": "3b2d75f5d7694788ffc69d7d3b7bf7c6a5ab06b0e93ac02617c941bc3635b81e",
+    "vectors": "15c69857b24b0ca6a3619561647d04537b84d0b519c4a291dd7c93f82fa46e57"
+  },
+  "files": [
+    {
+      "label": "vectors",
+      "path": "audit/golden/crc16_ccitt_false.vectors.json",
+      "sha256": "15c69857b24b0ca6a3619561647d04537b84d0b519c4a291dd7c93f82fa46e57"
+    },
+    {
+      "label": "implementation",
+      "path": "tools/crc16_ccitt_false.py",
+      "sha256": "3b2d75f5d7694788ffc69d7d3b7bf7c6a5ab06b0e93ac02617c941bc3635b81e"
+    },
+    {
+      "label": "documentation",
+      "path": "docs/CRC16_REPRO.md",
+      "sha256": "7d3d38fe454c704dcd58ba02256c7b5624bc0053c275b2d846430c8bb1ee9986"
+    }
+  ],
+  "generated": "2026-02-16T17:04:20.998928Z",
+  "version": "1.0.0"
+}
