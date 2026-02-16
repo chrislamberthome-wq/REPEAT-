@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Engage runner tool for REPEAT- project."""
+"""Engage runner tool for REPEAT project."""
 
 import argparse
 import sys

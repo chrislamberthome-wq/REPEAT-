@@ -7,6 +7,7 @@ from pathlib import Path
 import json
 import sys
 import os
+import uuid
 
 # Add tools directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent / 'tools'))
@@ -98,9 +99,12 @@ class TestEngageRun:
                 engage_v1_subdirs = list((tmp_path / 'engage-v1').iterdir())
                 assert len(engage_v1_subdirs) == 1
                 
-                # The subdirectory name should be a UUID
+                # The subdirectory name should be a valid UUID
                 run_id_dir = engage_v1_subdirs[0]
-                assert len(run_id_dir.name) == 36  # UUID format
+                try:
+                    uuid.UUID(run_id_dir.name)
+                except ValueError:
+                    pytest.fail(f"Directory name '{run_id_dir.name}' is not a valid UUID")
                 
             finally:
                 sys.argv = original_argv
