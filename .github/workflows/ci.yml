@@ -38,3 +38,6 @@ jobs:
     
     - name: Run tests
       run: make test
+    
+    - name: CRC-16 Golden Vector (Python)
+      run: PYTHONPATH=. python3 -m unittest -v tests.test_crc16_golden tests.test_crc16_cli_parity
