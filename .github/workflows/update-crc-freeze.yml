@@ -1,0 +1,42 @@
+name: Update CRC Vectors Freeze
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-freeze:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Update CRC_VECTORS_FREEZE.md
+      run: |
+        chmod +x scripts/update_crc_freeze.sh
+        ./scripts/update_crc_freeze.sh
+    
+    - name: Check for changes
+      id: check_changes
+      run: |
+        if git diff --quiet tests/vectors/CRC_VECTORS_FREEZE.md; then
+          echo "changed=false" >> $GITHUB_OUTPUT
+        else
+          echo "changed=true" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Commit and push changes
+      if: steps.check_changes.outputs.changed == 'true'
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add tests/vectors/CRC_VECTORS_FREEZE.md
+        git commit -m "Update CRC_VECTORS_FREEZE.md with latest commit SHA"
+        git push
