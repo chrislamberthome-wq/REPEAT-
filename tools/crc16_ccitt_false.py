@@ -77,7 +77,7 @@ def main():
     if args.expect:
         try:
             # Parse expected value (supports 0x34B6 or 34B6)
-            expected = int(args.expect, 16) if args.expect.startswith('0x') else int(args.expect, 16)
+            expected = int(args.expect, 16)
             if crc == expected:
                 print(f"PASS: CRC matches expected value 0x{expected:04X}")
                 sys.exit(0)
