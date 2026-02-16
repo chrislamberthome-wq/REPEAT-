@@ -10,7 +10,7 @@ import hashlib
 import json
 import os
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -35,7 +35,7 @@ def generate_manifest(repo_root: Path) -> dict:
     manifest = {
         "version": "1.0.0",
         "algorithm": "CRC-16/CCITT-FALSE",
-        "generated": datetime.utcnow().isoformat() + "Z",
+        "generated": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "checksums": {},
         "files": []
     }
