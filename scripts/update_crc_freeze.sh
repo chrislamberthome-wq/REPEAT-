@@ -1,9 +1,10 @@
 #!/bin/bash
 # Script to update CRC_VECTORS_FREEZE.md with the latest commit SHA
+# This records the commit at which the CRC vectors are frozen
 
 set -e
 
-# Get the latest commit SHA from the main branch (or current branch if main doesn't exist)
+# Get the latest commit SHA from the current branch
 COMMIT_SHA=$(git log -1 --format="%H" 2>/dev/null || echo "unknown")
 
 # Path to the freeze file

@@ -38,5 +38,5 @@ jobs:
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git add tests/vectors/CRC_VECTORS_FREEZE.md
-        git commit -m "Update CRC_VECTORS_FREEZE.md with latest commit SHA"
+        git commit -m "Update CRC_VECTORS_FREEZE.md with latest commit SHA [skip ci]"
         git push
