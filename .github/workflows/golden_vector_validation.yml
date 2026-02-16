@@ -1,0 +1,28 @@
+name: Golden Vector Validation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-crc16:
+    name: Validate CRC-16 Golden Vectors
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Run CRC-16 Vector Validation (Python)
+        run: PYTHONPATH=. python3 -m unittest -v tests.test_crc16_golden
