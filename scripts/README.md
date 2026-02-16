@@ -47,7 +47,7 @@ The freeze marker serves as a boundary marker to document at which commit the CR
 You can manually run the script at any time:
 
 ```bash
-cd /path/to/REPEAT-
+cd /path/to/repository
 ./scripts/update_crc_freeze.sh
 ```
 
