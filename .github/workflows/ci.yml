@@ -38,3 +38,19 @@ jobs:
     
     - name: Run tests
       run: make test
+  
+  b4iu-locked-check:
+    name: B4IU_LOCKED Compliance Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    
+    - name: Run B4IU_LOCKED verifier
+      run: make ci-count-b4iu
