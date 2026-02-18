@@ -314,10 +314,6 @@ class TestCmdVerifyB4IUCounter:
     
     def test_verify_reports_b4iu_counter(self, capsys):
         """Test that verify command reports B4IU counter operations."""
-        import tempfile
-        import os
-        from repeat_hd.cli import encode_data, cmd_verify
-        
         # Create a temporary file with encoded data
         with tempfile.NamedTemporaryFile(mode='wb', delete=False) as f:
             encoded = encode_data("test data")
@@ -336,10 +332,6 @@ class TestCmdVerifyB4IUCounter:
     
     def test_verify_strict_reports_higher_counter(self, capsys):
         """Test that strict mode reports higher counter value."""
-        import tempfile
-        import os
-        from repeat_hd.cli import encode_data, cmd_verify
-        
         with tempfile.NamedTemporaryFile(mode='wb', delete=False) as f:
             encoded = encode_data("test data")
             f.write(encoded)

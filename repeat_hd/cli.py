@@ -237,9 +237,6 @@ def cmd_verify(args):
     # Lock counter after successful verification
     b4iu_counter.lock()
     
-    # Check spec rule compliance
-    spec_valid, spec_error = b4iu_counter.check_spec_rule(min_required=2 if args.strict else 1)
-    
     # Success
     print("VERIFICATION PASSED", file=sys.stderr)
     if args.strict:
@@ -249,10 +246,6 @@ def cmd_verify(args):
     else:
         print("  All CRC/parse checks passed", file=sys.stderr)
         print(f"  B4IU counter: {b4iu_counter.get_count()} operations tracked", file=sys.stderr)
-    
-    # Report spec rule status
-    if not spec_valid:
-        print(f"  Warning: {spec_error}", file=sys.stderr)
     
     return 0
 
