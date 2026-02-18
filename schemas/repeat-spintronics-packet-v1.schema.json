@@ -1,0 +1,115 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "REPEAT Spintronics Packet v1",
+  "description": "Packet schema for MRAM hardware testing with REPEAT verification",
+  "type": "object",
+  "required": [
+    "schema",
+    "device_baseline",
+    "write_intent",
+    "read_plan",
+    "verifier"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "repeat-spintronics-packet-v1"
+    },
+    "device_baseline": {
+      "type": "object",
+      "required": [
+        "device_id",
+        "baseline_resistance_parallel_ohms",
+        "baseline_resistance_antiparallel_ohms",
+        "temperature_celsius"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "device_id": {
+          "type": "string",
+          "pattern": "^MRAM-[A-Z0-9]{8}$"
+        },
+        "baseline_resistance_parallel_ohms": {
+          "type": "number",
+          "minimum": 0
+        },
+        "baseline_resistance_antiparallel_ohms": {
+          "type": "number",
+          "minimum": 0
+        },
+        "temperature_celsius": {
+          "type": "number"
+        }
+      }
+    },
+    "write_intent": {
+      "type": "object",
+      "required": [
+        "target_state",
+        "write_current_ma",
+        "write_duration_ns"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "target_state": {
+          "type": "string",
+          "enum": ["parallel", "antiparallel"]
+        },
+        "write_current_ma": {
+          "type": "number"
+        },
+        "write_duration_ns": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "read_plan": {
+      "type": "object",
+      "required": [
+        "num_runs",
+        "read_current_ma",
+        "measurement_delay_ns"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "num_runs": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "read_current_ma": {
+          "type": "number"
+        },
+        "measurement_delay_ns": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "verifier": {
+      "type": "object",
+      "required": [
+        "threshold_resistance_ohms",
+        "drift_tolerance_percent",
+        "baseline_window_size"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "threshold_resistance_ohms": {
+          "type": "number",
+          "minimum": 0
+        },
+        "drift_tolerance_percent": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "baseline_window_size": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "REPEAT Spintronics Receipt v1",
+  "description": "Receipt schema for MRAM hardware testing verification results",
+  "type": "object",
+  "required": [
+    "schema",
+    "packet_hash_sha256",
+    "evidence_hash_sha256",
+    "receipt_hash_sha256",
+    "run_id",
+    "measured_resistance_ohms",
+    "verdict",
+    "metrics"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "repeat-spintronics-receipt-v1"
+    },
+    "packet_hash_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "evidence_hash_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "receipt_hash_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "run_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "measured_resistance_ohms": {
+      "type": "number",
+      "minimum": 0
+    },
+    "verdict": {
+      "type": "object",
+      "required": [
+        "pass"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "pass": {
+          "type": "boolean"
+        },
+        "fail_reason": {
+          "type": "string",
+          "enum": ["drift_detected", "threshold_exceeded"],
+          "description": "Reason for test failure: drift_detected (drift exceeds tolerance) or threshold_exceeded (resistance exceeds threshold)"
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "required": [
+        "mean_resistance_ohms",
+        "drift_pct"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "mean_resistance_ohms": {
+          "type": "number"
+        },
+        "drift_pct": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}
