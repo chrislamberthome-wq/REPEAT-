@@ -1,0 +1,2 @@
+# Runtime dependencies for CI diagnostics
+pytest>=7.0.0

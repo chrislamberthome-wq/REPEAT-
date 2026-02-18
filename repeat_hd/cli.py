@@ -5,6 +5,69 @@ import argparse
 import sys
 import struct
 import zlib
+from typing import Optional
+
+
+class B4IULockedCounter:
+    """
+    Before-In-Use (B4IU) locked counter for tracking verification operations.
+    
+    This counter enforces a "spec rule" that verification operations must
+    follow proper ordering and constraints before data can be considered safe
+    for use. Once locked, the counter becomes immutable.
+    """
+    
+    def __init__(self):
+        """Initialize the B4IU counter."""
+        self._count = 0
+        self._locked = False
+        self._violations = []
+    
+    def increment(self) -> bool:
+        """
+        Increment the counter if not locked.
+        
+        Returns:
+            bool: True if increment succeeded, False if locked
+        """
+        if self._locked:
+            self._violations.append("Attempted to increment locked counter")
+            return False
+        self._count += 1
+        return True
+    
+    def lock(self) -> None:
+        """Lock the counter, making it immutable."""
+        self._locked = True
+    
+    def is_locked(self) -> bool:
+        """Check if the counter is locked."""
+        return self._locked
+    
+    def get_count(self) -> int:
+        """Get the current count."""
+        return self._count
+    
+    def get_violations(self) -> list[str]:
+        """Get list of spec rule violations."""
+        return self._violations.copy()
+    
+    def check_spec_rule(self, min_required: int = 1) -> tuple[bool, Optional[str]]:
+        """
+        Check if the counter meets the spec rule requirements.
+        
+        Spec Rule: Counter must have been incremented at least min_required
+        times before being locked.
+        
+        Args:
+            min_required: Minimum required count before locking (default: 1)
+        
+        Returns:
+            tuple: (is_valid, error_message)
+        """
+        if self._locked and self._count < min_required:
+            return False, f"Spec rule violation: counter locked with count={self._count}, required>={min_required}"
+        return True, None
 
 
 def encode_data(data: str) -> bytes:
@@ -124,13 +187,19 @@ def cmd_encode(args):
 
 
 def cmd_verify(args):
-    """Handle the verify command."""
+    """Handle the verify command with b4iu locked counter tracking."""
+    # Initialize B4IU counter for this verification operation
+    b4iu_counter = B4IULockedCounter()
+    
     # Read input
     if args.infile:
         with open(args.infile, 'rb') as f:
             encoded = f.read()
     else:
         encoded = sys.stdin.buffer.read()
+    
+    # Track that we've started verification
+    b4iu_counter.increment()
     
     # Decode and verify CRC/parse
     decoded, is_valid, errors = decode_data(encoded)
@@ -139,24 +208,44 @@ def cmd_verify(args):
         print("VERIFICATION FAILED", file=sys.stderr)
         for error in errors:
             print(f"  - {error}", file=sys.stderr)
+        # Lock counter before returning (verification complete but failed)
+        b4iu_counter.lock()
+        # Check spec rule compliance
+        spec_valid, spec_error = b4iu_counter.check_spec_rule()
+        if not spec_valid:
+            print(f"  - {spec_error}", file=sys.stderr)
         return 1
     
     # If --strict flag is enabled, perform additional invariant checks
     if args.strict:
+        # Increment counter for strict mode checks
+        b4iu_counter.increment()
+        
         violations = check_invariants(decoded, encoded)
         if violations:
             print("STRICT MODE VIOLATIONS DETECTED", file=sys.stderr)
             for violation in violations:
                 print(f"  - {violation}", file=sys.stderr)
+            # Lock counter before returning
+            b4iu_counter.lock()
+            # Check spec rule compliance
+            spec_valid, spec_error = b4iu_counter.check_spec_rule(min_required=2)
+            if not spec_valid:
+                print(f"  - {spec_error}", file=sys.stderr)
             return 2
+    
+    # Lock counter after successful verification
+    b4iu_counter.lock()
     
     # Success
     print("VERIFICATION PASSED", file=sys.stderr)
     if args.strict:
         print("  All CRC/parse checks passed", file=sys.stderr)
         print("  All invariant checks passed", file=sys.stderr)
+        print(f"  B4IU counter: {b4iu_counter.get_count()} operations tracked", file=sys.stderr)
     else:
         print("  All CRC/parse checks passed", file=sys.stderr)
+        print(f"  B4IU counter: {b4iu_counter.get_count()} operations tracked", file=sys.stderr)
     
     return 0
 

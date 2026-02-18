@@ -307,3 +307,42 @@ class TestIntegration:
             # Verify invariants
             violations = check_invariants(decoded, encoded)
             assert len(violations) == 0
+
+
+class TestCmdVerifyB4IUCounter:
+    """Tests for cmd_verify with B4IU counter integration."""
+    
+    def test_verify_reports_b4iu_counter(self, capsys):
+        """Test that verify command reports B4IU counter operations."""
+        # Create a temporary file with encoded data
+        with tempfile.NamedTemporaryFile(mode='wb', delete=False) as f:
+            encoded = encode_data("test data")
+            f.write(encoded)
+            temp_file = f.name
+        
+        try:
+            args = argparse.Namespace(infile=temp_file, strict=False)
+            result = cmd_verify(args)
+            
+            captured = capsys.readouterr()
+            assert result == 0
+            assert "B4IU counter: 1 operations tracked" in captured.err
+        finally:
+            os.unlink(temp_file)
+    
+    def test_verify_strict_reports_higher_counter(self, capsys):
+        """Test that strict mode reports higher counter value."""
+        with tempfile.NamedTemporaryFile(mode='wb', delete=False) as f:
+            encoded = encode_data("test data")
+            f.write(encoded)
+            temp_file = f.name
+        
+        try:
+            args = argparse.Namespace(infile=temp_file, strict=True)
+            result = cmd_verify(args)
+            
+            captured = capsys.readouterr()
+            assert result == 0
+            assert "B4IU counter: 2 operations tracked" in captured.err
+        finally:
+            os.unlink(temp_file)
