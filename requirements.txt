@@ -1,1 +1,2 @@
-# No runtime dependencies - this is an exploratory research tool
+# Runtime dependencies for CI diagnostics
+pytest>=7.0.0
