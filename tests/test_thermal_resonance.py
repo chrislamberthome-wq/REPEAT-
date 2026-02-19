@@ -85,8 +85,8 @@ class TestThermalResonanceIntegration:
         assert tr2.parameters["id"] == 2
         assert tr1 is not tr2
     
-    def test_parameters_immutability(self):
-        """Test that parameters can be accessed and modified."""
+    def test_parameters_share_reference(self):
+        """Test that parameters share reference with original dict."""
         params = {"value": 10}
         tr = ThermalResonance(params)
         
