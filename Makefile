@@ -1,15 +1,13 @@
-.PHONY: help test lint fmt ci
+# Makefile for REPEAT-
 
-help:
-	@printf "Targets: test lint fmt ci\n"
+# Targets
+.PHONY: all clean install
 
-test:
-	python -m pytest -q
+all: install
 
-lint:
-	python -m compileall -q .
+install: 
+	@echo "Running installation..."
 
-fmt:
-	@printf "No formatter configured (stub).\n"
+clean:
+	@echo "Cleaning up..."
 
-ci: test lint
