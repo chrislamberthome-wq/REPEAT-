@@ -64,7 +64,7 @@ def classify_resonance_thermal(value: float,
 
 
 def decode_thermal(value: float, 
-                   threshold: float = 0.5) -> Optional[bool]:
+                   threshold: float = 0.5) -> bool:
     """
     Decode a thermal value to a boolean (truthy/falsy) based on a threshold.
     
