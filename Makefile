@@ -1,14 +1,15 @@
-# Optional include of the repo build system
--include make/trtl.mk
+.PHONY: help test lint fmt ci
 
-.PHONY: constraints-lint
-constraints-lint:
-	python tools/constraints_lint.py constraints.md
+help:
+	@printf "Targets: test lint fmt ci\n"
 
-.PHONY: claim-ledger-lint
-claim-ledger-lint:
-	python tools/claim_ledger_lint.py governance/claim_ledger.v1.jsonl
+test:
+	python -m pytest -q
 
-.PHONY: uc
-uc: constraints-lint claim-ledger-lint
-	@echo "UC: OK"
+lint:
+	python -m compileall -q .
+
+fmt:
+	@printf "No formatter configured (stub).\n"
+
+ci: test lint
