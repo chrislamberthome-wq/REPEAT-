@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "B4IU-SNN Manifest v0.1",
+  "type": "object",
+  "required": ["schema", "run_id", "artifacts"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"type": "string", "const": "b4iu_snn_manifest_v0.1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "artifacts": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1
+    }
+  }
+}

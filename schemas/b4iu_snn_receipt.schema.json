@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "B4IU-SNN Receipt v0.1",
+  "type": "object",
+  "required": ["schema", "run_id", "trace_root", "ida_root", "sha256_c14n"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"type": "string", "const": "b4iu_snn_receipt_v0.1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "trace_root": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "ida_root": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "sha256_c14n": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}
