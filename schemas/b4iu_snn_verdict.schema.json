@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "B4IU-SNN Verdict v0.1",
+  "type": "object",
+  "required": ["schema", "run_id", "verdict", "policy_version"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"type": "string", "const": "b4iu_snn_verdict_v0.1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "verdict": {"type": "string", "enum": ["PASS", "FAIL"]},
+    "policy_version": {"type": "string", "minLength": 1},
+    "reasons": {"type": "array", "items": {"type": "string"}}
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "B4IU-SNN Policy v0.1",
+  "type": "object",
+  "required": ["schema", "policy_version", "H_max", "locality_event_types", "hop_exceptions"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"type": "string", "const": "b4iu_snn_policy_v0.1"},
+    "policy_version": {"type": "string", "minLength": 1},
+    "H_max": {"type": "integer", "minimum": 0},
+    "locality_event_types": {"type": "array", "items": {"type": "string"}},
+    "hop_exceptions": {"type": "array", "items": {"type": "string"}}
+  }
+}

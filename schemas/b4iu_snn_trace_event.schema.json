@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "B4IU-SNN Trace Event v0.1",
+  "type": "object",
+  "required": ["schema", "seq", "event_type", "t_ns", "prev_hash", "hash"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"type": "string", "const": "b4iu_snn_trace_event_v0.1"},
+    "seq": {"type": "integer", "minimum": 0},
+    "event_type": {"type": "string", "minLength": 1},
+    "t_ns": {"type": "integer"},
+    "prev_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "step": {"type": "integer", "minimum": 0},
+    "unit_id": {"type": "string", "minLength": 1},
+    "hop_count": {"type": "integer", "minimum": 0},
+    "exception_reason": {"type": ["string", "null"]}
+  }
+}
