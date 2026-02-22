@@ -1,0 +1,26 @@
+{
+  "description": "Hash-chain vectors for REPEAT v0.1 with 2 packets",
+  "genesis": "sha256:208b4b669fe3cf278d1ba322f36840fc238a66a006e15bdd5ace9a6439d9cf60",
+  "packets": [
+    {
+      "seq": 0,
+      "payload": "REPEAT:tile:B4IU:0",
+      "crc16": 19578,
+      "ida_payload": "IDA:0:PLATOPUTER",
+      "ida_hash": "sha256:7f31bdeeca782646f5f3504af9f02f464466dd9c94c51efac4891f978a4af802"
+    },
+    {
+      "seq": 1,
+      "payload": "REPEAT:tile:B4IU:1",
+      "crc16": 23643,
+      "ida_payload": "IDA:1:PLATOPUTER",
+      "ida_hash": "sha256:3a1a42643281910b5da43ceb7b1987f05af30ed00de8643bb530454035f76309"
+    }
+  ],
+  "hash_chain": [
+    "sha256:208b4b669fe3cf278d1ba322f36840fc238a66a006e15bdd5ace9a6439d9cf60",
+    "sha256:f7806a091785889a2dbc25dacab191d8583fdbc5cf269d2816fce3f19c61334c",
+    "sha256:eaadea13f05aae03dad874c0f502b15ad347098ed8f9c5d29cf0903cd9864f49"
+  ],
+  "receipt_sha256_c14n": "sha256:56b5e394f0d9ccc68111a581060c44328431ab31fc7b9893eb60f444ff50be2a"
+}

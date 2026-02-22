@@ -28,3 +28,6 @@ build/
 # MRAM simulation outputs
 *.jsonl
 
+# Generated run artifacts
+run/
+

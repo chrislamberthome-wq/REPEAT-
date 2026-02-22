@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["version", "packets", "hash_chain"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {"type": "string"},
+    "packets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["seq", "payload", "crc16", "ida_payload", "ida_hash"],
+        "additionalProperties": false,
+        "properties": {
+          "seq":         {"type": "integer"},
+          "payload":     {"type": "string"},
+          "crc16":       {"type": "integer"},
+          "ida_payload": {"type": "string"},
+          "ida_hash":    {"type": "string"}
+        }
+      },
+      "minItems": 1
+    },
+    "hash_chain": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1
+    }
+  }
+}
