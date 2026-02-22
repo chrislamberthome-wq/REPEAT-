@@ -1,0 +1,10 @@
+{
+  "description": "CRC-16/CCITT-FALSE test vectors (poly=0x1021, init=0xFFFF, refin=false, refout=false, xorout=0x0000)",
+  "vectors": [
+    {"payload": "REPEAT",              "crc16": 24593},
+    {"payload": "B4IU",                "crc16": 41813},
+    {"payload": "REPEAT:tile:B4IU:0",  "crc16": 19578},
+    {"payload": "REPEAT:tile:B4IU:1",  "crc16": 23643},
+    {"payload": "IDA:0:PLATOPUTER",    "crc16": 20452}
+  ]
+}

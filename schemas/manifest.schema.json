@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["version", "artifacts"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {"type": "string"},
+    "artifacts": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1
+    }
+  }
+}

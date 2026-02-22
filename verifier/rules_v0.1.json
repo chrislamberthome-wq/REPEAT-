@@ -1,0 +1,12 @@
+{
+  "version": "0.1",
+  "manifest": "run/manifest.json",
+  "crc_flavor": "CRC-16/CCITT-FALSE",
+  "hash_algo": "sha256",
+  "schemas": {
+    "run/manifest.json": "schemas/manifest.schema.json",
+    "run/trace.json":    "schemas/trace.schema.json",
+    "run/receipt.json":  "schemas/receipt.schema.json",
+    "run/verdict.json":  "schemas/verdict.schema.json"
+  }
+}
