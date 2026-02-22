@@ -1,7 +1,0 @@
-{
-  "ida_root": "sha256:e8413e57e8482a0bb3853e5053c481746b3f1a90f2175481522908f8a858ed78",
-  "run_id": "b4iu_snn_synthetic_run_v0.1",
-  "schema": "b4iu_snn_receipt_v0.1",
-  "sha256_c14n": "sha256:3c413daab5d45228ff18a134c18c4d9cbfefcc7191de9ce4ae6e02e22890b370",
-  "trace_root": "sha256:80ddc84b6f0fe6f3134c0152e2c0d9410ea6a51a673dbc9dc96a61550e481573"
-}

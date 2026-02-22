@@ -1,9 +1,0 @@
-{
-  "H_max": 2,
-  "hop_exceptions": [],
-  "locality_event_types": [
-    "LOCALITY_CHECK"
-  ],
-  "policy_version": "b4iu_snn_policy_v0.1",
-  "schema": "b4iu_snn_policy_v0.1"
-}

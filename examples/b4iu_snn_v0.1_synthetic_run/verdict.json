@@ -1,7 +1,0 @@
-{
-  "policy_version": "b4iu_snn_policy_v0.1",
-  "reasons": [],
-  "run_id": "b4iu_snn_synthetic_run_v0.1",
-  "schema": "b4iu_snn_verdict_v0.1",
-  "verdict": "PASS"
-}
