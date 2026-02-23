@@ -1,13 +1,12 @@
-# README
+## Autotonomy (bounded autonomy)
 
-## Scope
+**This section provides a comprehensive overview of the concepts and methodologies applicable to bounded autonomy in our context. Below are essential resources that further elaborate on our approach:**
 
-This repository is an **exploratory research tool** for simulating somatic CAG expansion dynamics and overlaying probabilistic inference layers (HMM/HHMM) to study model behavior and interpretability.
+1. [Link to Resource 1](http://example.com/resource1)
+2. [Link to Resource 2](http://example.com/resource2)
+3. [Link to Resource 3](http://example.com/resource3)
 
-It explicitly:
-- **Does not provide medical advice** or clinical decision support.
-- **Is not a biological truth engine** and does not certify disease mechanisms.
-- **Is not a substitute for validation** against empirical datasets.
-- **Prioritizes reproducibility, transparency, and safe interpretation**.
+---
 
-See [SCOPE.md](SCOPE.md) for full details, including non-goals, interpretation boundaries, and guardrails for new features.
+Replace this entire section with the user-provided block that follows the format above.
+
