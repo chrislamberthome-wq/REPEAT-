@@ -11,3 +11,11 @@ It explicitly:
 - **Prioritizes reproducibility, transparency, and safe interpretation**.
 
 See [SCOPE.md](SCOPE.md) for full details, including non-goals, interpretation boundaries, and guardrails for new features.
+
+## Bounded Autotonomy
+
+**Autotonomy (REPEAT-bounded):** The system may select plans and execute steps without human micro-approval only within predeclared constraints, and only if each step produces an auditable trace and a verifier can NACK/fail-closed (non-zero exit / invalid receipt). This does **not** claim self-governing goal sovereignty, moral agency, or rights—only autonomy of execution under mandatory verification.
+
+- Definition: [docs/autotonomy/AUTOTONOMY.md](docs/autotonomy/AUTOTONOMY.md)
+- Implementation evidence: [docs/autotonomy/IMPLEMENTATION_MAP.md](docs/autotonomy/IMPLEMENTATION_MAP.md)
+- Fail-closed audit: [docs/autotonomy/FAIL_CLOSED_AUDIT.md](docs/autotonomy/FAIL_CLOSED_AUDIT.md)
