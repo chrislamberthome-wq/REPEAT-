@@ -9,6 +9,8 @@ These tests validate:
 4. Packet hashes remain invariant
 """
 
+from __future__ import annotations
+
 import json
 import os
 import subprocess
