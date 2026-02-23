@@ -250,6 +250,8 @@ def run_simulation(mode: str, seed: int, output_file: str) -> None:
                   f"reason={receipt['verdict']['fail_reason']}")
             break
 
+    return fail_count
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -276,8 +278,8 @@ def main():
     args = parser.parse_args()
     
     try:
-        run_simulation(args.mode, args.seed, args.output)
-        sys.exit(0)
+        fail_count = run_simulation(args.mode, args.seed, args.output)
+        sys.exit(1 if fail_count > 0 else 0)
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
