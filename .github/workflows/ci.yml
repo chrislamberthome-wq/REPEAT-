@@ -24,14 +24,6 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v4
 
-    - name: Set up Node 20
-      uses: actions/setup-node@v4
-      with:
-        node-version: "20"
-
-    - name: B4IU locked counter
-      run: make ci-count-b4iu
-
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
@@ -44,5 +36,5 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements-dev.txt
 
-    - name: Run tests
-      run: make test
+    - name: Run CI (fail-closed)
+      run: make ci
