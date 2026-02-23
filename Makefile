@@ -20,5 +20,7 @@ ci-count-b4iu:
 
 diag-strict:
 	python -m verifier --help > /dev/null && echo "verifier entrypoint: OK"
+	python3 simulate_mram_runs.py --mode pass --seed 42 --output /tmp/diag_receipts.jsonl
+	python -m verifier /tmp/diag_receipts.jsonl
 	@echo "Diagnostics (strict) passed."
 

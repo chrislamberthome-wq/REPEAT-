@@ -140,6 +140,11 @@ def validate_receipt(receipt: Dict[str, Any], index: int) -> List[str]:
     return errors
 
 
+def _is_verdict_failure(error: str) -> bool:
+    """Return True if an error string represents a verdict FAIL (not a structural error)."""
+    return ": verdict FAIL " in error
+
+
 def load_receipts(path: str) -> Tuple[List[Dict[str, Any]], List[str]]:
     """
     Load receipts from a JSONL file.
@@ -197,7 +202,7 @@ def main() -> int:
         if args.allow_fail_verdicts:
             receipt_errors = [
                 e for e in receipt_errors
-                if "verdict FAIL" not in e
+                if not _is_verdict_failure(e)
             ]
         all_errors.extend(receipt_errors)
 
