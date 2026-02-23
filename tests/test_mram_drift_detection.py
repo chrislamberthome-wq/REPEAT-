@@ -26,27 +26,29 @@ class TestMRAMDriftDetection:
     def run_simulation(self, mode: str, seed: int) -> tuple[str, str]:
         """
         Run the simulation and return (output_text, receipt_file_path).
+        Accepts non-zero exit codes for drift_fail mode (fail-closed by design).
         """
         with tempfile.NamedTemporaryFile(mode='w', suffix='.jsonl', delete=False) as f:
             output_file = f.name
-        
-        try:
-            result = subprocess.run(
-                [
-                    'python3',
-                    'simulate_mram_runs.py',
-                    '--mode', mode,
-                    '--seed', str(seed),
-                    '--output', output_file
-                ],
-                capture_output=True,
-                text=True,
-                check=True,
-                cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            )
-            return result.stdout, output_file
-        except subprocess.CalledProcessError as e:
-            pytest.fail(f"Simulation failed: {e.stderr}")
+
+        result = subprocess.run(
+            [
+                'python3',
+                'simulate_mram_runs.py',
+                '--mode', mode,
+                '--seed', str(seed),
+                '--output', output_file
+            ],
+            capture_output=True,
+            text=True,
+            cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        )
+        # stable mode must exit 0; drift_fail mode exits 1 (fail-closed)
+        if mode == 'pass' and result.returncode != 0:
+            pytest.fail(f"Stable simulation exited {result.returncode}: {result.stderr}")
+        if mode == 'drift_fail' and result.returncode not in (0, 1):
+            pytest.fail(f"Drift simulation unexpected exit {result.returncode}: {result.stderr}")
+        return result.stdout, output_file
     
     def load_receipts(self, receipt_file: str) -> list[dict]:
         """Load receipts from JSONL file."""
