@@ -10,6 +10,8 @@ Usage:
     python3 simulate_mram_runs.py --mode drift_fail --seed 42 --output receipts.jsonl
 """
 
+from __future__ import annotations
+
 import argparse
 import hashlib
 import json

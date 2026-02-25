@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Command-line interface for REPEAT-HD."""
 
+from __future__ import annotations
+
 import argparse
 import sys
 import struct
