@@ -1,26 +1,29 @@
-# README
+# SOLID-FSK v0.1
 
-## Scope
+Geometric resonance communication experiment using the five Platonic solids as spectral carriers.
 
-This repository is an **exploratory research tool** for simulating somatic CAG expansion dynamics and overlaying probabilistic inference layers (HMM/HHMM) to study model behavior and interpretability.
+Goal: encode a binary frame by exciting a physical solid and decoding from its resonant spectrum.
 
-It explicitly:
-- **Does not provide medical advice** or clinical decision support.
-- **Is not a biological truth engine** and does not certify disease mechanisms.
-- **Is not a substitute for validation** against empirical datasets.
-- **Prioritizes reproducibility, transparency, and safe interpretation**.
+This implementation includes:
+- CRC16 verification
+- peak extraction from recorded audio
+- template-based classifier
+- deterministic JSONL audit traces
 
-See [SCOPE.md](SCOPE.md) for full details, including non-goals, interpretation boundaries, and guardrails for new features.
+Status: experimental research protocol.
 
-## REPEAT-Bounded Autotonomy
+## Layout
 
-**Autotonomy (REPEAT-bounded):** The system may select plans and execute steps without human
-micro-approval only within predeclared constraints and only if each step produces an auditable
-trace and a verifier can NACK/fail-closed (non-zero exit / invalid receipt). This does not
-claim self-governing goal sovereignty, moral agency, or rights—only autonomy of execution
-under mandatory verification.
+SPEC_SOLID_FSK_v0_1.md — protocol specification  
+schema/ — JSON schema for audit traces  
+tools/ — signal processing + decoding tools  
+tests/ — verification tests  
+golden/ — calibration recordings + peak templates
 
-See [`docs/autotonomy/AUTOTONOMY.md`](docs/autotonomy/AUTOTONOMY.md) for the full normative
-definition and operational invariants, and
-[`docs/autotonomy/IMPLEMENTATION_MAP.md`](docs/autotonomy/IMPLEMENTATION_MAP.md) for
-evidence-backed code paths (trace emission, verifier, hash/provenance, replay).
+## Quick test
+
+Run tests:
+
+```bash
+pytest
+```
