@@ -1,0 +1,1 @@
+{"id":"phase_shifted_cosine","theta":{"fs_hz":100.0,"omega0_rad_s":6.283185307179586,"n":200,"float_round_decimals":9},"claim":{"A_min":0.95,"A_max":1.05,"rho_max":0.001},"y":"__GENERATE__:cos(A=1.0,phi=0.9)"}
