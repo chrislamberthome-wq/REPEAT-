@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "council_action.schema.json",
+  "title": "CouncilAction",
+  "description": "Schema for a REPEAT council governance action candidate.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "action_type",
+    "council_id",
+    "target_seat_id",
+    "candidate",
+    "proposed_at_utc",
+    "proposer_public_key",
+    "action_hash_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "c9-action-v1.0",
+      "description": "Schema version identifier."
+    },
+    "action_type": {
+      "type": "string",
+      "enum": ["seat_fill", "seat_vacate", "seat_revoke"],
+      "description": "The type of governance action."
+    },
+    "council_id": {
+      "type": "string",
+      "const": "council_of_9",
+      "description": "Identifier for the council."
+    },
+    "target_seat_id": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9,
+      "description": "The seat number being acted upon (1..9)."
+    },
+    "candidate": {
+      "type": "object",
+      "required": ["public_key", "identity_hash_sha256"],
+      "properties": {
+        "public_key": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Public key of the candidate."
+        },
+        "identity_hash_sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "description": "SHA-256 hash of the canonical identity document."
+        }
+      },
+      "additionalProperties": false
+    },
+    "proposed_at_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp when the action was proposed."
+    },
+    "proposer_public_key": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Public key of the entity proposing the action."
+    },
+    "proposer_signature": {
+      "type": "string",
+      "description": "Signature over canonical action JSON by proposer (optional for draft stage)."
+    },
+    "quorum_approvals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["approver_public_key", "signature", "approved_at_utc"],
+        "properties": {
+          "approver_public_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "signature": {
+            "type": "string",
+            "minLength": 1
+          },
+          "approved_at_utc": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "description": "Quorum approval signatures (minimum threshold enforced by verifier)."
+    },
+    "action_hash_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "SHA-256 hash of canonical action JSON (excluding this field)."
+    }
+  },
+  "additionalProperties": false
+}

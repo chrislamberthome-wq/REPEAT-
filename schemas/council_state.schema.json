@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "council_state.schema.json",
+  "title": "CouncilState",
+  "description": "Schema for the REPEAT council-of-9 governance state snapshot.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "council_id",
+    "ledger_seq",
+    "seats",
+    "state_hash_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "c9-state-v1.0",
+      "description": "Schema version identifier."
+    },
+    "council_id": {
+      "type": "string",
+      "const": "council_of_9",
+      "description": "Council identifier."
+    },
+    "ledger_seq": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Ledger sequence number at which this state was produced (0 = genesis)."
+    },
+    "seats": {
+      "type": "object",
+      "description": "Map of seat_id (1..9 as string keys) to seat occupant or null.",
+      "patternProperties": {
+        "^[1-9]$": {
+          "oneOf": [
+            {
+              "type": "null",
+              "description": "Seat is vacant."
+            },
+            {
+              "type": "object",
+              "required": ["public_key", "identity_hash_sha256", "filled_at_ledger_seq"],
+              "properties": {
+                "public_key": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "identity_hash_sha256": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                },
+                "filled_at_ledger_seq": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "quorum_threshold": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9,
+      "description": "Number of approvals required for a governance action to pass.",
+      "default": 5
+    },
+    "state_hash_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "SHA-256 hash of the canonical council state (excluding this field)."
+    },
+    "recorded_at_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp when this state snapshot was recorded."
+    }
+  },
+  "additionalProperties": false
+}
