@@ -527,10 +527,12 @@ class TestComputeCanonicalHash:
         assert compute_canonical_hash(mesh1) != compute_canonical_hash(mesh2)
 
     def test_matches_golden_minimal_tet(self):
-        expected = "sha256:451ccdc5c2e29890cf02b24dee4d78657ae5b767a6431e14e6fda9da5ba2159c"
+        with open(_golden("pass_minimal_tet.json")) as f:
+            golden = json.load(f)
+        expected = golden["topology_hash"]
         mesh = _minimal_tet()
-        mesh["mesh_id"] = "golden-pass-minimal-tet"
-        mesh["declared_invariants"] = ["closed_boundary", "connected", "manifold_interior"]
+        mesh["mesh_id"] = golden["mesh_id"]
+        mesh["declared_invariants"] = golden["declared_invariants"]
         assert compute_canonical_hash(mesh) == expected
 
 

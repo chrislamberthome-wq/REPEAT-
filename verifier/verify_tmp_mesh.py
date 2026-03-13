@@ -68,7 +68,7 @@ def _validate_face_ref(ref: Any, path: str, errors: List[str]) -> None:
         errors.append(f"{path}.tetra_id must be a non-empty string")
     if "face" not in ref:
         errors.append(f"{path} missing 'face'")
-    elif not isinstance(ref["face"], int) or isinstance(ref["face"], bool) or \
+    elif isinstance(ref["face"], bool) or not isinstance(ref["face"], int) or \
             ref["face"] < 0 or ref["face"] > 3:
         errors.append(f"{path}.face must be an integer in 0–3")
 
@@ -461,10 +461,9 @@ def check_topology(mesh: Dict) -> Tuple[List[str], List[str]]:
 def _perm_parity(perm: Tuple[int, ...]) -> int:
     """Return 0 if permutation is even, 1 if odd (counted by inversions)."""
     inversions = 0
-    lst = list(perm)
-    for i in range(len(lst)):
-        for j in range(i + 1, len(lst)):
-            if lst[i] > lst[j]:
+    for i in range(len(perm)):
+        for j in range(i + 1, len(perm)):
+            if perm[i] > perm[j]:
                 inversions += 1
     return inversions % 2
 
@@ -542,7 +541,7 @@ def canonical_json(obj: Any) -> bytes:
     if isinstance(obj, dict):
         parts = [
             canonical_json(k) + b":" + canonical_json(v)
-            for k, v in sorted(obj.items(), key=lambda kv: kv[0])
+            for k, v in sorted(obj.items())
         ]
         return b"{" + b",".join(parts) + b"}"
     if isinstance(obj, list):

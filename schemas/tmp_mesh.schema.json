@@ -17,6 +17,7 @@
     "declared_invariants"
   ],
   "additionalProperties": false,
+  "$comment": "additionalProperties=false is intentional: TMP v1 is a frozen, fail-closed protocol. Unknown fields are rejected. Future versions use a different protocol identifier.",
   "properties": {
     "protocol": {
       "type": "string",
