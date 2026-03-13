@@ -1,0 +1,29 @@
+{
+  "protocol": "TMP-v1",
+  "version": "1.0.0",
+  "mesh_id": "golden-pass-minimal-tet",
+  "vertex_ids": ["v0", "v1", "v2", "v3"],
+  "tetrahedra": [
+    {"tetra_id": "T0", "vertices": ["v0", "v1", "v2", "v3"]}
+  ],
+  "adjacency": [],
+  "boundary_faces": [
+    {"tetra_id": "T0", "face": 0},
+    {"tetra_id": "T0", "face": 1},
+    {"tetra_id": "T0", "face": 2},
+    {"tetra_id": "T0", "face": 3}
+  ],
+  "orientation_rule": "right_hand_outward",
+  "canonicalization_version": "c14n-v1",
+  "declared_invariants": ["closed_boundary", "connected", "manifold_interior"],
+  "topology_hash": "sha256:451ccdc5c2e29890cf02b24dee4d78657ae5b767a6431e14e6fda9da5ba2159c",
+  "geometry": {
+    "coordinate_system": "euclidean_3d",
+    "coordinates": {
+      "v0": [0.0, 0.0, 0.0],
+      "v1": [1.0, 0.0, 0.0],
+      "v2": [0.0, 1.0, 0.0],
+      "v3": [0.0, 0.0, 1.0]
+    }
+  }
+}
