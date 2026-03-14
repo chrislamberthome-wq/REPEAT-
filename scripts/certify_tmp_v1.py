@@ -58,8 +58,8 @@ ERROR_VECTORS = sorted((REPO_ROOT / "tests" / "vectors" / "tmp" / "error").glob(
 # ---------------------------------------------------------------------------
 
 FROZEN_HASHES: Dict[str, str] = {
-    "verifier/verify_tmp_mesh.py":    "e15c636ce0697aab0665129586e17a65c80972aa0b0fc0046d6644dd988c6876",
-    "schemas/tmp_mesh.schema.json":   "7fe5f9e293e5b77742a00e60d5eab11d4df37db76ba5ec2610aa947371808800",
+    "verifier/verify_tmp_mesh.py":    "9abd7cf16e746e10a26619c6d2982ca1b74fe55e1cc96ec6febd3ed43cf59ad7",
+    "schemas/tmp_mesh.schema.json":   "0735ae7ea96e07f51330c10d92a9e5689aa0ef4147295f2212eb5912165b471d",
     "docs/CANONICALIZATION.md":       "6dae85aee4890a689cb6b7a37075974f72934e6168e4bdad373989b855d99715",
 }
 

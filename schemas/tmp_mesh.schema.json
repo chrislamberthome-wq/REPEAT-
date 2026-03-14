@@ -81,7 +81,12 @@
       "required": ["canonical_sha256"],
       "additionalProperties": true,
       "properties": {
-        "canonical_sha256": { "type": "string", "minLength": 64 },
+        "canonical_sha256": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        },
         "vertex_count":       { "type": "integer", "minimum": 1 },
         "tetra_count":        { "type": "integer", "minimum": 1 },
         "adjacency_count":    { "type": "integer", "minimum": 0 },

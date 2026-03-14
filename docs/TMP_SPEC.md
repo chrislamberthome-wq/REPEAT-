@@ -4,7 +4,7 @@
 **Protocol**: TMP-v1
 **Version**: 1.0
 **Canonicalization**: tmp-c14n-v1
-**Status**: Draft — pending certification gate
+**Status**: Draft — certification gate established; pending first CERTIFY run
 
 ---
 

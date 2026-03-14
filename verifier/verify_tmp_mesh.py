@@ -19,7 +19,7 @@ Verifier checks (ordered):
     6.  No face slot appears in more than one adjacency or boundary record
     7.  Every non-boundary face matched exactly once in adjacency
     8.  Orientation consistency across shared faces
-    9.  Boundary accounting complete (no interior face declared as boundary)
+    9.  Boundary accounting complete (each boundary face appears in exactly one tetra)
     10. Canonical hash reproduction
     11. Declared invariant counts match actual mesh dimensions
 """
