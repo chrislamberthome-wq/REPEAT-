@@ -1,0 +1,29 @@
+<svg width='600' height='400' xmlns='http://www.w3.org/2000/svg'>
+  <!-- Panel A: Initial -->
+  <g id='panelA'>
+    <rect x='0' y='0' width='280' height='400' fill='none' stroke='black' />
+    <text x='140' y='20' font-size='20' text-anchor='middle'>A (Initial)</text>
+    <!-- Add additional diagram elements here -->
+  </g>
+  
+  <!-- Panel B: Move γ₁ to junction -->
+  <g id='panelB' transform='translate(300, 0)'>
+    <rect x='0' y='0' width='280' height='400' fill='none' stroke='black' />
+    <text x='140' y='20' font-size='20' text-anchor='middle'>B (Move γ₁ to junction)</text>
+    <!-- Additional diagram elements for this panel -->
+  </g>
+  
+  <!-- Panel C: Move γ₂ across -->
+  <g id='panelC' transform='translate(0, 200)'>
+    <rect x='0' y='0' width='280' height='200' fill='none' stroke='black' />
+    <text x='140' y='20' font-size='20' text-anchor='middle'>C (Move γ₂ across)</text>
+    <!-- Additional diagram elements for this panel -->
+  </g>
+  
+  <!-- Panel D: Final configuration -->
+  <g id='panelD' transform='translate(300, 200)'>
+    <rect x='0' y='0' width='280' height='200' fill='none' stroke='black' />
+    <text x='140' y='20' font-size='20' text-anchor='middle'>D (Final configuration)</text>
+    <!-- Additional diagram elements for this panel -->
+  </g>
+</svg>
