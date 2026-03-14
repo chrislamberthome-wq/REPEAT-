@@ -1,0 +1,26 @@
+{
+  "protocol": "TMP-v1",
+  "version": "1.0",
+  "mesh_id": "boundary_mismatch",
+  "vertex_ids": ["v0", "v1", "v2", "v3", "v4"],
+  "tetrahedra": [
+    {"tetra_id": "T0", "vertices": ["v0", "v1", "v2", "v3"]},
+    {"tetra_id": "T1", "vertices": ["v1", "v0", "v2", "v4"]}
+  ],
+  "adjacency": [],
+  "boundary_faces": [
+    {"tetra_id": "T0", "face": 0},
+    {"tetra_id": "T0", "face": 1},
+    {"tetra_id": "T0", "face": 2},
+    {"tetra_id": "T0", "face": 3},
+    {"tetra_id": "T1", "face": 0},
+    {"tetra_id": "T1", "face": 1},
+    {"tetra_id": "T1", "face": 2},
+    {"tetra_id": "T1", "face": 3}
+  ],
+  "orientation_rule": "right_hand_sorted",
+  "canonicalization_version": "tmp-c14n-v1",
+  "declared_invariants": {
+    "canonical_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+}
