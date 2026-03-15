@@ -32,6 +32,8 @@ Tests include:
 - invalid enum value
 - missing required field
 
+Contract examples live under `tests/vectors/repo_reference/` and must be updated alongside any intentional schema change.
+
 3. Schema Integrity Lock
 
 `tests/test_schema_fingerprint.py` computes the SHA-256 digest of:
