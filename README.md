@@ -20,6 +20,19 @@ tools/ — signal processing + decoding tools
 tests/ — verification tests  
 golden/ — calibration recordings + peak templates
 
+## External Verifier
+
+Validate a payload against the controlled repo-reference schema:
+
+```
+python -m verifier tests/vectors/repo_reference/valid_minimal.json
+```
+
+Exit codes:
+- 0 = valid
+- 1 = schema validation failure
+- 2 = operational/tool error
+
 ## Quick test
 
 Run tests:

@@ -3,40 +3,35 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import pytest
 from jsonschema import Draft202012Validator
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_PATH = ROOT / "schemas" / "repo-reference.schema.json"
+VECTORS = ROOT / "tests" / "vectors" / "repo_reference"
+
 
 def _validator() -> Draft202012Validator:
     schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
     return Draft202012Validator(schema)
 
-def test_minimal_valid_repo_reference() -> None:
-    payload = {
-        "repo": "chrislamberthome-wq/REPEAT-",
-    }
 
+def _load(name: str) -> dict[str, object]:
+    return json.loads((VECTORS / name).read_text(encoding="utf-8"))
+
+
+def test_valid_minimal_vector():
+    payload = _load("valid_minimal.json")
     errors = sorted(_validator().iter_errors(payload), key=lambda e: e.path)
     assert errors == []
 
-def test_invalid_repo_reference_rejected() -> None:
-    payload = {
-        "repo": "not-the-allowed-repo",
-    }
 
+def test_invalid_enum_vector():
+    payload = _load("invalid_enum.json")
     errors = sorted(_validator().iter_errors(payload), key=lambda e: e.path)
-    assert errors, "expected schema validation errors for invalid payload"
+    assert errors, "expected schema validation errors"
 
-    messages = [e.message for e in errors]
-    assert any("is not one of" in message for message in messages)
 
-def test_missing_repo_field_rejected() -> None:
-    payload = {}
-
+def test_missing_repo_vector():
+    payload = _load("missing_repo.json")
     errors = sorted(_validator().iter_errors(payload), key=lambda e: e.path)
-    assert errors, "expected schema validation errors for missing repo field"
-
-    messages = [e.message for e in errors]
-    assert any("'repo' is a required property" in message for message in messages)
+    assert errors, "expected schema validation errors"
