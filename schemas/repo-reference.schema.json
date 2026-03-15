@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:repeat:schema:repo-reference:1",
+  "title": "Repository Reference Schema",
+  "description": "Validates a payload whose repo field must equal the single allowed repository.",
+  "type": "object",
+  "properties": {
+    "repo": {
+      "type": "string",
+      "const": "chrislamberthome-wq/REPEAT-",
+      "description": "The only permitted repository value."
+    }
+  },
+  "required": ["repo"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "repo": "chrislamberthome-wq/REPEAT-"
+    }
+  ]
+}
