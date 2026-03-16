@@ -1,45 +1,148 @@
-## Digest Algorithm Definition
+# QUANTUM LINEAGE SUBSTRATE
 
-SHA-256 with lowercase hexadecimal encoding is used for digest calculations. The output is formatted as a 64-character string representing the hash value in lowercase hex.
+...existing content...
 
-## Canonical JSON Rules
+## 11. Implementation Index (Reference Modules)
 
-- Trailing whitespace is explicitly forbidden.
-- All representations must be in UTF-8 byte format before hashing.
-- The deterministic serialization format is defined using `json.dumps`.
+This section maps specification components to the corresponding reference implementation modules in the repository. These mappings are informational and do not supersede the normative rules defined in this document.
 
-## Generator Digest Definition
+### Canonical QUBO
 
-The generator digest is calculated as:  
-`sha256(canonical_json_bytes(spec_object_without_generator_digest))`.
+Specification sections
+- Section 2.1 — Canonical QUBO
+- Section 3 — Canonicalization Rules
 
-## Chain-Hash Concatenation Rule
+Reference module
 
-The `prev_hash` must be encoded as UTF-8 bytes before concatenation with the canonical JSON bytes.
+`repeat_quantum/canonicalize_qubo.py`
 
-## Trace Canonicalization Scope
+Responsibilities
+- index normalization
+- diagonal folding
+- duplicate merging
+- zero pruning
+- deterministic serialization
+- `problem_digest` generation
 
-Note: The trace file itself is not canonicalized, but each individual entry is.
+### Deterministic QUBO → Ising Mapping
 
-## Best Energy Selection
+Specification sections
+- Section 2.2 — Deterministic Ising Mapping
+- Section 4 — Mapping Rules
 
-When determining the best energy, the minimum energy is selected. In case of ties, the earliest `shot_index` is used to break them.
+Reference module
 
-## Zero Digest Constant
+`repeat_quantum/qubo_to_ising.py`
 
-The zero digest is defined as follows:  
-`ZERO_DIGEST = "0" * 64`  
-This constant is used before the first trace entry.
+Responsibilities
+- QUBO → Ising coefficient transformation
+- constant offset computation
+- deterministic coefficient ordering
+- `mapping_digest` generation
 
-## Tightened PASS Rules
+### Generator Specification
 
-Replace permissive language with normative language throughout the document:
-"A verifier MUST emit …"
+Specification sections
+- Section 2.3 — Generator Specification
+- Section 5 — Generator Rules
 
-## Negative Corpus Expansion
+Reference module
 
-Included a case for `trace_missing_field.jsonl` that tests `MISSING_REQUIRED_FIELD`.
+`repeat_quantum/generator_spec.py`
 
-## Implementation Independence
+Responsibilities
+- validation of generator parameters
+- enforcement of QAOA conventions
+- deterministic canonical serialization
+- `generator_digest` generation
 
-Emphasize that the specification is implementation-independent and that identical digests must be produced for identical inputs.
+### Trace Logger
+
+Specification sections
+- Section 2.4 — Trace
+- Section 6 — Trace Format and Chain-Hash Rules
+
+Reference module
+
+`repeat_quantum/log_trace.py`
+
+Responsibilities
+- trace entry construction
+- deterministic timestamp integration
+- incremental chain hashing
+- trace file emission
+
+### Verifier
+
+Specification sections
+- Section 7 — Verifier Semantics
+
+Reference module
+
+`repeat_quantum/verifier.py`
+
+Responsibilities
+- schema validation
+- lineage homogeneity checks
+- bitstring validation
+- energy validation
+- chain hash verification
+- PASS / FAIL receipt generation
+
+### Receipt Construction
+
+Specification sections
+- Section 2.5 — Receipt
+- Section 7 — Verifier Semantics
+
+Reference module
+
+`repeat_quantum/receipt.py`
+
+Responsibilities
+- PASS receipt creation
+- FAIL receipt creation
+- deterministic receipt serialization
+- `receipt_digest` generation
+
+### Golden Vectors and Test Corpus
+
+Specification sections
+- Section 8 — Golden Vectors
+
+Test directories
+
+`tests/vectors/trace_valid.jsonl`  
+`tests/vectors/trace_empty.jsonl`  
+`tests/vectors/trace_mixed_problem.jsonl`  
+`tests/vectors/trace_invalid_bitstring.jsonl`  
+`tests/vectors/trace_bad_chain_hash.jsonl`
+
+Purpose
+- deterministic PASS verification
+- deterministic FAIL verification
+- regression protection for verifier behavior
+
+### CLI Utilities (Optional)
+
+If the reference CLI is implemented, commands map as follows:
+
+`repeat-quantum canonicalize problem.json`  
+`repeat-quantum map problem.json`  
+`repeat-quantum generate mapping.json`  
+`repeat-quantum log shots.json`  
+`repeat-quantum verify trace.jsonl`
+
+Reference module
+
+`repeat_quantum/cli.py`
+
+### Implementation Independence
+
+Implementations in other languages must conform to the rules defined in this specification rather than the reference modules listed above.
+
+Conformance is demonstrated if an independent implementation can:
+- reproduce canonical artifacts
+- regenerate identical digests
+- verify trace integrity
+- emit byte-identical PASS or FAIL receipts.
