@@ -1,0 +1,1 @@
+# Updated content of VERIFY.md
