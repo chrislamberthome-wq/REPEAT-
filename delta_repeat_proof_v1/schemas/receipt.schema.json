@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "delta-repeat-proof-v1/receipt",
+  "title": "Receipt",
+  "description": "Governed execution receipt for one completed cycle.",
+  "type": "object",
+  "required": ["cycle_id", "trace_sha256", "event_count", "governance_verdict", "replay_match", "status", "crc16_ccitt_false"],
+  "additionalProperties": false,
+  "properties": {
+    "cycle_id": {
+      "type": "string",
+      "pattern": "^cycle-[0-9]{4}$"
+    },
+    "trace_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "event_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "governance_verdict": {
+      "type": "string",
+      "enum": ["ALLOW", "DENY"]
+    },
+    "replay_match": {
+      "type": "boolean"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"]
+    },
+    "crc16_ccitt_false": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{4}$"
+    }
+  }
+}

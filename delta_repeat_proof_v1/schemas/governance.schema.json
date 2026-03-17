@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "delta-repeat-proof-v1/governance",
+  "title": "GovernanceDecision",
+  "description": "Binary governance decision record for one cycle.",
+  "type": "object",
+  "required": ["decision_id", "cycle_id", "verdict", "constraints_applied"],
+  "additionalProperties": false,
+  "properties": {
+    "decision_id": {
+      "type": "string",
+      "pattern": "^gov-[0-9]{4}$"
+    },
+    "cycle_id": {
+      "type": "string",
+      "pattern": "^cycle-[0-9]{4}$"
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["ALLOW", "DENY"]
+    },
+    "constraints_applied": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    }
+  }
+}
