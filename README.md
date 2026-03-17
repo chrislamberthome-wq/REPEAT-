@@ -1,3 +1,9 @@
-# Updated README
+REPEAT introduces verifiable state to outputs.
 
-This project now includes a PVC pipeline implementation. Please refer to the new files under `tools/pvc/` for details.
+Current status: PVC pipeline active on `pvc-implementation`.
+
+Independent verification:
+- `artifacts/pvc/pvc_v1.json`
+- `artifacts/pvc/evidence.zip`
+
+See `VERIFY.md` to verify the artifact locally.
