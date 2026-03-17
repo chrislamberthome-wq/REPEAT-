@@ -1,0 +1,2 @@
+{"action":"governance_check","hash":"e10c90a61dfe268dfddd5a453564646d2f577e657f8856e0eab42a60c4abfa79","prev_hash":"0000000000000000000000000000000000000000000000000000000000000000","step":1,"verdict":"ALLOW"}
+{"action":"task_execution","hash":"748b9af9a49c8696f418eafb0ed5578dadea9ac24dcbefc8977bc030764ec0e7","output":"GOVERNED_EXECUTION_VERIFIED","prev_hash":"e10c90a61dfe268dfddd5a453564646d2f577e657f8856e0eab42a60c4abfa79","step":2}
