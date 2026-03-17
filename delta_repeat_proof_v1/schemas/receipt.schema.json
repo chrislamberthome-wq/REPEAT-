@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chrislamberthome-wq.github.io/REPEAT-/schemas/receipt.schema.json",
+  "title": "ExecutionReceipt",
+  "description": "Governed execution receipt. status=PASS only when all verification conditions hold.",
+  "type": "object",
+  "required": ["cycle_id", "issued_at", "status", "trace_sha256"],
+  "additionalProperties": false,
+  "properties": {
+    "cycle_id": {
+      "type": "string",
+      "pattern": "^cycle-[0-9]{4}$"
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"]
+    },
+    "trace_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

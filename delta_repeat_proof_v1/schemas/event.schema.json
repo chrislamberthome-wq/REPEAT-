@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chrislamberthome-wq.github.io/REPEAT-/schemas/event.schema.json",
+  "title": "TraceEvent",
+  "description": "One stage event in the five-stage governed execution cycle.",
+  "type": "object",
+  "required": ["cycle_id", "event_hash", "payload", "prev_hash", "seq", "stage"],
+  "additionalProperties": false,
+  "properties": {
+    "cycle_id": {
+      "type": "string",
+      "pattern": "^cycle-[0-9]{4}$"
+    },
+    "event_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "payload": {
+      "type": "object",
+      "minProperties": 1
+    },
+    "prev_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "seq": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "stage": {
+      "type": "string",
+      "enum": ["govern", "learn", "plan", "reflect", "regulate"]
+    }
+  }
+}

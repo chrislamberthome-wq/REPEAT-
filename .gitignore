@@ -28,3 +28,6 @@ build/
 # MRAM simulation outputs
 *.jsonl
 
+# Allow the locked artifact trace
+!delta_repeat_proof_v1/trace/trace.jsonl
+
