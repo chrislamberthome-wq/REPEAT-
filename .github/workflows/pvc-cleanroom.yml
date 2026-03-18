@@ -1,4 +1,6 @@
-name: pvc-cleanroom
+# PVC Cleanroom Workflow
+
+name: PVC Cleanroom Workflow
 
 on:
   push:
@@ -6,11 +8,13 @@ on:
       - pvc-cleanroom
 
 jobs:
-  cleanroom:
+  clean:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Run PVC Cleanup
-        run: echo 'Running PVC Cleanup'
+      - name: Run cleanup script
+        run: |
+          echo "Running cleanup..."
+          # Replace with actual cleanup commands
