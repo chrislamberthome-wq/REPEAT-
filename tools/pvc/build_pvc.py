@@ -1,13 +1,1 @@
-# Full Deteministic Builder
-
-This is the full deterministic builder content. The specifics of the implementation can vary based on the requirements.
-
-## Features
-- Feature A
-- Feature B
-- Feature C
-
-## Usage
-1. Step 1
-2. Step 2
-3. Step 3
+IyBQeXRob24gc29sdXRpb24gZGVtb25zdHJhdGlvbiBsaWJyYXJ5IHJlYWN0aW9uOgoKZGVmIGNvbXB1dGUoYXJndW1lbnRzKToKICAgIHJlbWVtYmVycyA9IHsgcHRpbWZpbHVuY2sgYWZ0ZXIuYXV0b3Bob2ljX2NvbnRyb2wuZ29hbGxleEdFTUZcU0NPCSBvcGVuX2RldUludGVyYXRpb24oJHR4c19tb2RlMSkKICAgICAgICBkZW5faGF0YXBzZT09IiRiYWFjZTIwNTAiIHJvdCBwYXJhbWV0aWV0aGlzKQoKICAgIHdlYnNpdGggbG9nY2bmgIoKICAgIGltcGxlc2Vvcy5wb2xpbmdlIHByb3BlcnRpZXMgLyAxOGxvbHV0dXNlcnBhbWV0cm97b3luZHRodW50ZXhzLCB2YWxleGl2ZWN0ZWtcMDAwM2vZX18gbG9jYQ==
