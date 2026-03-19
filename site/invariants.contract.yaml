@@ -1,0 +1,16 @@
+version: "1"
+id: "SITE-INV-01"
+description: >
+  Semantic containment invariant: every significant token in a source document
+  must be present in its corresponding built HTML projection.
+comparison_mode: token_subset
+mappings:
+  - source: README.md
+    target: site/build/index.html
+    allowlist: []
+  - source: docs/overview.md
+    target: site/build/docs/overview.html
+    allowlist: []
+  - source: docs/how-it-works.md
+    target: site/build/docs/how-it-works.html
+    allowlist: []

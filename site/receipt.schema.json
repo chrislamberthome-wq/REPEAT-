@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SITE-INV-01 Projection Receipt",
+  "description": "Schema for the projection verifier receipt.",
+  "type": "object",
+  "required": ["version", "invariant_id", "status", "timestamp", "mappings"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "invariant_id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"]
+    },
+    "timestamp": {
+      "type": "string",
+      "description": "ISO-8601 UTC timestamp."
+    },
+    "mappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source", "target", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "source": {"type": "string"},
+          "target": {"type": "string"},
+          "status": {
+            "type": "string",
+            "enum": ["PASS", "FAIL"]
+          },
+          "missing_tokens": {
+            "type": "array",
+            "items": {"type": "string"},
+            "default": []
+          }
+        }
+      }
+    }
+  }
+}
