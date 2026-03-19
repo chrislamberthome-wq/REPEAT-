@@ -1,4 +1,4 @@
-# SOLID-FSK v0.1
+    # SOLID-FSK v0.1
 
 Geometric resonance communication experiment using the five Platonic solids as spectral carriers.
 
