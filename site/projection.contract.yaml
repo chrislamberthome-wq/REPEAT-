@@ -1,0 +1,50 @@
+version: "2"
+contract_id: "site-projection-v2"
+description: "Deterministic projection contract for rendering selected repository documentation into auditable static site artifacts."
+
+traceability:
+  mappings:
+    - invariant_id: "SITE-INV-01"
+      source: "README.md"
+      rendered: "site/build/index.html"
+      comparison_mode: "token_subset"
+      allowlist:
+        - "breadcrumb"
+        - "stable-side-menu"
+      rationale: "Homepage may add stable navigation wrappers while preserving source semantic content."
+
+    - invariant_id: "SITE-INV-01"
+      source: "docs/SCIENTIFIC_OVERVIEW.md"
+      rendered: "site/build/docs/scientific-overview.html"
+      comparison_mode: "token_subset"
+      allowlist:
+        - "breadcrumb"
+        - "stable-side-menu"
+      rationale: "Rendered page may add stable navigation wrappers while preserving source semantic content."
+
+    - invariant_id: "SITE-INV-01"
+      source: "docs/COMPLIANCE_MATRIX.md"
+      rendered: "site/build/docs/compliance-matrix.html"
+      comparison_mode: "token_subset"
+      allowlist:
+        - "breadcrumb"
+        - "stable-side-menu"
+      rationale: "Rendered page may add stable navigation wrappers while preserving source semantic content."
+
+    - invariant_id: "SITE-INV-01"
+      source: "docs/SCHEMA_GOVERNANCE.md"
+      rendered: "site/build/docs/schema-governance.html"
+      comparison_mode: "token_subset"
+      allowlist:
+        - "breadcrumb"
+        - "stable-side-menu"
+      rationale: "Rendered page may add stable navigation wrappers while preserving source semantic content."
+
+    - invariant_id: "SITE-INV-01"
+      source: "docs/IDA_CONTROL_LOOP.md"
+      rendered: "site/build/docs/ida-control-loop.html"
+      comparison_mode: "token_subset"
+      allowlist:
+        - "breadcrumb"
+        - "stable-side-menu"
+      rationale: "Rendered page may add stable navigation wrappers while preserving source semantic content."
