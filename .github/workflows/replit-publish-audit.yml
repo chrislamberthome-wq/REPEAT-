@@ -1,0 +1,65 @@
+name: replit-publish-audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install runtime deps
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            pip install fastapi==0.110.0 uvicorn==0.29.0
+          fi
+
+      - name: Ensure artifact directories exist
+        run: |
+          mkdir -p tools
+          mkdir -p artifacts/deploy
+
+      - name: Verify audit script exists
+        run: |
+          test -f tools/replit_publish_audit.py
+
+      - name: Run REPEAT publish audit
+        run: |
+          python tools/replit_publish_audit.py
+
+      - name: Show receipt
+        if: always()
+        run: |
+          echo "==== replit_publish_receipt.json ===="
+          cat artifacts/deploy/replit_publish_receipt.json || true
+          echo
+          echo "==== REPLIT_DEPLOY_BLOCKER.md ===="
+          cat artifacts/deploy/REPLIT_DEPLOY_BLOCKER.md || true
+
+      - name: Upload audit artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: replit-publish-audit-artifacts
+          path: |
+            artifacts/deploy/replit_publish_receipt.json
+            artifacts/deploy/REPLIT_DEPLOY_BLOCKER.md
+            artifacts/deploy/replit_publish_uvicorn.log
+          if-no-files-found: warn
