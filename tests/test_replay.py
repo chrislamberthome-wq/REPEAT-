@@ -193,7 +193,7 @@ class TestReplayAndSummarize:
     def test_empty_rows(self):
         summary = replay_and_summarize([], CLEAN_CONFIG)
         assert summary.trial_count == 0
-        assert summary.result == "PASS"  # no failures → PASS
+        assert summary.result == "FAIL"  # no trials → cannot pass
         assert summary.aggregate_ber == 0.0
 
     def test_aggregate_ber_partial_errors(self):

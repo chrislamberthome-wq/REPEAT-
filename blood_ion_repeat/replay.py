@@ -134,7 +134,7 @@ def replay_and_summarize(
     )
     crc_pass_count = sum(1 for r in trial_records if r.crc_pass)
     crc_pass_rate = crc_pass_count / trial_count if trial_count > 0 else 0.0
-    result = "PASS" if trials_failed == 0 else "FAIL"
+    result = "PASS" if trial_count > 0 and trials_failed == 0 else "FAIL"
 
     return ReplaySummary(
         experiment_id=experiment_id,
