@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "run_receipt.schema.json",
+  "title": "run_receipt",
+  "description": "Records the immediate result of executing a one_string_payload. Strictly bound to payload identity via SHA-256 and CRC-16/CCITT-FALSE.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_type",
+    "engine_name",
+    "engine_version",
+    "payload_sha256",
+    "payload_crc16_ccitt_false",
+    "executed_at",
+    "result",
+    "exit_code",
+    "output",
+    "trace_sha256",
+    "errors"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "receipt_type": {
+      "type": "string",
+      "const": "run_receipt"
+    },
+    "engine_name": {
+      "type": "string",
+      "const": "one_string_repeat"
+    },
+    "engine_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "payload_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 hex digest of the canonical payload bytes."
+    },
+    "payload_crc16_ccitt_false": {
+      "type": "string",
+      "pattern": "^[A-F0-9]{4}$",
+      "description": "CRC-16/CCITT-FALSE of canonical payload bytes, upper-case 4-hex-digit string."
+    },
+    "executed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp of when execution began."
+    },
+    "result": {
+      "type": "string",
+      "enum": ["PASS", "FAIL", "ERROR"],
+      "description": "Execution outcome. Only one of PASS, FAIL, ERROR is admissible."
+    },
+    "exit_code": {
+      "type": "integer",
+      "enum": [0, 1, 2],
+      "description": "Exit code: 0=PASS, 1=FAIL, 2=ERROR."
+    },
+    "output": {
+      "type": "object",
+      "description": "Deterministic engine output. Must be fully reproduced by replay.",
+      "required": ["final_value", "steps_executed", "fixed_point_reached"],
+      "additionalProperties": false,
+      "properties": {
+        "final_value": {
+          "type": "integer"
+        },
+        "steps_executed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "fixed_point_reached": {
+          "type": "boolean"
+        }
+      }
+    },
+    "trace_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 hex digest of the canonical output (trace)."
+    },
+    "errors": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Must be empty on PASS result."
+    }
+  }
+}
