@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repeat.example/schemas/experiment_config.schema.json",
+  "title": "ExperimentConfig",
+  "description": "Configuration schema for blood-ion-repeat ionic channel experiments.",
+  "type": "object",
+  "required": [
+    "experiment_id",
+    "channel_medium",
+    "electrode_type",
+    "electrode_spacing_mm",
+    "pulse_voltage_v",
+    "pulse_width_ms",
+    "symbol_period_ms",
+    "preamble_bits",
+    "payload_bits",
+    "crc_mode",
+    "decode_threshold_mv",
+    "trials"
+  ],
+  "properties": {
+    "experiment_id": {
+      "type": "string",
+      "description": "Unique identifier for the experiment."
+    },
+    "channel_medium": {
+      "type": "string",
+      "description": "Description of the ionic channel medium (e.g. '0.9% saline')."
+    },
+    "electrode_type": {
+      "type": "string",
+      "description": "Type of electrode used (e.g. 'inert_baseline', 'PEDOT:PSS')."
+    },
+    "electrode_spacing_mm": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Distance between electrodes in millimetres."
+    },
+    "pulse_voltage_v": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Excitation pulse voltage in volts."
+    },
+    "pulse_width_ms": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Excitation pulse width in milliseconds."
+    },
+    "symbol_period_ms": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Duration allocated per symbol in milliseconds."
+    },
+    "preamble_bits": {
+      "type": "string",
+      "pattern": "^[01]+$",
+      "description": "Fixed preamble bit string (e.g. '1010')."
+    },
+    "payload_bits": {
+      "type": "string",
+      "pattern": "^[01]+$",
+      "description": "Data payload bit string."
+    },
+    "crc_mode": {
+      "type": "string",
+      "enum": ["CRC-16/CCITT-FALSE"],
+      "description": "CRC algorithm used for frame integrity."
+    },
+    "decode_threshold_mv": {
+      "type": "number",
+      "description": "Receiver voltage threshold for decoding a '1' symbol (mV)."
+    },
+    "trials": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Number of trials to execute."
+    },
+    "timestamp_seed_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional ISO-8601 UTC base time for deterministic timestamp generation. When absent, real wall-clock time is used."
+    },
+    "trial_spacing_seconds": {
+      "type": "number",
+      "minimum": 0,
+      "default": 60,
+      "description": "Simulated elapsed seconds between the start of consecutive trials."
+    },
+    "symbol_spacing_seconds": {
+      "type": "number",
+      "minimum": 0,
+      "default": 1,
+      "description": "Simulated elapsed seconds between symbols within a single trial."
+    },
+    "noise_schedule_mv": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "description": "Per-trial Gaussian noise standard deviation offset (mV). If shorter than trials, the last value is repeated. Omit to use the channel model default."
+    }
+  },
+  "additionalProperties": false
+}
