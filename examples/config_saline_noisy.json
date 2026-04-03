@@ -1,0 +1,14 @@
+{
+  "experiment_id": "saline-noisy-v1",
+  "channel_medium": "0.9% saline (noisy conditions)",
+  "electrode_type": "inert_baseline",
+  "electrode_spacing_mm": 30,
+  "pulse_voltage_v": 0.15,
+  "pulse_width_ms": 80,
+  "symbol_period_ms": 500,
+  "preamble_bits": "1010",
+  "payload_bits": "11001100",
+  "crc_mode": "CRC-16/CCITT-FALSE",
+  "decode_threshold_mv": 15.0,
+  "trials": 32
+}

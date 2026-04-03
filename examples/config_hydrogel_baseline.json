@@ -1,0 +1,14 @@
+{
+  "experiment_id": "hydrogel-baseline-v1",
+  "channel_medium": "saline hydrogel",
+  "electrode_type": "inert_baseline",
+  "electrode_spacing_mm": 20,
+  "pulse_voltage_v": 0.2,
+  "pulse_width_ms": 100,
+  "symbol_period_ms": 500,
+  "preamble_bits": "1010",
+  "payload_bits": "11001100",
+  "crc_mode": "CRC-16/CCITT-FALSE",
+  "decode_threshold_mv": 20.0,
+  "trials": 16
+}
