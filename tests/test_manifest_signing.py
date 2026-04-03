@@ -8,6 +8,8 @@ import base64
 import hashlib
 import json
 import os
+import subprocess
+import sys
 import tempfile
 from typing import Any, Dict
 
@@ -302,7 +304,6 @@ class TestVerifyRunCLI:
     """Integration tests for verify_run.py via subprocess."""
 
     def _run(self, *args: str) -> "subprocess.CompletedProcess[str]":
-        import subprocess
         return subprocess.run(
             [sys.executable, "verify_run.py", *args],
             capture_output=True,
@@ -361,7 +362,6 @@ class TestVerifyRunCLI:
     # -- no manifest tests ------------------------------------------------
 
     def test_no_args_exits_nonzero(self):
-        import subprocess, sys
         r = subprocess.run(
             [sys.executable, "verify_run.py"],
             capture_output=True,
@@ -457,6 +457,3 @@ class TestVerifyRunCLI:
         assert parsed["signed_manifest_provided"] is False
         assert parsed["manifest_cryptographically_verified"] is False
         assert parsed["artifact_signature_policy_enforced"] is False
-
-
-import sys  # noqa: E402  (needed by TestVerifyRunCLI._run)
