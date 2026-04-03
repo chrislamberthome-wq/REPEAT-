@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:repeat:schema:key-manifest-bundle:1",
+  "title": "REPEAT Key Manifest Bundle",
+  "description": "Signed bundle that binds an unsigned key manifest to a root trust anchor via a detached Ed25519 signature.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "bundle_type",
+    "manifest",
+    "manifest_sha256",
+    "root_key_id",
+    "signature_algorithm",
+    "signature_b64"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "bundle_type": {
+      "type": "string",
+      "const": "key_manifest_bundle"
+    },
+    "manifest": {
+      "type": "object",
+      "description": "The embedded unsigned key_manifest object (verbatim).",
+      "$ref": "urn:repeat:schema:key-manifest:1"
+    },
+    "manifest_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 hex digest of the canonical UTF-8 bytes of the manifest object."
+    },
+    "root_key_id": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 hex digest of the raw bytes of the root public key used to sign this bundle."
+    },
+    "signature_algorithm": {
+      "type": "string",
+      "const": "Ed25519",
+      "description": "Algorithm used to produce the detached signature."
+    },
+    "signature_b64": {
+      "type": "string",
+      "description": "Base64-encoded detached Ed25519 signature over the canonical UTF-8 bytes of the manifest object."
+    }
+  }
+}
