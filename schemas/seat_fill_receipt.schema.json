@@ -1,0 +1,119 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "seat_fill_receipt.schema.json",
+  "title": "SeatFillReceipt",
+  "description": "Schema for a REPEAT seat_fill governance receipt (c9-receipt-v1.0).",
+  "type": "object",
+  "required": [
+    "receipt_type",
+    "spec_version",
+    "ledger_seq",
+    "action",
+    "target_seat_id",
+    "council_id",
+    "entry_sha256",
+    "prev_state_sha256",
+    "next_state_sha256",
+    "result",
+    "reason",
+    "verified_at_utc",
+    "verifier",
+    "verifier_signature"
+  ],
+  "properties": {
+    "receipt_type": {
+      "type": "string",
+      "const": "seat_fill_receipt",
+      "description": "Receipt type discriminator."
+    },
+    "spec_version": {
+      "type": "string",
+      "const": "c9-receipt-v1.0",
+      "description": "Receipt specification version."
+    },
+    "ledger_seq": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonically increasing ledger sequence number."
+    },
+    "action": {
+      "type": "string",
+      "const": "seat_fill",
+      "description": "The governance action type for this receipt."
+    },
+    "target_seat_id": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9,
+      "description": "The seat that was filled (1..9)."
+    },
+    "council_id": {
+      "type": "string",
+      "const": "council_of_9",
+      "description": "Council identifier."
+    },
+    "entry_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "SHA-256 hash of the canonical ledger entry (action JSON)."
+    },
+    "prev_state_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "SHA-256 hash of the prior council state."
+    },
+    "next_state_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "SHA-256 hash of the resulting council state after applying the action."
+    },
+    "result": {
+      "type": "string",
+      "enum": ["PASS", "FAIL", "ERROR"],
+      "description": "Deterministic verifier outcome."
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Machine-readable reason code (e.g., 'seat_filled', 'duplicate_seat', 'bad_signature')."
+    },
+    "verified_at_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp of verification."
+    },
+    "verifier": {
+      "type": "object",
+      "required": ["verifier_id", "public_key"],
+      "properties": {
+        "verifier_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Identifier for the verifier instance."
+        },
+        "public_key": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Public key of the verifier."
+        }
+      },
+      "additionalProperties": false
+    },
+    "verifier_signature": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Signature over canonical receipt JSON by the verifier."
+    },
+    "candidate_public_key": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Public key of the candidate whose seat was filled. Required for deterministic ledger replay."
+    },
+    "candidate_identity_hash_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "SHA-256 hash of the candidate identity document. Required for deterministic ledger replay."
+    }
+  },
+  "additionalProperties": false
+}
