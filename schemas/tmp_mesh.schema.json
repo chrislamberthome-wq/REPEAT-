@@ -1,0 +1,193 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/chrislamberthome-wq/REPEAT-/schemas/tmp_mesh.schema.json",
+  "title": "TMP v1 Mesh",
+  "description": "Canonical schema for a Tetrahedral Mesh Protocol v1 (TMP-v1) mesh object.",
+  "type": "object",
+  "required": [
+    "protocol",
+    "version",
+    "mesh_id",
+    "vertex_ids",
+    "tetrahedra",
+    "adjacency",
+    "boundary_faces",
+    "orientation_rule",
+    "canonicalization_version",
+    "declared_invariants"
+  ],
+  "additionalProperties": false,
+  "$comment": "additionalProperties=false is intentional: TMP v1 is a frozen, fail-closed protocol. Unknown fields are rejected. Future versions use a different protocol identifier.",
+  "properties": {
+    "protocol": {
+      "type": "string",
+      "const": "TMP-v1",
+      "description": "Protocol identifier. Must be exactly 'TMP-v1'."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Spec version in semver format (e.g. '1.0.0')."
+    },
+    "mesh_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Non-empty unique identifier for this mesh."
+    },
+    "vertex_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 4,
+      "uniqueItems": true,
+      "description": "Ordered list of at least 4 distinct vertex labels."
+    },
+    "tetrahedra": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/TetraRecord"
+      },
+      "minItems": 1,
+      "description": "Ordered list of tetrahedra. At least 1 required."
+    },
+    "adjacency": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/AdjacencyRecord"
+      },
+      "description": "Explicit face-sharing records. May be empty for a single tetrahedron."
+    },
+    "boundary_faces": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/BoundaryFaceRecord"
+      },
+      "description": "Explicit boundary face records. Each non-shared face must appear here."
+    },
+    "orientation_rule": {
+      "type": "string",
+      "enum": ["right_hand_outward"],
+      "description": "Orientation convention. Must be 'right_hand_outward' in TMP v1."
+    },
+    "canonicalization_version": {
+      "type": "string",
+      "const": "c14n-v1",
+      "description": "Canonicalization rule version. Must be 'c14n-v1'."
+    },
+    "declared_invariants": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["manifold_interior", "closed_boundary", "connected", "oriented"]
+      },
+      "description": "Invariant class names to enforce during verification. May be empty."
+    },
+    "geometry": {
+      "$ref": "#/definitions/GeometryBlock",
+      "description": "Optional coordinate metadata. Excluded from the topology hash."
+    },
+    "topology_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "Pre-declared canonical SHA-256 hash of the topology projection."
+    }
+  },
+  "definitions": {
+    "TetraRecord": {
+      "type": "object",
+      "required": ["tetra_id", "vertices"],
+      "additionalProperties": false,
+      "properties": {
+        "tetra_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Unique non-empty identifier for this tetrahedron."
+        },
+        "vertices": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 4,
+          "maxItems": 4,
+          "description": "Exactly 4 distinct vertex labels ordered to define orientation."
+        }
+      }
+    },
+    "FaceRef": {
+      "type": "object",
+      "required": ["tetra_id", "face"],
+      "additionalProperties": false,
+      "properties": {
+        "tetra_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Identifier of the tetrahedron."
+        },
+        "face": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3,
+          "description": "Face index (0–3). Face i is opposite to vertex i."
+        }
+      }
+    },
+    "AdjacencyRecord": {
+      "type": "object",
+      "required": ["left", "right"],
+      "additionalProperties": false,
+      "properties": {
+        "left": {
+          "$ref": "#/definitions/FaceRef",
+          "description": "Left side of the shared face."
+        },
+        "right": {
+          "$ref": "#/definitions/FaceRef",
+          "description": "Right side of the shared face."
+        }
+      }
+    },
+    "BoundaryFaceRecord": {
+      "type": "object",
+      "required": ["tetra_id", "face"],
+      "additionalProperties": false,
+      "properties": {
+        "tetra_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Identifier of the tetrahedron."
+        },
+        "face": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3,
+          "description": "Face index (0–3) that is a boundary face."
+        }
+      }
+    },
+    "GeometryBlock": {
+      "type": "object",
+      "required": ["coordinate_system", "coordinates"],
+      "additionalProperties": false,
+      "properties": {
+        "coordinate_system": {
+          "type": "string",
+          "description": "Coordinate system name (e.g. 'euclidean_3d')."
+        },
+        "coordinates": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {"type": "number"},
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "description": "Map from vertex_id to [x, y, z] coordinates."
+        }
+      }
+    }
+  }
+}

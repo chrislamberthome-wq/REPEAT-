@@ -1,0 +1,11 @@
+{
+  "protocol": "TMP-v1",
+  "mesh_id": "golden-error-malformed",
+  "vertex_ids": ["v0", "v1", "v2"],
+  "tetrahedra": "not-an-array",
+  "adjacency": [],
+  "boundary_faces": [],
+  "orientation_rule": "wrong_rule",
+  "canonicalization_version": "c14n-v1",
+  "declared_invariants": ["unknown_invariant"]
+}

@@ -1,0 +1,50 @@
+{
+  "protocol": "TMP-v1",
+  "version": "1.0.0",
+  "mesh_id": "golden-pass-cube-5tet",
+  "vertex_ids": ["v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7"],
+  "tetrahedra": [
+    {"tetra_id": "T0", "vertices": ["v0", "v1", "v3", "v4"]},
+    {"tetra_id": "T1", "vertices": ["v1", "v2", "v3", "v6"]},
+    {"tetra_id": "T2", "vertices": ["v1", "v4", "v5", "v6"]},
+    {"tetra_id": "T3", "vertices": ["v3", "v4", "v6", "v7"]},
+    {"tetra_id": "T4", "vertices": ["v1", "v3", "v4", "v6"]}
+  ],
+  "adjacency": [
+    {"left": {"tetra_id": "T4", "face": 3}, "right": {"tetra_id": "T0", "face": 0}},
+    {"left": {"tetra_id": "T4", "face": 2}, "right": {"tetra_id": "T1", "face": 1}},
+    {"left": {"tetra_id": "T4", "face": 1}, "right": {"tetra_id": "T2", "face": 2}},
+    {"left": {"tetra_id": "T4", "face": 0}, "right": {"tetra_id": "T3", "face": 3}}
+  ],
+  "boundary_faces": [
+    {"tetra_id": "T0", "face": 1},
+    {"tetra_id": "T0", "face": 2},
+    {"tetra_id": "T0", "face": 3},
+    {"tetra_id": "T1", "face": 0},
+    {"tetra_id": "T1", "face": 2},
+    {"tetra_id": "T1", "face": 3},
+    {"tetra_id": "T2", "face": 0},
+    {"tetra_id": "T2", "face": 1},
+    {"tetra_id": "T2", "face": 3},
+    {"tetra_id": "T3", "face": 0},
+    {"tetra_id": "T3", "face": 1},
+    {"tetra_id": "T3", "face": 2}
+  ],
+  "orientation_rule": "right_hand_outward",
+  "canonicalization_version": "c14n-v1",
+  "declared_invariants": ["connected", "manifold_interior"],
+  "topology_hash": "sha256:9dd505bcc94da70e7af8a840e8ce19a6db00ccb0ede9379a7c15adec9e0ffe40",
+  "geometry": {
+    "coordinate_system": "euclidean_3d",
+    "coordinates": {
+      "v0": [0.0, 0.0, 0.0],
+      "v1": [1.0, 0.0, 0.0],
+      "v2": [1.0, 1.0, 0.0],
+      "v3": [0.0, 1.0, 0.0],
+      "v4": [0.0, 0.0, 1.0],
+      "v5": [1.0, 0.0, 1.0],
+      "v6": [1.0, 1.0, 1.0],
+      "v7": [0.0, 1.0, 1.0]
+    }
+  }
+}
