@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "tetra_mesh_receipt.schema.json",
+  "title": "Tetrahedral Mesh Verification Receipt",
+  "description": "Schema for verification receipts emitted by the Tetrahedral Mesh Protocol verifier.",
+  "type": "object",
+  "required": [
+    "receipt_type",
+    "mesh_id",
+    "cell_count",
+    "timestamp",
+    "canonical_hash",
+    "verifier_version",
+    "result"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "receipt_type": {
+      "type": "string",
+      "const": "tetra_mesh_verification",
+      "description": "Fixed receipt type identifier."
+    },
+    "mesh_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Identifier of the mesh that was verified."
+    },
+    "cell_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of tetrahedral cells in the mesh."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC 3339 timestamp of when the receipt was emitted."
+    },
+    "canonical_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 hex digest of the canonical JSON serialisation of the mesh state."
+    },
+    "prev_receipt_hash": {
+      "type": ["string", "null"],
+      "description": "SHA-256 hex digest of the previous receipt in the chain, or null for the first receipt.",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "verifier_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Version string of the TMP verifier that produced this receipt."
+    },
+    "result": {
+      "type": "string",
+      "enum": ["PASS", "FAIL", "ERROR"],
+      "description": "Deterministic verification outcome."
+    },
+    "failures": {
+      "type": "array",
+      "description": "List of failure descriptions when result is FAIL or ERROR.",
+      "items": {"type": "string"}
+    }
+  }
+}
