@@ -1,0 +1,130 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TMP Mesh v1",
+  "description": "Tetrahedral Mesh Protocol v1 — topology-first combinatorial mesh object.",
+  "type": "object",
+  "required": [
+    "protocol",
+    "version",
+    "mesh_id",
+    "vertex_ids",
+    "tetrahedra",
+    "adjacency",
+    "boundary_faces",
+    "orientation_rule",
+    "canonicalization_version",
+    "declared_invariants"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "protocol": {
+      "type": "string",
+      "const": "TMP-v1"
+    },
+    "version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "mesh_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "vertex_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "tetrahedra": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["tetra_id", "vertices"],
+        "additionalProperties": false,
+        "properties": {
+          "tetra_id": { "type": "string", "minLength": 1 },
+          "vertices": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 4,
+            "maxItems": 4
+          }
+        }
+      }
+    },
+    "adjacency": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["left", "right"],
+        "additionalProperties": false,
+        "properties": {
+          "left":  { "$ref": "#/definitions/face_ref" },
+          "right": { "$ref": "#/definitions/face_ref" }
+        }
+      }
+    },
+    "boundary_faces": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/face_ref" }
+    },
+    "orientation_rule": {
+      "type": "string",
+      "enum": ["right_hand_sorted"]
+    },
+    "canonicalization_version": {
+      "type": "string",
+      "const": "tmp-c14n-v1"
+    },
+    "declared_invariants": {
+      "type": "object",
+      "required": ["canonical_sha256"],
+      "additionalProperties": true,
+      "properties": {
+        "canonical_sha256": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "vertex_count":       { "type": "integer", "minimum": 1 },
+        "tetra_count":        { "type": "integer", "minimum": 1 },
+        "adjacency_count":    { "type": "integer", "minimum": 0 },
+        "boundary_face_count":{ "type": "integer", "minimum": 0 }
+      }
+    },
+    "geometry": {
+      "type": "object",
+      "description": "Optional geometric realization. Excluded from topology hash.",
+      "additionalProperties": true,
+      "properties": {
+        "coordinates": {
+          "type": "object",
+          "description": "Map from vertex_id to [x, y, z] coordinates.",
+          "additionalProperties": {
+            "type": "array",
+            "items": { "type": "number" },
+            "minItems": 3,
+            "maxItems": 3
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "face_ref": {
+      "type": "object",
+      "required": ["tetra_id", "face"],
+      "additionalProperties": false,
+      "properties": {
+        "tetra_id": { "type": "string", "minLength": 1 },
+        "face": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3,
+          "description": "Face index 0–3; face i is opposite to vertex index i."
+        }
+      }
+    }
+  }
+}

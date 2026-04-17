@@ -1,0 +1,42 @@
+{
+  "protocol": "TMP-v1",
+  "version": "1.0",
+  "mesh_id": "cube_decomposition",
+  "vertex_ids": ["v0", "v1", "v2", "v3", "v4"],
+  "tetrahedra": [
+    {"tetra_id": "T0", "vertices": ["v0", "v1", "v2", "v3"]},
+    {"tetra_id": "T1", "vertices": ["v1", "v0", "v2", "v4"]}
+  ],
+  "adjacency": [
+    {
+      "left":  {"tetra_id": "T0", "face": 3},
+      "right": {"tetra_id": "T1", "face": 3}
+    }
+  ],
+  "boundary_faces": [
+    {"tetra_id": "T0", "face": 0},
+    {"tetra_id": "T0", "face": 1},
+    {"tetra_id": "T0", "face": 2},
+    {"tetra_id": "T1", "face": 0},
+    {"tetra_id": "T1", "face": 1},
+    {"tetra_id": "T1", "face": 2}
+  ],
+  "orientation_rule": "right_hand_sorted",
+  "canonicalization_version": "tmp-c14n-v1",
+  "declared_invariants": {
+    "canonical_sha256": "12465ecf2a2f4939dccd69fbe3297413e5394373e282fff8f12a4215bfde7ecf",
+    "vertex_count": 5,
+    "tetra_count": 2,
+    "adjacency_count": 1,
+    "boundary_face_count": 6
+  },
+  "geometry": {
+    "coordinates": {
+      "v0": [0.0, 0.0, 0.0],
+      "v1": [1.0, 0.0, 0.0],
+      "v2": [0.5, 1.0, 0.0],
+      "v3": [0.5, 0.5, 1.0],
+      "v4": [0.5, 0.5, -1.0]
+    }
+  }
+}
