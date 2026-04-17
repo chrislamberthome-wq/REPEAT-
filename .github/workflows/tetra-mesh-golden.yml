@@ -1,0 +1,63 @@
+name: Tetra Mesh Golden Vector
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'verifier/tetra_mesh.py'
+      - 'tests/vectors/golden_tetra_mesh.json'
+      - 'tests/vectors/golden_tetra_mesh.sha256'
+      - 'tests/test_golden_vector.py'
+      - 'tests/test_replay_golden_vector.py'
+      - 'tests/test_cli_golden_vector.py'
+      - 'cli/verify_tetra_mesh.py'
+      - '.github/workflows/tetra-mesh-golden.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'verifier/tetra_mesh.py'
+      - 'tests/vectors/golden_tetra_mesh.json'
+      - 'tests/vectors/golden_tetra_mesh.sha256'
+      - 'tests/test_golden_vector.py'
+      - 'tests/test_replay_golden_vector.py'
+      - 'tests/test_cli_golden_vector.py'
+      - 'cli/verify_tetra_mesh.py'
+      - '.github/workflows/tetra-mesh-golden.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  golden-vector:
+    name: Golden vector — Python ${{ matrix.python-version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ['3.11', '3.12']
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+          cache-dependency-path: 'requirements-dev.txt'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Print computed canonical hash (debug)
+        run: |
+          python cli/verify_tetra_mesh.py tests/vectors/golden_tetra_mesh.json --print-hash
+
+      - name: Run golden vector tests
+        run: |
+          pytest tests/test_golden_vector.py tests/test_replay_golden_vector.py tests/test_cli_golden_vector.py -v
