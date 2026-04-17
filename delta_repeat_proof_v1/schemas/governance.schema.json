@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chrislamberthome-wq.github.io/REPEAT-/schemas/governance.schema.json",
+  "title": "GovernanceDecision",
+  "description": "Binary governance decision record for one execution cycle.",
+  "type": "object",
+  "required": ["constraints_applied", "cycle_id", "decision_id", "verdict"],
+  "additionalProperties": false,
+  "properties": {
+    "constraints_applied": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string"}
+    },
+    "cycle_id": {
+      "type": "string",
+      "pattern": "^cycle-[0-9]{4}$"
+    },
+    "decision_id": {
+      "type": "string",
+      "pattern": "^gov-[0-9]{4}$"
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["ALLOW", "DENY"]
+    }
+  }
+}

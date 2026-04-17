@@ -1,0 +1,87 @@
+name: Verify delta_repeat_proof_v1
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  verify:
+    name: Verification discipline
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install pytest jsonschema
+
+      # ------------------------------------------------------------------
+      # 1. Unit tests (canonical, hash-chain, governance, replay, receipt)
+      # ------------------------------------------------------------------
+      - name: Unit tests
+        working-directory: delta_repeat_proof_v1
+        run: |
+          python -m pytest tests/ -v
+        env:
+          PYTHONPATH: ${{ github.workspace }}/delta_repeat_proof_v1
+
+      # ------------------------------------------------------------------
+      # 2. Adversarial tests (fail-closed tamper cases)
+      # ------------------------------------------------------------------
+      - name: Adversarial tests
+        run: |
+          python -m pytest tests/test_adversarial.py -v
+        env:
+          PYTHONPATH: ${{ github.workspace }}/delta_repeat_proof_v1
+
+      # ------------------------------------------------------------------
+      # 3. Baseline verification (must exit 0, emit PASS)
+      # ------------------------------------------------------------------
+      - name: Baseline verification
+        working-directory: delta_repeat_proof_v1
+        run: |
+          python verifier/verify.py
+        env:
+          PYTHONPATH: ${{ github.workspace }}/delta_repeat_proof_v1
+
+      # ------------------------------------------------------------------
+      # 4. Determinism hash validation (two runs, hashes must match)
+      # ------------------------------------------------------------------
+      - name: Determinism validation
+        run: |
+          HASH1=$(sha256sum delta_repeat_proof_v1/trace/trace.jsonl | awk '{print $1}')
+          python -m pytest tests/test_adversarial.py::test_baseline_exit0_pass -v
+          HASH2=$(sha256sum delta_repeat_proof_v1/trace/trace.jsonl | awk '{print $1}')
+          if [ "$HASH1" != "$HASH2" ]; then
+            echo "FAIL: trace hashes differ between runs: $HASH1 vs $HASH2"
+            exit 1
+          fi
+          echo "PASS: trace SHA-256 is deterministic: sha256:$HASH1"
+        env:
+          PYTHONPATH: ${{ github.workspace }}/delta_repeat_proof_v1
+
+      # ------------------------------------------------------------------
+      # 5. Full verification matrix (structured JSON report)
+      # ------------------------------------------------------------------
+      - name: Verification matrix
+        run: |
+          python scripts/run_verification_matrix.py --json-output /tmp/matrix.json
+        env:
+          PYTHONPATH: ${{ github.workspace }}/delta_repeat_proof_v1
+
+      - name: Upload matrix report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-matrix
+          path: /tmp/matrix.json
+          if-no-files-found: ignore
