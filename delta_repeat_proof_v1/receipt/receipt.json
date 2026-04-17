@@ -1,0 +1,9 @@
+{
+  "cycle_id": "cycle-0001",
+  "trace_sha256": "c3781f72ecd08a2377ad6ac4164ed046c6736a17dd1a38051759ba71b212709e",
+  "event_count": 5,
+  "governance_verdict": "ALLOW",
+  "replay_match": true,
+  "status": "PASS",
+  "crc16_ccitt_false": "73cf"
+}

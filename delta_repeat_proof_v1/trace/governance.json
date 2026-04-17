@@ -1,0 +1,6 @@
+{
+  "decision_id": "gov-0001",
+  "cycle_id": "cycle-0001",
+  "verdict": "ALLOW",
+  "constraints_applied": ["max_nodes<=3", "posture!=LOCKDOWN"]
+}

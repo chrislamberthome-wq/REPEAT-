@@ -1,0 +1,6 @@
+{
+  "task_id": "task-0001",
+  "operation": "sum",
+  "inputs": [1, 2, 3],
+  "expected_output": 6
+}

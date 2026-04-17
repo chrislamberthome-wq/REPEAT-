@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "delta-repeat-proof-v1/event",
+  "title": "Event",
+  "description": "One stage event in a five-stage cognitive cycle.",
+  "type": "object",
+  "required": ["event_id", "cycle_id", "stage", "task_id", "payload", "prev_hash", "event_hash"],
+  "additionalProperties": false,
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "pattern": "^evt-[0-9]{4}$"
+    },
+    "cycle_id": {
+      "type": "string",
+      "pattern": "^cycle-[0-9]{4}$"
+    },
+    "stage": {
+      "type": "string",
+      "enum": ["reflect", "plan", "learn", "regulate", "govern"]
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^task-[0-9]{4}$"
+    },
+    "payload": {
+      "type": "object",
+      "required": ["note"],
+      "additionalProperties": false,
+      "properties": {
+        "note": { "type": "string" }
+      }
+    },
+    "prev_hash": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      ]
+    },
+    "event_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}
