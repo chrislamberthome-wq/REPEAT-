@@ -1,0 +1,59 @@
+[
+  {
+    "id": "engage-golden-1",
+    "description": "Basic Engage receipt with current schema",
+    "receipt": {
+      "schema_id": "repeat-engage-v1.receipt",
+      "receipt_id": "ENG-000001",
+      "timestamp": "2026-02-15T10:30:00Z",
+      "engagement_type": "survey_response",
+      "participant_id": "P12345",
+      "data": {
+        "survey_id": "SRV-001",
+        "responses": [
+          {"question_id": "Q1", "answer": "yes"},
+          {"question_id": "Q2", "answer": "42"}
+        ]
+      },
+      "receipt": {
+        "sha256_c14n": "sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+      }
+    }
+  },
+  {
+    "id": "engage-golden-2",
+    "description": "Future Core Receipt v1 format",
+    "receipt": {
+      "schema_id": "repeat-core-v1.receipt",
+      "receipt_id": "CORE-000001",
+      "timestamp": "2026-02-16T12:00:00Z",
+      "engagement_type": "data_collection",
+      "participant_id": "P67890",
+      "data": {
+        "collection_method": "automated",
+        "metrics": {
+          "duration_ms": 1500,
+          "quality_score": 0.95
+        }
+      },
+      "receipt": {
+        "sha256_c14n": "sha256:abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789"
+      }
+    }
+  },
+  {
+    "id": "engage-golden-3",
+    "description": "Minimal valid receipt",
+    "receipt": {
+      "schema_id": "repeat-engage-v2.receipt",
+      "receipt_id": "ENG-000002",
+      "timestamp": "2026-02-16T13:00:00Z",
+      "engagement_type": "consent_recorded",
+      "participant_id": "P11111",
+      "data": {},
+      "receipt": {
+        "sha256_c14n": "sha256:fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210"
+      }
+    }
+  }
+]
