@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SITE-POL Policy Report",
+  "description": "Schema for the release governance policy evaluation report.",
+  "type": "object",
+  "required": ["report_version", "policies"],
+  "additionalProperties": false,
+  "properties": {
+    "report_version": {"type": "string"},
+    "policies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "passed", "details"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string"},
+          "passed": {"type": "boolean"},
+          "details": {"type": "string"}
+        }
+      }
+    }
+  }
+}

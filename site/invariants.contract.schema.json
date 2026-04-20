@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SITE-INV-01 Invariants Contract",
+  "description": "Schema for the semantic containment invariant contract.",
+  "type": "object",
+  "required": ["version", "id", "comparison_mode", "mappings"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Contract version string."
+    },
+    "id": {
+      "type": "string",
+      "description": "Invariant identifier.",
+      "pattern": "^SITE-INV-[0-9]+$"
+    },
+    "description": {
+      "type": "string"
+    },
+    "comparison_mode": {
+      "type": "string",
+      "enum": ["token_subset"],
+      "description": "How source and target tokens are compared."
+    },
+    "mappings": {
+      "type": "array",
+      "description": "List of source-to-target projection mappings.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["source", "target"],
+        "additionalProperties": false,
+        "properties": {
+          "source": {
+            "type": "string",
+            "description": "Path to the source document, relative to the repository root."
+          },
+          "target": {
+            "type": "string",
+            "description": "Path to the built HTML projection, relative to the repository root."
+          },
+          "allowlist": {
+            "type": "array",
+            "description": "Tokens permitted to be absent from the target.",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        }
+      }
+    }
+  }
+}

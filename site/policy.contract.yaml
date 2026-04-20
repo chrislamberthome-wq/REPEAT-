@@ -1,0 +1,15 @@
+version: "1"
+id: "SITE-POL"
+description: >
+  Release governance policies. These evaluate admissibility of the release
+  process and are separate from artifact-truth invariants (SITE-INV-*).
+policies:
+  - id: "SITE-POL-01"
+    level: required
+    description: "Release tag must be annotated."
+  - id: "SITE-POL-03"
+    level: required
+    description: "Working tree must be clean at certification time."
+  - id: "SITE-POL-04"
+    level: required
+    description: "Release artifacts must include receipt and manifests."
