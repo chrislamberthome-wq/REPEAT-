@@ -1,0 +1,55 @@
+name: Verify delta_repeat_proof_v1
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    name: Proof artifact verification
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+
+      - name: Baseline verification (exit 0, receipt PASS)
+        run: |
+          cd delta_repeat_proof_v1
+          python verifier/verify.py
+        # Non-zero exit blocks merge
+
+      - name: Adversarial tests (all tamper classes must fail correctly)
+        run: |
+          pytest delta_repeat_proof_v1/tests/test_adversarial.py -v
+        # Any unexpected PASS on a tamper scenario blocks merge
+
+      - name: Full verification matrix (determinism + adversarial)
+        run: |
+          python delta_repeat_proof_v1/scripts/run_verification_matrix.py \
+            > certification/verification_matrix.json
+          python -c "
+          import json, sys
+          with open('certification/verification_matrix.json') as f:
+              matrix = json.load(f)
+          if not matrix.get('overall_passed'):
+              print('FAIL: verification matrix overall_passed is false', file=sys.stderr)
+              sys.exit(1)
+          det = next(c for c in matrix['checks'] if c['check'] == 'determinism')
+          if not det.get('all_receipts_identical'):
+              print('FAIL: determinism check — receipt hashes differ across runs', file=sys.stderr)
+              sys.exit(1)
+          print('OK: all matrix checks passed')
+          "

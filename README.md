@@ -27,3 +27,15 @@ Run tests:
 ```bash
 pytest
 ```
+
+---
+
+## delta_repeat_proof_v1
+
+A verifiable execution primitive that proves a governed decision occurred, execution followed constraints, the result is reproducible, and verification is independent.
+
+```bash
+git clone https://github.com/chrislamberthome-wq/REPEAT-
+cd REPEAT-/delta_repeat_proof_v1
+python verifier/verify.py
+```

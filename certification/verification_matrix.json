@@ -1,0 +1,53 @@
+{
+  "artifact": "delta_repeat_proof_v1",
+  "checks": [
+    {
+      "check": "baseline",
+      "exit_code": 0,
+      "receipt_status": "PASS",
+      "receipt_sha256": "6122eeb8e79e48ccb475df2df01f535458ed571ad6094f940f6c1fd61f06115b",
+      "passed": true
+    },
+    {
+      "check": "determinism",
+      "runs": 5,
+      "receipt_sha256": "6122eeb8e79e48ccb475df2df01f535458ed571ad6094f940f6c1fd61f06115b",
+      "all_receipts_identical": true,
+      "all_exit_codes_zero": true,
+      "passed": true
+    },
+    {
+      "check": "adversarial",
+      "mutants": [
+        {
+          "mutant": "hash_chain_break",
+          "exit_code": 1,
+          "receipt_status": "FAIL",
+          "passed": true
+        },
+        {
+          "mutant": "non_canonical_json",
+          "exit_code": 2,
+          "receipt_status": null,
+          "passed": true
+        },
+        {
+          "mutant": "replay_mismatch",
+          "exit_code": 1,
+          "receipt_status": "FAIL",
+          "replay_match": false,
+          "passed": true
+        },
+        {
+          "mutant": "governance_deny",
+          "exit_code": 1,
+          "receipt_status": "FAIL",
+          "governance_verdict": "DENY",
+          "passed": true
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "overall_passed": true
+}

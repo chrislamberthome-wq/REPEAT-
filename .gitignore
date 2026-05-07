@@ -27,4 +27,6 @@ build/
 
 # MRAM simulation outputs
 *.jsonl
+# Whitelist proof artifact trace (must be committed)
+!delta_repeat_proof_v1/trace.jsonl
 
