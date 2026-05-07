@@ -1,0 +1,17 @@
+{
+  "version": "repeat-ai-policy-v1",
+  "deny": [
+    "/environment/**",
+    "/provider/**",
+    "/request/body/model"
+  ],
+  "warn": [
+    "/response/body/usage/**"
+  ],
+  "allow": [
+    "/request/body/input",
+    "/response/body/output_text",
+    "/response/body/output/**"
+  ],
+  "unmatched": "warn"
+}
