@@ -1,0 +1,47 @@
+{
+  "contract_id": "site-projection-v2",
+  "generated_at": "2026-03-19T20:22:59.319448+00:00",
+  "overall_status": "PASS",
+  "mappings": [
+    {
+      "invariant_id": "SITE-INV-01",
+      "source": "README.md",
+      "source_sha256": "805b6482e262d51fdffa66cdc64787f45b2ea9c56841dd9849bb77f097c9d8da",
+      "rendered": "site/build/index.html",
+      "rendered_sha256": "f5fecc1e1ee1a00923762b5307f433b945e6a40fa7e31fe1e9339b16afa743bd",
+      "status": "PASS"
+    },
+    {
+      "invariant_id": "SITE-INV-01",
+      "source": "docs/SCIENTIFIC_OVERVIEW.md",
+      "source_sha256": "6b82019c0977d0397f6802458b0bb11ba056cc39f6c53467e08914a3aa24b93d",
+      "rendered": "site/build/docs/scientific-overview.html",
+      "rendered_sha256": "0912be4a06a560e7553bf2d0637b976fbb6bb17b319d08310a065c08a6a2106f",
+      "status": "PASS"
+    },
+    {
+      "invariant_id": "SITE-INV-01",
+      "source": "docs/COMPLIANCE_MATRIX.md",
+      "source_sha256": "27964c3616d6b392610f3d20720cc996d0edd697e7e4dad4e53b1ceed02c3cfa",
+      "rendered": "site/build/docs/compliance-matrix.html",
+      "rendered_sha256": "d016df7aed41e0713a350d90daeb243cf6a048115691d91b0b54949b81f284eb",
+      "status": "PASS"
+    },
+    {
+      "invariant_id": "SITE-INV-01",
+      "source": "docs/SCHEMA_GOVERNANCE.md",
+      "source_sha256": "54f422941fecd308376030cef3046c54b7764d8ca4cb0f6ecace2643edc67e4f",
+      "rendered": "site/build/docs/schema-governance.html",
+      "rendered_sha256": "c7b834cb1b24eacdacfef3edbf11157adaabce0e476547b093adc31c51ee573e",
+      "status": "PASS"
+    },
+    {
+      "invariant_id": "SITE-INV-01",
+      "source": "docs/IDA_CONTROL_LOOP.md",
+      "source_sha256": "a167075564dedab570ab212bdf7060117e1113501d391c5efd25abb5c491e28e",
+      "rendered": "site/build/docs/ida-control-loop.html",
+      "rendered_sha256": "c0cda3008cfec168f9e132e8f5e0e35f78203aab7f240272c15d775293525a6c",
+      "status": "PASS"
+    }
+  ]
+}
