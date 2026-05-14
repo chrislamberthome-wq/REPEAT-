@@ -27,4 +27,6 @@ build/
 
 # MRAM simulation outputs
 *.jsonl
+# Allow example traces checked in under examples/
+!examples/*.jsonl
 

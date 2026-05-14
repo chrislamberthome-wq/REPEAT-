@@ -1,0 +1,130 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Blood-Ion-Repeat Verification Receipt v1",
+  "description": "Receipt schema for multi-trial blood-ion-repeat experiment verification. Includes trial-wise results (trial_count, trials_passed, trials_failed) alongside aggregated outcomes.",
+  "type": "object",
+  "required": [
+    "schema",
+    "experiment_id",
+    "result",
+    "trial_count",
+    "trials_passed",
+    "trials_failed",
+    "total_symbols",
+    "total_symbol_errors",
+    "aggregate_ber",
+    "crc_pass_rate",
+    "sha256_trace",
+    "trial_results"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "blood-ion-repeat-verification-receipt-v1"
+    },
+    "experiment_id": {
+      "type": "string",
+      "description": "Identifier for the experiment run, matching the config experiment_id."
+    },
+    "result": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"],
+      "description": "Aggregate result: PASS only when all trials pass."
+    },
+    "trial_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total number of trials observed in the trace."
+    },
+    "trials_passed": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of trials that passed (zero symbol errors and CRC match)."
+    },
+    "trials_failed": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of trials that failed."
+    },
+    "total_symbols": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total symbols across all trials."
+    },
+    "total_symbol_errors": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total symbol decode errors across all trials."
+    },
+    "aggregate_ber": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Aggregate bit error rate: total_symbol_errors / total_symbols."
+    },
+    "crc_pass_rate": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Fraction of trials where CRC-16/CCITT-FALSE matched."
+    },
+    "sha256_trace": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$",
+      "description": "SHA-256 fingerprint of the canonical trace (prefixed 'sha256:')."
+    },
+    "trial_results": {
+      "type": "array",
+      "description": "Per-trial verification results.",
+      "items": {
+        "type": "object",
+        "required": [
+          "trial_index",
+          "symbol_count",
+          "symbol_errors",
+          "ber",
+          "crc_pass",
+          "passed",
+          "fail_reason"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "trial_index": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Zero-based index of this trial."
+          },
+          "symbol_count": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of symbols in this trial."
+          },
+          "symbol_errors": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of symbol decode errors in this trial."
+          },
+          "ber": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "description": "Bit error rate for this trial."
+          },
+          "crc_pass": {
+            "type": "boolean",
+            "description": "Whether CRC-16/CCITT-FALSE matched for this trial."
+          },
+          "passed": {
+            "type": "boolean",
+            "description": "Whether this trial passed (zero errors and CRC match)."
+          },
+          "fail_reason": {
+            "type": "string",
+            "description": "Reason for failure, or empty string if trial passed."
+          }
+        }
+      }
+    }
+  }
+}
