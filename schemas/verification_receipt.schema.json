@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "verification_receipt.schema.json",
+  "title": "verification_receipt",
+  "description": "Records the result of independently replaying a run and comparing it to a claimed run_receipt. PASS only if all comparisons match.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_type",
+    "verifier_name",
+    "verifier_version",
+    "verified_at",
+    "payload_sha256",
+    "payload_crc16_ccitt_false",
+    "claimed_result",
+    "replayed_result",
+    "matched_payload_hash",
+    "matched_payload_crc16",
+    "matched_output",
+    "matched_exit_code",
+    "verification_result",
+    "verification_exit_code",
+    "notes"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "receipt_type": {
+      "type": "string",
+      "const": "verification_receipt"
+    },
+    "verifier_name": {
+      "type": "string",
+      "const": "one_string_repeat_verifier"
+    },
+    "verifier_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "verified_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp of when verification was performed."
+    },
+    "payload_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 hex digest recomputed by the verifier from canonical payload bytes."
+    },
+    "payload_crc16_ccitt_false": {
+      "type": "string",
+      "pattern": "^[A-F0-9]{4}$",
+      "description": "CRC-16/CCITT-FALSE recomputed by the verifier from canonical payload bytes."
+    },
+    "claimed_result": {
+      "type": "string",
+      "enum": ["PASS", "FAIL", "ERROR"],
+      "description": "Result declared in the run_receipt under verification."
+    },
+    "replayed_result": {
+      "type": "string",
+      "enum": ["PASS", "FAIL", "ERROR"],
+      "description": "Result produced by the independent replay."
+    },
+    "matched_payload_hash": {
+      "type": "boolean",
+      "description": "True if the verifier-recomputed SHA-256 matches the run_receipt's payload_sha256."
+    },
+    "matched_payload_crc16": {
+      "type": "boolean",
+      "description": "True if the verifier-recomputed CRC-16 matches the run_receipt's payload_crc16_ccitt_false."
+    },
+    "matched_output": {
+      "type": "boolean",
+      "description": "True if replayed output exactly matches the claimed output in the run_receipt."
+    },
+    "matched_exit_code": {
+      "type": "boolean",
+      "description": "True if replayed exit_code matches the claimed exit_code in the run_receipt."
+    },
+    "verification_result": {
+      "type": "string",
+      "enum": ["PASS", "FAIL", "ERROR"],
+      "description": "PASS only if all match flags are true and all comparisons succeed."
+    },
+    "verification_exit_code": {
+      "type": "integer",
+      "enum": [0, 1, 2],
+      "description": "Exit code: 0=PASS, 1=FAIL, 2=ERROR."
+    },
+    "notes": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Informational notes from the verifier. Non-empty indicates issues."
+    }
+  }
+}
