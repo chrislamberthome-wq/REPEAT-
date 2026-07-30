@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:repeat:schema:key-manifest:1",
+  "title": "REPEAT Key Manifest",
+  "description": "Unsigned manifest listing authorized artifact-signing keys.",
+  "type": "object",
+  "required": ["schema_version", "manifest_type", "created_at", "keys"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "manifest_type": {
+      "type": "string",
+      "const": "key_manifest"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp of manifest creation."
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of this manifest."
+    },
+    "keys": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["key_id", "algorithm", "public_key_b64", "purpose", "added_at"],
+        "additionalProperties": false,
+        "properties": {
+          "key_id": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "description": "SHA-256 hex digest of the raw public key bytes."
+          },
+          "algorithm": {
+            "type": "string",
+            "const": "Ed25519",
+            "description": "Signing algorithm for this key."
+          },
+          "public_key_b64": {
+            "type": "string",
+            "description": "Base64-encoded (standard, no padding omitted) raw public key bytes."
+          },
+          "purpose": {
+            "type": "string",
+            "description": "Human-readable description of what artifacts this key signs."
+          },
+          "added_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 UTC timestamp when this key was added."
+          },
+          "revoked_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 UTC timestamp when this key was revoked (absent if active)."
+          }
+        }
+      }
+    }
+  }
+}
