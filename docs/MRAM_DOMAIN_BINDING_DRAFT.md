@@ -26,6 +26,11 @@ For this draft, **Sufficient requires evidence capable of establishing the decla
 
 This statement does not, by itself, define the observation selected as “current,” the exact observation count, the numerical drift operator, or the admissibility policy for malformed evidence. Those are domain-binding inputs that remain open below.
 
+This draft also fixes two domain decisions for this MRAM binding:
+
+1. `C` is evaluated per run. The proposition is evaluated for each run in its local run context rather than as a cross-run aggregate.
+2. `E` is assumed to be ordered, sequential, and gap-free for this MRAM domain. Evidence outside that ordering and continuity is outside the admitted domain for this binding.
+
 A binding MUST therefore distinguish at least:
 
 1. evidence and rules that satisfy the eventual admission and mandatory-precondition requirements;
@@ -36,7 +41,7 @@ No implementation convention is normative merely because the current simulator o
 
 ## 3. Explicit open bindings
 
-The following items remain **`[DOMAIN-SPECIFIC — UNDEFINED]`** pending an approved MRAM domain binding.
+The following items remain **`[DOMAIN-SPECIFIC — UNDEFINED]`** pending an approved MRAM domain binding, except where this draft explicitly resolves the decision above.
 
 ### 3.1 Baseline-value validity
 
@@ -44,18 +49,11 @@ The following items remain **`[DOMAIN-SPECIFIC — UNDEFINED]`** pending an appr
 
 ### 3.2 Exact sufficiency count
 
-**`[DOMAIN-SPECIFIC — UNDEFINED]`** The precise definition of the required `N` observations. This includes which observations count, whether the baseline observation(s) are included, and what makes the count sufficient for evaluation.
+For this MRAM domain, sufficiency is evaluated per run. The predicate is applied to the evidence set associated with a single run under the local run context, not to a cross-run aggregate. The run-level evidence is the ordered, sequential, gap-free observation stream admitted for that run.
 
 ### 3.3 Current-observation semantics
 
-**`[DOMAIN-SPECIFIC — UNDEFINED]`** The meaning of the “current” observation in the MRAM evidence model. The binding has not selected whether “current” is:
-
-- exactly the first observation after the baseline;
-- the latest observation;
-- a specifically identified observation; or
-- another observation selected under `R`.
-
-This choice MUST remain unbound here. The normative domain definition MUST NOT assume the first, latest, or any other implementation convention until `R` explicitly binds it.
+For this MRAM domain, “current” means the observation corresponding to the run currently being evaluated under `C`. The current run is assessed in sequence using the ordered evidence stream for that run. No global “first post-baseline” or “latest observation” convention is assumed by this binding.
 
 ### 3.4 Drift semantics
 
@@ -63,7 +61,7 @@ This choice MUST remain unbound here. The normative domain definition MUST NOT a
 
 ### 3.5 Evidence structure
 
-**`[DOMAIN-SPECIFIC — UNDEFINED]`** The treatment of malformed, missing, reordered, duplicate, or non-monotonic observations. The binding MUST specify which cases make `Admissible(E,R)` false, which—if any—are evaluated as a proposition failure, and whether any case has another domain-specific disposition. No such case is a third value of `Sufficient`.
+For this MRAM domain, `E` is assumed to be ordered, sequential, and gap-free. Evidence that is reordered, duplicated, missing, or non-monotonic is outside the admitted domain of this binding. Such evidence makes `Admissible(E,R)` false instead of yielding a special runtime predicate value or an implementation-specific fallback.
 
 ### 3.6 Binding versioning
 
@@ -71,22 +69,21 @@ This choice MUST remain unbound here. The normative domain definition MUST NOT a
 
 ## 4. Non-inferences and review labels
 
-The following are intentionally not asserted by this draft:
+The following are intentionally not asserted by this draft beyond the decisions fixed above:
 
 - that a current observation is the first post-baseline observation;
 - that a current observation is the latest observation;
 - that the simulator’s baseline-window behavior is the normative MRAM definition;
 - that a zero baseline is invalid or valid;
 - that drift is absolute or signed;
-- that malformed, reordered, duplicate, or non-monotonic evidence has a particular terminal; or
 - that the MRAM binding version is or is not part of canonical `R`.
 
 Review classification for this draft:
 
-- **PASS:** The Boolean-only nature of `Sufficient`, the separation of admission from evaluation, the requirement for evidence capable of establishing the declared baseline and evaluating mandatory drift, and the stated terminal consequences follow from the frozen calculus.
-- **OPEN:** The six bindings in Section 3 are genuinely domain-specific and remain undefined.
+- **PASS:** The Boolean-only nature of `Sufficient`, the separation of admission from evaluation, the requirement for evidence capable of establishing the declared baseline and evaluating mandatory drift, the per-run evaluation rule, the ordered/sequential/gap-free evidence assumption, and the stated terminal consequences follow from the frozen calculus.
+- **OPEN:** Baseline-value validity, drift semantics, and binding versioning remain genuinely domain-specific and unresolved.
 - **NACK:** Any reading that treats `[DOMAIN-SPECIFIC — UNDEFINED]` as a runtime predicate result, or that promotes an unbound observation-selection convention into the normative MRAM definition, contradicts the frozen boundary.
 
 ## 5. Non-freezing boundary
 
-This inline draft does not select the six open bindings, amend the master calculus, authorize implementation, or modify existing schemas or verifier behavior. A later approved binding MUST resolve the open items before a fully bound `Sufficient(E,C,R)` or an implementation-specific MRAM verifier claims to be normative.
+This inline draft does not select the remaining open bindings, amend the master calculus, authorize implementation, or modify existing schemas or verifier behavior. A later approved binding MUST resolve the remaining open items before a fully bound `Sufficient(E,C,R)` or an implementation-specific MRAM verifier claims to be normative.
