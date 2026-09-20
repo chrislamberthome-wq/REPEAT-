@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/chrislamberthome-wq/REPEAT-/main/schemas/REPEAT_v1.json",
+  "title": "REPEAT_SCHEMA_v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "protocol_id",
+    "authority"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "protocol_id": {
+      "type": "string"
+    },
+    "authority": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}
