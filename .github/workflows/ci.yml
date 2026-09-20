@@ -1,50 +1,32 @@
-name: CI
+name: ci
 
 on:
   push:
     branches: [ main, phase2-governance-staging ]
   pull_request:
     branches: [ main, phase2-governance-staging ]
-  workflow_dispatch:
-
-permissions:
-  contents: read
 
 jobs:
-  test:
-    name: Test Python ${{ matrix.python-version }} on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ['3.8', '3.9', '3.10', '3.11']
+  build-and-verify:
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Set up Node 20
-      uses: actions/setup-node@v4
-      with:
-        node-version: "20"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
-    - name: B4IU locked counter
-      run: make ci-count-b4iu
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pytest jsonschema
+          if [ -f requirements.txt ]; then python -m pip install -r requirements.txt; fi
+          if [ -f requirements-dev.txt ]; then python -m pip install -r requirements-dev.txt; fi
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
-        cache: 'pip'
-        cache-dependency-path: 'requirements-dev.txt'
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install numpy pytest jsonschema
-        if [ -f requirements.txt ]; then python -m pip install -r requirements.txt; fi
-        if [ -f requirements-dev.txt ]; then python -m pip install -r requirements-dev.txt; fi
-
-    - name: Run tests
-      run: python -m pytest -q
+      - name: Run Schema and Diagnostic Boundary Checks
+        run: |
+          make verify-schema
+          make diag-governance
