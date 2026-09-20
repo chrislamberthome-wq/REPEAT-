@@ -4,16 +4,16 @@ import json
 from pathlib import Path
 
 import pytest
-from jsonschema import Draft7Validator
+from jsonschema import Draft202012Validator
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_PATH = ROOT / "schemas" / "repo-reference.schema.json"
 
 
-def _validator() -> Draft7Validator:
+def _validator() -> Draft202012Validator:
     schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
-    Draft7Validator.check_schema(schema)
-    return Draft7Validator(schema, format_checker=Draft7Validator.FORMAT_CHECKER)
+    Draft202012Validator.check_schema(schema)
+    return Draft202012Validator(schema, format_checker=Draft202012Validator.FORMAT_CHECKER)
 
 
 def test_minimal_valid_repo_reference() -> None:
