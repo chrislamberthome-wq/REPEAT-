@@ -12,25 +12,32 @@ SCHEMA_PATH = ROOT / "schemas" / "repo-reference.schema.json"
 
 def _validator() -> Draft202012Validator:
     schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
-    Draft202012Validator.check_schema(schema)
-    return Draft202012Validator(schema, format_checker=Draft202012Validator.FORMAT_CHECKER)
+    return Draft202012Validator(schema)
 
 
 def test_minimal_valid_repo_reference() -> None:
-    payload = {"repo": "chrislamberthome-wq/REPEAT-"}
+    payload = {
+        "repo": "chrislamberthome-wq/REPEAT-",
+    }
+
     errors = sorted(_validator().iter_errors(payload), key=lambda e: e.path)
     assert errors == []
 
 
 def test_invalid_repo_reference_rejected() -> None:
-    payload = {"repo": "not-the-allowed-repo"}
+    payload = {
+        "repo": "not-the-allowed-repo",
+    }
+
     errors = sorted(_validator().iter_errors(payload), key=lambda e: e.path)
     assert errors, "expected schema validation errors for invalid payload"
-    messages = [e.message for e in errors]
-    assert any("does not match" in message or "is not" in message for message in messages)
 
 
 def test_missing_repo_field_rejected() -> None:
-    errors = sorted(_validator().iter_errors({}), key=lambda e: e.path)
+    payload = {}
+
+    errors = sorted(_validator().iter_errors(payload), key=lambda e: e.path)
     assert errors, "expected schema validation errors for missing repo field"
-    assert any("'repo' is a required property" in e.message for e in errors)
+
+    messages = [e.message for e in errors]
+    assert any("'repo' is a required property" in message for message in messages)

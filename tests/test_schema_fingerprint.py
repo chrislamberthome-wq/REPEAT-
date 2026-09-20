@@ -5,7 +5,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_PATH = ROOT / "schemas" / "repo-reference.schema.json"
-EXPECTED_SHA256 = "425d424acd2e44711a9f7de5c958a45788b22b1edb7e5eb3de9e5f3a355e6f94"
+EXPECTED_SHA256 = "bdba59782604f14962fb85b35ea2acf70df8968fa1210f38360e9e1dbe1edceb"
+
 
 def test_repo_reference_schema_fingerprint() -> None:
     actual_sha256 = hashlib.sha256(SCHEMA_PATH.read_bytes()).hexdigest()

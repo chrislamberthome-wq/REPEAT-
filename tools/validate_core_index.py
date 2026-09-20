@@ -34,26 +34,18 @@ def load_json(path: Path) -> Any:
 
 
 def validate_core_index(index_path: Path, root: Path) -> str:
-    schema = load_json(index_path)
+    index = load_json(index_path)
 
+    # CORE_INDEX.v1.json is a governed registry document that embeds its
+    # instance data alongside its Draft 2020-12 schema keywords.  Validate
+    # the schema's structure, but do not validate the document against itself:
+    # that would treat $defs/$id/properties as registry instance properties.
     try:
-        Draft202012Validator.check_schema(schema)
+        Draft202012Validator.check_schema(index)
     except SchemaError as exc:
         raise CoreIndexError(f"{index_path}: invalid Draft 2020-12 schema: {exc}") from exc
 
-    validator = Draft202012Validator(schema)
-    structural_errors = sorted(validator.iter_errors(schema), key=lambda error: list(error.path))
-    if structural_errors:
-        diagnostics = []
-        for error in structural_errors:
-            location = ".".join(str(part) for part in error.path) or "<root>"
-            diagnostics.append(f"{location}: {error.message}")
-        raise CoreIndexError(
-            f"{index_path}: schema self-validation failed:\n"
-            + "\n".join(f"  - {item}" for item in diagnostics)
-        )
-
-    artifacts = schema.get("artifacts", [])
+    artifacts = index.get("artifacts", [])
     artifact_ids = [artifact["artifact_id"] for artifact in artifacts]
     artifact_paths = [artifact["relative_path"] for artifact in artifacts]
 
@@ -83,7 +75,7 @@ def validate_core_index(index_path: Path, root: Path) -> str:
                 f"{artifact['artifact_id']} -> {artifact['relative_path']}"
             )
 
-    precedence = schema.get("precedence", [])
+    precedence = index.get("precedence", [])
     tiers = [entry["tier"] for entry in precedence]
     if tuple(tiers) != EXPECTED_TIERS:
         raise CoreIndexError(
@@ -91,8 +83,8 @@ def validate_core_index(index_path: Path, root: Path) -> str:
         )
 
     precedence_ids = [entry["artifact_id"] for entry in precedence]
-    
-    # REPEAT_CORE_v1 is the root abstract authority and does not require a path on disk
+
+    # REPEAT_CORE_v1 is the root abstract authority and does not require a path on disk.
     known_authority_ids = set(registered.keys()).union({"REPEAT_CORE_v1"})
     unknown_ids = sorted(set(precedence_ids) - known_authority_ids)
     if unknown_ids:
