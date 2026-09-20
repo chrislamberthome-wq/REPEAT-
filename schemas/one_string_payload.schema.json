@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "one_string_payload.schema.json",
+  "title": "one_string_payload",
+  "description": "Canonical run input for one_string_REPEAT v1.0. The entire object is the certifiable envelope — canonicalized to UTF-8 bytes and identified by SHA-256 + CRC-16/CCITT-FALSE.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "payload_type",
+    "engine_name",
+    "engine_version",
+    "canonicalization",
+    "input_schema",
+    "input"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0",
+      "description": "Schema version for this payload format."
+    },
+    "payload_type": {
+      "type": "string",
+      "const": "one_string_run",
+      "description": "Identifies this as a one_string_run payload."
+    },
+    "engine_name": {
+      "type": "string",
+      "const": "one_string_repeat",
+      "description": "Engine that executes this payload."
+    },
+    "engine_version": {
+      "type": "string",
+      "const": "1.0.0",
+      "description": "Version of the engine executing this payload."
+    },
+    "canonicalization": {
+      "type": "string",
+      "description": "Canonicalization algorithm used (e.g. JCS)."
+    },
+    "input_schema": {
+      "type": "string",
+      "description": "Schema name or path that governs the input field."
+    },
+    "input": {
+      "type": "object",
+      "description": "Normalized run input. Must be fully determined and reproducible.",
+      "required": ["rule", "initial_value", "max_steps"],
+      "additionalProperties": false,
+      "properties": {
+        "rule": {
+          "type": "string",
+          "enum": ["fixed_point"],
+          "description": "Rule name for the engine to execute."
+        },
+        "initial_value": {
+          "type": "integer",
+          "description": "Starting value for the rule execution."
+        },
+        "max_steps": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum number of steps before halting."
+        }
+      }
+    }
+  }
+}
