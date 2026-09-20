@@ -13,7 +13,7 @@ SCHEMA_PATH = ROOT / "schemas" / "repo-reference.schema.json"
 def _validator() -> Draft7Validator:
     schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
     Draft7Validator.check_schema(schema)
-    return Draft7Validator(schema)
+    return Draft7Validator(schema, format_checker=Draft7Validator.FORMAT_CHECKER)
 
 
 def test_minimal_valid_repo_reference() -> None:
