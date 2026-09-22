@@ -1,4 +1,4 @@
-.PHONY: all clean install test ci-count-b4iu diag-strict
+.PHONY: all clean install test ci-count-b4iu diag-strict preservation-test
 
 all: install
 
@@ -21,3 +21,6 @@ diag-strict:
 	python3 simulate_mram_runs.py --mode pass --seed 42 --output /tmp/diag_receipts.jsonl
 	python -m verifier /tmp/diag_receipts.jsonl
 	@echo "Diagnostics (strict) passed."
+
+preservation-test:
+	@python3 scripts/validate_preservation.py .

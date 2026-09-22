@@ -1,0 +1,27 @@
+{
+  "repository": "chrislamberthome-wq/REPEAT-",
+  "commit": "8b50a6a2311539dca7c686b7a0013bd22fc0e89f",
+  "archive_format": "directory-bundle-v1",
+  "manifest_version": "0.1",
+  "historical_claim": {
+    "record_id": "REPEAT-preservation-record-0001"
+  },
+  "technical_verification": {
+    "status": "UNRESOLVED",
+    "receipt_id": "REPEAT-preservation-receipt-0001"
+  },
+  "verification": {
+    "method": "scripts/validate_preservation.py",
+    "chat_dependency": "NONE"
+  },
+  "artifacts": [
+    {
+      "path": "archive/provenance.jsonl",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5edb4a1f6a5f7f7f3a4f9f6f5f7f7f7f7"
+    },
+    {
+      "path": "archive/timeline.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5edb4a1f6a5f7f7f3a4f9f6f5f7f7f7f7"
+    }
+  ]
+}
