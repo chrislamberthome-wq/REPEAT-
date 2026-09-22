@@ -7,11 +7,21 @@ import hashlib
 import json
 import re
 import sys
+from datetime import datetime
 from pathlib import Path
 
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 SHA1 = re.compile(r"^[0-9a-f]{40}$")
-REQUIRED = {"archive/preservation-manifest.json", "archive/sha256sums.txt", "archive/provenance.jsonl", "archive/timeline.json"}
+
+# These names are the complete archive scope.  The manifest and checksum list
+# are established independently and therefore are not hashes of themselves.
+REQUIRED_SCOPE = {
+    "preservation-manifest.json",
+    "sha256sums.txt",
+    "provenance.jsonl",
+    "timeline.json",
+}
+MANIFEST_CONTROLLED = {"provenance.jsonl", "timeline.json"}
 
 
 class VerificationFailure(Exception):
@@ -26,7 +36,7 @@ def load_json(path: Path):
     try:
         return json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-        fail(f"INVALID_ARCHIVE: {path}: {exc}")
+        fail(f"MALFORMED_METADATA: {path}: {exc}")
 
 
 def digest(path: Path) -> str:
@@ -37,12 +47,32 @@ def digest(path: Path) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def verify(root: Path) -> dict[str, int | str]:
-    for relative in REQUIRED:
-        if not (root / relative).is_file():
-            fail(f"MISSING_ARTIFACT: {relative}")
+def archive_path(root: Path, name: str) -> Path:
+    """Resolve an archive-relative name without permitting scope escape."""
+    candidate = (root / "archive" / name).resolve()
+    archive = (root / "archive").resolve()
+    try:
+        candidate.relative_to(archive)
+    except ValueError:
+        fail("INVALID_ARTIFACT_PATH")
+    return candidate
 
-    manifest = load_json(root / "archive/preservation-manifest.json")
+
+def verify(root: Path) -> dict[str, int | str]:
+    archive = root / "archive"
+    if not archive.is_dir():
+        fail("MISSING_ARCHIVE_SCOPE")
+
+    actual = {p.relative_to(archive).as_posix() for p in archive.rglob("*") if p.is_file()}
+    if actual != REQUIRED_SCOPE:
+        missing = sorted(REQUIRED_SCOPE - actual)
+        extra = sorted(actual - REQUIRED_SCOPE)
+        if missing:
+            fail(f"MISSING_ARTIFACT: {missing[0]}")
+        fail(f"UNEXPECTED_ARTIFACT: {extra[0]}")
+
+    manifest_path = archive / "preservation-manifest.json"
+    manifest = load_json(manifest_path)
     if not isinstance(manifest, dict):
         fail("INVALID_MANIFEST")
     if manifest.get("manifest_version") != "0.1":
@@ -62,41 +92,57 @@ def verify(root: Path) -> dict[str, int | str]:
         fail("EXTERNAL_CONVERSATIONAL_DEPENDENCY")
 
     artifacts = manifest.get("artifacts")
-    if not isinstance(artifacts, list) or not artifacts:
+    if not isinstance(artifacts, list):
         fail("INVALID_MANIFEST_ARTIFACTS")
     declared: dict[str, str] = {}
     for item in artifacts:
         if not isinstance(item, dict) or not isinstance(item.get("path"), str) or not SHA256.fullmatch(item.get("sha256", "")):
             fail("INVALID_MANIFEST_ARTIFACT")
-        path = item["path"]
-        if path in declared or Path(path).is_absolute() or ".." in Path(path).parts:
+        raw_path = item["path"]
+        path = Path(raw_path)
+        if path.is_absolute() or ".." in path.parts or path.parts[:1] != ("archive",) or len(path.parts) != 2:
             fail("INVALID_ARTIFACT_PATH")
-        declared[path] = item["sha256"]
-        if not (root / path).is_file():
-            fail(f"MISSING_ARTIFACT: {path}")
-        if digest(root / path) != item["sha256"]:
-            fail(f"HASH_MISMATCH: {path}")
+        name = path.parts[1]
+        if name in declared:
+            fail("DUPLICATE_ARTIFACT_DECLARATION")
+        if name not in MANIFEST_CONTROLLED:
+            fail("INVALID_MANIFEST_ARTIFACT")
+        declared[name] = item["sha256"]
+        if not archive_path(root, name).is_file():
+            fail(f"MISSING_ARTIFACT: {name}")
+        if digest(archive_path(root, name)) != item["sha256"]:
+            fail(f"HASH_MISMATCH: {name}")
+    if set(declared) != MANIFEST_CONTROLLED:
+        fail("REQUIRED_ARTIFACT_OMITTED_FROM_MANIFEST")
 
     sums: dict[str, str] = {}
     try:
-        lines = (root / "archive/sha256sums.txt").read_text(encoding="utf-8").splitlines()
+        lines = (archive / "sha256sums.txt").read_text(encoding="utf-8").splitlines()
     except (OSError, UnicodeError) as exc:
-        fail(f"INVALID_HASH_LIST: {exc}")
+        fail(f"MALFORMED_METADATA: sha256sums.txt: {exc}")
     for line in lines:
         fields = line.split()
         if len(fields) != 2 or not SHA256.fullmatch(fields[0]):
             fail("INVALID_HASH_LIST")
-        sums[fields[1]] = fields[0]
+        raw_path = fields[1]
+        path = Path(raw_path)
+        if path.is_absolute() or ".." in path.parts or path.parts[:1] != ("archive",) or len(path.parts) != 2:
+            fail("INVALID_ARTIFACT_PATH")
+        name = path.parts[1]
+        if name in sums:
+            fail("DUPLICATE_ARTIFACT_DECLARATION")
+        if name not in MANIFEST_CONTROLLED:
+            fail("INVALID_HASH_LIST")
+        sums[name] = fields[0]
     if sums != declared:
         fail("HASH_LIST_MISMATCH")
-    for path, expected in sums.items():
-        if digest(root / path) != expected:
-            fail(f"HASH_MISMATCH: {path}")
+    for name, expected in sums.items():
+        if digest(archive_path(root, name)) != expected:
+            fail(f"HASH_MISMATCH: {name}")
 
-    provenance_path = root / "archive/provenance.jsonl"
     references = 0
     try:
-        for number, line in enumerate(provenance_path.read_text(encoding="utf-8").splitlines(), 1):
+        for number, line in enumerate((archive / "provenance.jsonl").read_text(encoding="utf-8").splitlines(), 1):
             if not line.strip():
                 continue
             record = json.loads(line)
@@ -105,17 +151,24 @@ def verify(root: Path) -> dict[str, int | str]:
             for key in ("source", "target"):
                 if key in record:
                     target = record[key]
-                    if not isinstance(target, str) or target not in declared:
+                    if not isinstance(target, str) or not target.startswith("archive/") or target[8:] not in declared:
                         fail(f"BROKEN_PROVENANCE_REFERENCE: line {number}")
                     references += 1
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         fail(f"MALFORMED_PROVENANCE: {exc}")
 
-    timeline = load_json(root / "archive/timeline.json")
+    timeline = load_json(archive / "timeline.json")
     if not isinstance(timeline, list):
         fail("MALFORMED_CHRONOLOGY")
-    timestamps = [entry.get("timestamp") for entry in timeline if isinstance(entry, dict) and "timestamp" in entry]
-    if any(not isinstance(value, str) for value in timestamps) or timestamps != sorted(timestamps):
+    timestamps = []
+    for entry in timeline:
+        if not isinstance(entry, dict) or not isinstance(entry.get("timestamp"), str):
+            fail("MALFORMED_CHRONOLOGY")
+        try:
+            timestamps.append(datetime.fromisoformat(entry["timestamp"].replace("Z", "+00:00")))
+        except ValueError:
+            fail("MALFORMED_CHRONOLOGY")
+    if timestamps != sorted(timestamps):
         fail("MALFORMED_CHRONOLOGY")
 
     return {"artifacts": len(declared), "hashes": len(sums), "provenance": references}
