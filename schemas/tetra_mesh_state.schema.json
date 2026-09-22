@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repeat.global/schemas/tetra_mesh_state.schema.json",
+  "title": "Tetra Mesh State",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["mesh_id", "cells"],
+  "properties": {
+    "mesh_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cells": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/cell"
+      }
+    }
+  },
+  "$defs": {
+    "coord": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "number"
+      }
+    },
+    "vertex_id": {
+      "type": "string",
+      "pattern": "^v[0-9]+$"
+    },
+    "cell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cell_id",
+        "vertex_ids",
+        "vertices",
+        "orientation"
+      ],
+      "properties": {
+        "cell_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "vertex_ids": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/vertex_id"
+          }
+        },
+        "vertices": {
+          "type": "object",
+          "minProperties": 4,
+          "maxProperties": 4,
+          "additionalProperties": false,
+          "patternProperties": {
+            "^v[0-9]+$": {
+              "$ref": "#/$defs/coord"
+            }
+          }
+        },
+        "orientation": {
+          "type": "string",
+          "enum": ["positive", "negative"]
+        },
+        "volume": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}

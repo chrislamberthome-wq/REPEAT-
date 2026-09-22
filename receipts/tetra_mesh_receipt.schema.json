@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repeat.global/schemas/tetra_mesh_receipt.schema.json",
+  "title": "Tetra Mesh Verification Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "receipt_type",
+    "mesh_id",
+    "cell_count",
+    "canonical_hash",
+    "verifier_version",
+    "result"
+  ],
+  "properties": {
+    "receipt_type": {
+      "type": "string",
+      "const": "tetra_mesh_verification"
+    },
+    "mesh_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cell_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "canonical_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "prev_receipt_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "verifier_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "result": {
+      "type": "string",
+      "enum": ["PASS", "FAIL", "ERROR"]
+    },
+    "reasons": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
